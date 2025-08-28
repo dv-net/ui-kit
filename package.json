@@ -16,8 +16,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --p ./tsconfig-build.json && vite build",
-    "lint": "eslint . --fix & npx stylelint \"**/*.{vue,css,scss}\" --fix",
     "build-only": "vite build",
+    "build-demo": "vite build --mode demo",
+    "lint": "eslint . --fix & npx stylelint \"**/*.{vue,css,scss}\" --fix",
     "generate-svg-list": "node generate-svg-list.js"
   },
   "engines": {
