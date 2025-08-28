@@ -1,0 +1,35 @@
+.ui-button {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  width: max-content;
+  min-width: max-content;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 8px;
+  outline: none;
+  text-decoration: none;
+  transition: var(--transition);
+  user-select: none;
+  white-space: nowrap;
+
+  &:focus,
+  &:hover,
+  &:active {
+    border: 1px solid transparent;
+  }
+
+  &:disabled,
+  &.is-loading {
+    cursor: not-allowed;
+  }
+}

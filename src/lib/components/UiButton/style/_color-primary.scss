@@ -1,0 +1,38 @@
+.ui-button.type-primary {
+  background-color: var(--color-background-accent);
+  color: var(--color-white);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: var(--color-state-accent-hover);
+    }
+  }
+
+  &:active,
+  &:focus-visible {
+    background: var(--color-state-accent-pressed);
+  }
+
+  &:disabled {
+    background: var(--color-state-accent-disabled);
+  }
+
+  &.mode-neutral {
+    background: var(--color-state-neutral);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not(:disabled) {
+        background: var(--color-state-neutral-hover);
+      }
+    }
+
+    &:active,
+    &:focus-visible {
+      background: var(--color-state-neutral-pressed);
+    }
+
+    &:disabled {
+      background: var(--color-state-neutral-disabled);
+    }
+  }
+}

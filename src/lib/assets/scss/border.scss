@@ -1,0 +1,7 @@
+$sizes: 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 66, 68, 76;
+
+@each $size in $sizes {
+  .br-#{$size} {
+    border-radius: #{$size}px;
+  }
+}

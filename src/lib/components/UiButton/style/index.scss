@@ -1,0 +1,31 @@
+@use "common";
+@use "color-primary";
+@use "color-secondary";
+@use "color-tertiary";
+@use "color-outline";
+@use "color-outline-light";
+@use "color-negative";
+@use "color-social";
+@use "sizes";
+@use "loading";
+
+.ui-button {
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__icon-slot {
+    display: inline-flex;
+    width: max-content;
+    align-items: center;
+  }
+
+  &.is-loading {
+    .ui-button__content,
+    .ui-button__icon-slot {
+      opacity: 0;
+    }
+  }
+}

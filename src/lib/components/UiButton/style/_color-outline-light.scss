@@ -1,0 +1,25 @@
+.ui-button.type-outline-light {
+  border-color: var(--color-state-secondary);
+  color: var(--color-state-accent);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      border-color: var(--color-state-secondary-hover);
+      opacity: 0.8;
+    }
+  }
+
+  &:active,
+  &:focus-visible {
+    border-color: var(--color-state-secondary-pressed);
+    opacity: 0.6;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+
+  &.mode-neutral {
+    color: var(--color-text-primary);
+  }
+}

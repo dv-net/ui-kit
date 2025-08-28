@@ -1,0 +1,7 @@
+.ui-input.is-filled {
+  background: var(--color-background-secondary);
+
+  &:hover &:not(.is-disabled) {
+    box-shadow: 0 0 0 1px var(--color-separator-border-secondary);
+  }
+}

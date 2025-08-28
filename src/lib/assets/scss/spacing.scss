@@ -1,0 +1,39 @@
+$multiplier: 20;
+
+@for $i from 1 through $multiplier {
+  .gap-#{$i} {
+    gap: $i * 4px;
+  }
+
+  // margins and paddings
+  $props: (
+    m: margin,
+    p: padding
+  );
+
+  @each $key, $value in $props {
+    .#{$key}a-#{$i} {
+      #{$value}: $i * 4px;
+    }
+    .#{$key}x-#{$i} {
+      #{$value}-right: $i * 4px;
+      #{$value}-left: $i * 4px;
+    }
+    .#{$key}y-#{$i} {
+      #{$value}-top: $i * 4px;
+      #{$value}-bottom: $i * 4px;
+    }
+    .#{$key}r-#{$i} {
+      #{$value}-right: $i * 4px;
+    }
+    .#{$key}l-#{$i} {
+      #{$value}-left: $i * 4px;
+    }
+    .#{$key}t-#{$i} {
+      #{$value}-top: $i * 4px;
+    }
+    .#{$key}b-#{$i} {
+      #{$value}-bottom: $i * 4px;
+    }
+  }
+}

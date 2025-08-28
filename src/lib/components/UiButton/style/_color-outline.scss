@@ -1,0 +1,42 @@
+.ui-button.type-outline {
+  border-color: var(--color-state-accent);
+  color: var(--color-state-accent);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      opacity: 0.8;
+    }
+  }
+
+  &:active,
+  &:focus-visible {
+    opacity: 0.6;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+
+  &.mode-neutral {
+    border-color: var(--color-state-neutral);
+    color: var(--color-state-neutral);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not(:disabled) {
+        border-color: var(--color-state-neutral-hover);
+        color: var(--color-state-neutral-hover);
+      }
+    }
+
+    &:active,
+    &:focus-visible {
+      border-color: var(--color-state-neutral-pressed);
+      color: var(--color-state-neutral-pressed);
+    }
+
+    &:disabled {
+      border-color: var(--color-state-neutral-disabled);
+      color: var(--color-state-neutral-disabled);
+    }
+  }
+}

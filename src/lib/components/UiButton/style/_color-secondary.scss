@@ -1,0 +1,23 @@
+.ui-button.type-secondary {
+  background-color: var(--color-state-secondary);
+  color: var(--color-text-primary);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: var(--color-state-secondary-hover);
+    }
+  }
+
+  &:active,
+  &:focus-visible {
+    background-color: var(--color-state-secondary-pressed);
+  }
+
+  &:disabled {
+    color: var(--color-text-tertiary);
+  }
+
+  &.is-loading {
+    color: var(--color-text-primary);
+  }
+}

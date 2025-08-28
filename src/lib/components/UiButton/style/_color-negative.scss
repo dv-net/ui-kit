@@ -1,0 +1,20 @@
+.ui-button.type-negative {
+  background: var(--color-background-negative);
+  color: var(--color-text-negative);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      color: var(--color-state-negative-hover);
+    }
+  }
+
+  &:active,
+  &:focus-visible {
+    color: var(--color-state-negative-pressed);
+  }
+
+  &:disabled {
+    color: var(--color-text-tertiary);
+    opacity: 0.4;
+  }
+}

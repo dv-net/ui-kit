@@ -1,0 +1,45 @@
+.ui-button.type-social {
+  border-color: var(--color-separator-border-secondary);
+  background-color: transparent;
+  color: var(--color-state-primary);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border-color: var(--color-separator-border-accent);
+    }
+  }
+
+  &:active,
+  &:focus-visible {
+    background: var(--color-background-secondary);
+  }
+
+  &:disabled {
+    border-color: var(--color-separator-border-secondary);
+    opacity: 0.5;
+  }
+
+  &.mode-neutral {
+    border-color: transparent;
+    background-color: var(--color-state-neutral);
+    color: var(--color-text-contrast);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: var(--color-state-neutral-hover);
+        opacity: 1;
+      }
+    }
+
+    &:active,
+    &:focus-visible {
+      background: var(--color-state-neutral-pressed);
+      opacity: unset;
+    }
+
+    &:disabled {
+      background: var(--color-state-neutral-disabled);
+      opacity: 0.5;
+    }
+  }
+}

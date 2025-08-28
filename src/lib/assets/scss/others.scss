@@ -1,0 +1,98 @@
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dropdown {
+  0% {
+    transform: scaleY(0);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.dropdown-enter-active {
+  animation: dropdown 0.3s ease;
+  transform-origin: top;
+}
+
+.dropdown-leave-active {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  max-height: max-content;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  max-height: 0;
+}
+
+.is-hidden {
+  overflow: hidden;
+}
+
+p {
+  margin: 0;
+}
+
+body {
+  overscroll-behavior: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px transparent inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.el-popper.is-light {
+  background: var(--color-white);
+}
+
+.notification-enter-active,
+.notification-leave-active {
+  transition: var(--transtiton);
+}
+
+.notification-enter-from {
+  transform: translateX(calc(100% + 16px));
+}
+
+.notification-leave-to {
+  opacity: 0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+/* Firefox */
+input[type="number"] {
+  appearance: textfield;
+}

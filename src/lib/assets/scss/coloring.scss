@@ -1,0 +1,54 @@
+$text-colors: (
+  primary: var(--color-text-primary),
+  secondary: var(--color-text-secondary),
+  tertiary: var(--color-text-tertiary),
+  inactive: var(--color-text-inactive),
+  contrast: var(--color-text-contrast),
+  accent: var(--color-text-accent),
+  positive: var(--color-text-positive),
+  negative: var(--color-text-negative),
+  warning: var(--color-text-warning),
+  alternative: var(--color-text-alternative)
+);
+
+@each $color-name, $color-value in $text-colors {
+  .text-#{$color-name} {
+    color: $color-value;
+  }
+}
+
+$background-colors: (
+  primary: var(--color-background-primary),
+  secondary: var(--color-background-secondary),
+  tertiary: var(--color-background-tertiary),
+  contrast: var(--color-background-contrast),
+  contrast-secondary: var(--color-background-contrast-secondary),
+  accent: var(--color-background-accent),
+  info: var(--color-background-info),
+  positive: var(--color-background-positive),
+  negative: var(--color-background-negative),
+  warning: var(--color-background-warning),
+  dark: var(--color-background-dark),
+  alternative: var(--color-background-alternative)
+);
+
+@each $color-name, $color-value in $background-colors {
+  .bg-#{$color-name} {
+    background: $color-value;
+  }
+}
+
+$border-colors: (
+  primary: var(--color-separator-border-primary),
+  secondary: var(--color-separator-border-secondary),
+  inactive: var(--color-separator-border-inactive),
+  accent: var(--color-separator-border-accent),
+  contrast: var(--color-separator-border-contrast),
+  contrast-secondary: var(--color-separator-border-contrast-secondary)
+);
+
+@each $color-name, $color-value in $border-colors {
+  .border-#{$color-name} {
+    border: 1px solid $color-value;
+  }
+}

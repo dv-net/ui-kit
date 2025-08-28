@@ -1,0 +1,70 @@
+name: Publish to npm on GitHub Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: 'yarn'
+          always-auth: true
+
+      - name: Enable Corepack (Yarn)
+        run: corepack enable
+
+      - name: Install dependencies (Yarn)
+        run: yarn install --frozen-lockfile
+
+      - name: Verify release tag matches package.json version
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION_FROM_TAG="${TAG#v}"
+          VERSION_FROM_PKG=$(node -p "require('./package.json').version")
+          echo "Release tag: $TAG"
+          echo "Version from tag: $VERSION_FROM_TAG"
+          echo "Version from package.json: $VERSION_FROM_PKG"
+          if [ "$VERSION_FROM_TAG" != "$VERSION_FROM_PKG" ]; then
+            echo "Tag version and package.json version do not match." >&2
+            exit 1
+          fi
+
+      - name: Configure npm auth
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm config get registry
+
+      - name: Verify npm identity
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "whoami:"
+          npm whoami || true
+          echo "npm ping:"
+          npm ping || true
+
+      - name: Build (Yarn)
+        run: yarn build
+
+      - name: Publish to npm (stable)
+        if: ${{ !github.event.release.prerelease }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+
+      - name: Publish to npm (pre-release -> next)
+        if: ${{ github.event.release.prerelease }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --tag next

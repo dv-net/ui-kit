@@ -1,0 +1,34 @@
+@mixin font-sizes($suffix: "") {
+  $font-weights: 400, 500, 600, 700;
+  $suffix: if($suffix == "", "", "-" + $suffix);
+
+  @for $i from 5 through 40 {
+    .fs-#{$i * 2}#{$suffix} {
+      font-size: #{$i * 2}px;
+    }
+
+    .lh-#{$i * 2}#{$suffix} {
+      line-height: #{$i * 2}px;
+    }
+  }
+
+  @each $fw in $font-weights {
+    .fw-#{$fw}#{$suffix} {
+      font-weight: $fw;
+    }
+  }
+}
+
+@include font-sizes;
+
+$breakpoints-list: (
+  lg: 1440px,
+  md: 1024px,
+  sm: 768px
+);
+
+@each $key, $value in $breakpoints-list {
+  @media (width < $value) {
+    @include font-sizes($key);
+  }
+}

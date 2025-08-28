@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss",
+    "stylelint-config-recommended-vue/scss",
+    "stylelint-config-idiomatic-order",
+    "stylelint-prettier/recommended"
+  ],
+  "rules": {
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "value-keyword-case": [
+      "lower",
+      {
+        "ignoreFunctions": ["v-bind"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.vue", "**/*.vue"],
+      "rules": {}
+    }
+  ]
+}

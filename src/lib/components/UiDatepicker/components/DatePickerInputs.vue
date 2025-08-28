@@ -1,0 +1,103 @@
+<script lang="ts" setup>
+  import DatePickerInput from "./DatePickerInput.vue";
+
+  import { useWindowSize } from "@vueuse/core";
+  import { computed, ref, watch } from "vue";
+
+  import { useDatePicker } from "../composables/useDatePicker";
+
+  import { config } from "@/lib/config";
+  const emits = defineEmits(["submit", "change"]);
+  const processingData = defineModel<string[]>("model-value", { default: [] });
+  const { dayjs, inputFormat, modelValueFormat } = useDatePicker();
+  const errors = ref<boolean[]>([false, false]);
+
+  const { width } = useWindowSize();
+  const startDate = ref("");
+  const endDate = ref("");
+  const maska = computed(() => inputFormat.value.replace(/\w/g, "#"));
+  const placeholder = computed(() => dayjs().format(inputFormat.value));
+  function update(date: string, isStart: boolean) {
+    const isValid =
+      !dayjs(date, inputFormat.value).isValid() ||
+      dayjs(date, inputFormat.value).isAfter(dayjs(dayjs(), inputFormat.value), "day");
+    if (isStart && date.length === 10) {
+      errors.value[0] =
+        dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day") || isValid;
+      if (!errors.value[0]) {
+        processingData.value[0] = dayjs(date, inputFormat.value).format(modelValueFormat.value);
+        emits("change");
+      }
+    } else {
+      errors.value[0] = false;
+    }
+
+    if (!isStart && date.length === 10) {
+      errors.value[1] =
+        dayjs(date, inputFormat.value).isBefore(dayjs(startDate.value, inputFormat.value), "day") || isValid;
+      if (!errors.value[1]) {
+        processingData.value[1] = dayjs(date, inputFormat.value).format(modelValueFormat.value);
+        emits("change");
+      }
+    } else {
+      errors.value[1] = false;
+    }
+  }
+  watch(
+    processingData,
+    () => {
+      startDate.value = dayjs(processingData.value[0]).format(inputFormat.value);
+      endDate.value = dayjs(processingData.value[1]).format(inputFormat.value);
+    },
+    { immediate: true }
+  );
+</script>
+<template>
+  <div class="com-datepicker-inputs">
+    <form class="com-datepicker-inputs--form">
+      <DatePickerInput
+        :label="width < 1000 ? config.uiDatePicker.translations.inputLabelStart : ''"
+        :isError="errors[0]"
+        @input="(e) => update(e, true)"
+        :placeholder="placeholder"
+        :maska="maska"
+        v-model="startDate"
+      />
+      <div class="com-datepicker-inputs--form__divider" />
+      <DatePickerInput
+        :label="width < 1000 ? config.uiDatePicker.translations.inputLabelEnd : ''"
+        :isError="errors[1]"
+        @input="(e) => update(e, false)"
+        :placeholder="placeholder"
+        :maska="maska"
+        v-model="endDate"
+      />
+    </form>
+  </div>
+</template>
+<style lang="scss">
+  .com-datepicker-inputs {
+    margin-bottom: 16px;
+
+    &--form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      @media (width <= 1000px) {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      &__divider {
+        width: 16px;
+        height: 1px;
+        background-color: var(--color-separator-border-contrast);
+
+        @media (width <= 1000px) {
+          display: none;
+        }
+      }
+    }
+  }
+</style>
