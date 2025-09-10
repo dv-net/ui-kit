@@ -1,11 +1,9 @@
 <script setup lang="ts">
   import UiDatepickerRange from "@/lib/components/UiDatepicker/UiDatepickerRange.vue";
 
-  import { ref, watch } from "vue";
+  import { ref } from "vue";
 
   const date = ref([]);
-
-  watch(date, () => console.log(123));
 </script>
 
 <template>
