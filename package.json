@@ -21,6 +21,10 @@
     "lint": "eslint . --fix & npx stylelint \"**/*.{vue,css,scss}\" --fix",
     "generate-svg-list": "node generate-svg-list.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dv-net/ui-kit.git"
+  },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
