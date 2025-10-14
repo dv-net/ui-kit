@@ -1,15 +1,15 @@
-# @dv.net/ui-kit
+# 🎨 dv.net/ui-kit
 
 A Vue 3 UI component library for internal and external web applications. Includes ready‑to‑use UI elements (buttons, inputs, selects, tables, modals, etc.), utilities, and styles.
 
-## Quick start
+## ⚡️ Quick start
 
-- **Install with yarn**
+- 📦 **Install with yarn**
 ```bash
 yarn add @dv.net/ui-kit
 ```
 
-- **Use in a Vue 3 (Vite) app**
+- 💻 **Use in a Vue 3 (Vite) app**
 ```vue
 <script setup lang="ts">
 import { UiButton, UiInput } from "@dv.net/ui-kit";
@@ -25,7 +25,7 @@ import { UiButton, UiInput } from "@dv.net/ui-kit";
 </style>
 ```
 
-## Demo / component catalog
+## 📘 Demo / component catalog
 
 You can run a local demo app with examples of all components.
 ```bash
@@ -36,26 +36,26 @@ yarn run dev
 yarn run build-demo
 ```
 
-## Scripts
+## 🧰 Scripts
 
-- `dev` — run the demo app with Vite
-- `build` — type check (tsc) + build the component library
-- `build-only` — build the library without tsc
-- `build-demo` — build the demo app (`--mode demo`)
-- `lint` — ESLint + Stylelint with auto‑fix
-- `generate-svg-list` — generate an SVG icon list based on `src/lib/assets/icons`
+- 🚀 `dev` — run the demo app with Vite
+- 🏗️ `build` — type check (tsc) + build the component library
+- 🧱 `build-only` — build the library without tsc
+- 🧪 `build-demo` — build the demo app (`--mode demo`)
+- ✨ `lint` — ESLint + Stylelint with auto‑fix
+- 🖼️ `generate-svg-list` — generate an SVG icon list based on `src/lib/assets/icons`
 
-## Tech stack
+## 🛠️ Tech stack
 
-- **Vue 3** (`^3.5`) with `<script setup>`
-- **Vite** (`^7`) + `@vitejs/plugin-vue`
-- **TypeScript** (`^5.8`), d.ts generation via `vite-plugin-dts`
-- **SCSS**: shared styles and variables in `src/lib/assets/scss`
-- **ESLint** + **Stylelint** + **Prettier**
-- **@floating-ui/vue**, **@vueuse/core**, **dayjs**, **maska**, **vue3-lottie**, **vue-virtual-scroller**
-- SVG loading via `vite-svg-loader` (SVGO with `removeViewBox: false`, `prefixIds`)
+- ⚙️ **Vue 3** (`^3.5`) with `<script setup>`
+- ⚡️ **Vite** (`^7`) + `@vitejs/plugin-vue`
+- 🧩 **TypeScript** (`^5.8`), d.ts generation via `vite-plugin-dts`
+- 🎨 **SCSS**: shared styles and variables in `src/lib/assets/scss`
+- 🧹 **ESLint** + **Stylelint** + **Prettier**
+- 📦 **@floating-ui/vue**, **@vueuse/core**, **dayjs**, **maska**, **vue3-lottie**, **vue-virtual-scroller**
+- 🖼️ SVG loading via `vite-svg-loader` (SVGO with `removeViewBox: false`, `prefixIds`)
 
-## Project structure (main)
+## 🗂️ Project structure (main)
 
 ```
 src/
@@ -70,29 +70,29 @@ src/
 vite.config.ts        # library and demo build config
 ```
 
-## Development
+## 🧑‍💻 Development
 
-1) Install dependencies
+1) 📦 Install dependencies
 ```bash
 yarn install
 ```
-2) Start the demo
+2) ▶️ Start the demo
 ```bash
 yarn dev
 ```
-3) Make changes in `src/lib/**` — the demo will hot‑reload.
+3) ✏️ Make changes in `src/lib/**` — the demo will hot‑reload.
 
-Code quality checks:
+🔍 Code quality checks:
 ```bash
 yarn lint
 ```
 
-Generate icon list (when SVG set changes):
+🖼️ Generate icon list (when SVG set changes):
 ```bash
 yarn generate-svg-list
 ```
 
-## Library build
+## 📦 Library build
 
 ```bash
 yarn build
@@ -102,11 +102,11 @@ The output will be in `dist/`:
 - `dist/index.d.ts` — TypeScript types
 - `dist/style.css` — shared library styles
 
-## Environment requirements
+## ⚙️ Environment requirements
 
-- Node.js `^20.19.0` or `>=22.12.0`
-- Consumer project: `vue >= 3.5.0`, `vue-router >= 4.4.0`
+- 🖥️ Node.js `^20.19.0` or `>=22.12.0`
+- 🧩 Consumer project: `vue >= 3.5.0`, `vue-router >= 4.4.0`
 
-## License
+## 📝 License
 
 Distributed under the MIT license. See `LICENSE` for details.
