@@ -1,4 +1,4 @@
-# 🎨 dv.net/ui-kit
+# 🎨 UI KIT
 
 A Vue 3 UI component library for internal and external web applications. Includes ready‑to‑use UI elements (buttons, inputs, selects, tables, modals, etc.), utilities, and styles.
 
@@ -107,6 +107,17 @@ The output will be in `dist/`:
 - 🖥️ Node.js `^20.19.0` or `>=22.12.0`
 - 🧩 Consumer project: `vue >= 3.5.0`, `vue-router >= 4.4.0`
 
-## 📝 License
+## 📄 License
 
-Distributed under the MIT license. See `LICENSE` for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+<br>
+
+<div align="center">
+
+**Made with ❤️ for the developer community**
+
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dv-net/ui-kit)
+[![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/package/@dv.net/ui-kit)
+
+</div>
