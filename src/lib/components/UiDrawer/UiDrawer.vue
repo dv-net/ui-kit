@@ -53,6 +53,7 @@
             }"
             class="ui-drawer"
             :class="[direction, orientation, drawerClass]"
+            @click.stop
           >
             <slot></slot>
           </div>

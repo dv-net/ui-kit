@@ -66,6 +66,7 @@ export interface UiKitConfig {
     translations: {
       error: string;
       success: string;
+      infoTitle: string;
     };
   };
 }
@@ -135,7 +136,8 @@ export const config = reactive<UiKitConfig>({
   uiNotification: {
     translations: {
       error: "Error",
-      success: "Success"
+      success: "Success",
+      infoTitle: "Information"
     }
   }
 });

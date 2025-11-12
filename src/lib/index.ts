@@ -15,6 +15,7 @@ export { default as UiDropdown } from "@/lib/components/UiDropdown/UiDropdown.vu
 export { default as UiFlagIcon } from "@/lib/components/UiFlagIcon/UiFlagIcon.vue";
 export { default as UiForm } from "@/lib/components/UiForm/UiForm.vue";
 export { default as UiFormItem } from "@/lib/components/UiFormItem/UiFormItem.vue";
+export { default as UiGallery } from "@/lib/components/UiGallery/UiGallery.vue";
 export { default as UiIcon } from "@/lib/components/UiIcon/UiIcon.vue";
 export { default as UiIconButton } from "@/lib/components/UiIconButton/UiIconButton.vue";
 export { default as UiInput } from "@/lib/components/UiInput/UiInput.vue";

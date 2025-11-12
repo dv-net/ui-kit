@@ -1,16 +1,14 @@
 <script setup lang="ts">
-  import UiDragAndDrop from "@/lib/components/UiDragAndDrop/UiDragAndDrop.vue";
-
   import { ref } from "vue";
 
-  import { UiButton } from "@/lib";
+  import { UiButton, UiDragAndDrop, UiGallery } from "@/lib";
   import { FileToUpload } from "@/lib/components/UiDragAndDrop/types.ts";
 
   const filesMultiple = ref<FileToUpload[]>([]);
-
   const loading = ref(false);
-
   const fileSingle = ref<FileToUpload[]>([]);
+  const isShowGallery = ref<boolean>(false);
+  const images = ref<FileToUpload[]>([]);
 
   let timer: ReturnType<typeof setTimeout>;
 
@@ -76,15 +74,22 @@
           @cancel="onCancel"
           :extensions="['txt']"
         />
-        <UiButton type="primary" mode="accent" @click="launchFakeLoad" :disabled="!filesMultiple.length && !loading"
-          >Upload (mock)</UiButton
-        >
+        <UiButton type="primary" mode="accent" @click="launchFakeLoad" :disabled="!filesMultiple.length && !loading">
+          Upload (mock)
+        </UiButton>
       </div>
     </div>
 
     <div class="grid">
       <div class="grid__header">Single file only</div>
       <UiDragAndDrop v-model="fileSingle" :multiple="false" />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">Gallery preview</div>
+      <UiDragAndDrop v-model="images" :multiple="true" />
+      <UiButton type="primary" @click="isShowGallery = true" :disabled="!images.length"> Show photos</UiButton>
+      <UiGallery v-if="images.length" v-model="isShowGallery" :images="images" />
     </div>
   </div>
 </template>

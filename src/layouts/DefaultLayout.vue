@@ -54,12 +54,14 @@
       margin-left: auto;
     }
   }
+
   .ui-layout__main {
     display: flex;
     flex-grow: 1;
+
     .main {
-      max-width: 1200px;
       width: 100%;
+      max-width: 1200px;
       margin: 0 auto;
     }
   }

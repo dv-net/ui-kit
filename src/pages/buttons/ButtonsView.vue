@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import UiSwitch from "@/lib/components/UiSwitch/UiSwitch.vue";
+
   import { ref } from "vue";
+
   import { UiButton } from "@/lib";
 
   const isLoading = ref<boolean>(false);

@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import UiCheckboxGroup from "@/lib/components/UiCheckboxGroup/UiCheckboxGroup.vue";
   import UiSwitch from "@/lib/components/UiSwitch/UiSwitch.vue";
+
   import { ref } from "vue";
+
   import { UiCheckbox } from "@/lib";
 
   const isDisabled = ref(false);

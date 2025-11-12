@@ -15,6 +15,18 @@
     }
     emits("closeMenu");
   }
+
+  function playAnimation() {
+    animationRef.value?.lottie?.play();
+  }
+
+  function resetAnimation() {
+    animationRef.value?.lottie?.goToAndStop?.(0, true);
+  }
+
+  function handleAnimationLoaded() {
+    resetAnimation();
+  }
 </script>
 <template>
   <button
@@ -23,11 +35,17 @@
     v-if="item.isShow === undefined || item.isShow"
     class="ui-profile-menu--item"
     :class="[{ 'is-active': item.isActive }, item.class && item.class()]"
-    @mouseover="item.animationIcon && animationRef?.lottie?.play()"
-    @mouseleave="item.animationIcon && animationRef?.lottie?.stop()"
+    @mouseover="item.animationIcon && playAnimation()"
+    @mouseleave="item.animationIcon && resetAnimation()"
   >
     <div v-if="item.animationIcon" class="ui-profile-menu--item__animation">
-      <UiAnimation ref="animationRef" :width="24" :height="24" :icon-component="item.animationIcon" />
+      <UiAnimation
+        ref="animationRef"
+        :width="24"
+        :height="24"
+        :icon-component="item.animationIcon"
+        @onAnimationLoaded="handleAnimationLoaded"
+      />
     </div>
 
     <UiIcon

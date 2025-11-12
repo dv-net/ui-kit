@@ -145,6 +145,20 @@
           <p>{{ config.uiLanguages.translations.changeLanguage }}</p>
           <UiIcon name="close" type="400" size="lg" />
         </div>
+        <div class="ui-languages--drawer__search">
+          <UiInput
+            ref="inputRef"
+            autofocus
+            size="sm"
+            v-model="searchValue"
+            clearable
+            :placeholder="config.uiLanguages.translations.searchInputPlaceholder"
+          >
+            <template #prepend>
+              <search-icon />
+            </template>
+          </UiInput>
+        </div>
         <div class="ui-languages--drawer__items">
           <div
             class="ui-languages__favourites"
@@ -230,6 +244,10 @@
         font-weight: 500;
         gap: 12px;
         line-height: 24px;
+      }
+
+      &__search {
+        padding: 8px 16px;
       }
 
       &__items {

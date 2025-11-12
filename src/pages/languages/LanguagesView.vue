@@ -1,6 +1,8 @@
 <script lang="ts" setup>
   import UiLanguages from "@/lib/components/UiLanguages/UiLanguages.vue";
+
   import { ref } from "vue";
+
   import { locales } from "@/utils/constants/locale";
 
   const isShow = ref(false);

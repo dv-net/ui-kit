@@ -4,7 +4,7 @@
 
   import { ref } from "vue";
 
-  import { UiInput, UiForm, UiFormItem } from "@/lib";
+  import { UiForm, UiFormItem,UiInput } from "@/lib";
 
   const isShow = ref<boolean>(false)
   const valueInput = ref<string | null>(null)

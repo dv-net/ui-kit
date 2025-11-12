@@ -8,17 +8,43 @@
   <div class="page">
     <h1 class="global-title">Notification</h1>
 
-    <div class="grid">
-      <div class="grid__header">Basic</div>
+    <div class="flex">
       <UiButton
-        mode="neutral"
+        type="negative"
         @click="
           UiNotification(
             'Hello, I am notification <p style=color:red;>123</p> asdasd Eat more of these soft French rolls, and have some tea'
           )
         "
-        >Show</UiButton
       >
+        Error
+      </UiButton>
+
+      <UiButton
+        type="primary"
+        @click="
+          UiNotification(
+            'Hello, I am notification <p style=color:green;>123</p> asdasd Eat more of these soft French rolls, and have some tea',
+            'success'
+          )
+        "
+      >
+        Success
+      </UiButton>
+
+      <UiButton
+        type="secondary"
+        @click="
+          UiNotification(
+            'Hello, I am notification <p style=color:lightgreen;>123</p> asdasd Eat more of these soft French rolls, and have some tea',
+            'info',
+            true,
+            'Custom info title'
+          )
+        "
+      >
+        Info
+      </UiButton>
     </div>
   </div>
 </template>
@@ -29,19 +55,9 @@
     flex-direction: column;
     gap: 24px;
 
-    .grid {
-      display: grid;
-      align-items: center;
+    .flex {
+      display: flex;
       gap: 12px;
-      grid-template-columns: 1fr;
-
-      &__header {
-        width: max-content;
-        border-bottom: 1px solid;
-        margin-bottom: 8px;
-        font-size: 18px;
-        font-weight: bold;
-      }
     }
   }
 </style>

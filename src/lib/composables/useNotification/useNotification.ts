@@ -3,10 +3,12 @@ import UiNotification from "./UiNotification.vue";
 import { uuidv4 } from "uuidv7";
 import { h, render, type VNode } from "vue";
 
+import { UiNotificationType } from "@/lib/composables/useNotification/types.ts";
+
 const margin = 16;
 let existedNotifications: VNode[] = [];
 
-export default function (message: string, type?: "success" | "error", isHTMLMessage?: boolean) {
+export default function (message: string, type?: UiNotificationType, isHTMLMessage?: boolean, title?: string) {
   let topOffset = margin;
   for (const notificationComp of existedNotifications) {
     topOffset += notificationComp.el!.offsetHeight + margin;
@@ -24,7 +26,8 @@ export default function (message: string, type?: "success" | "error", isHTMLMess
     onRemove: removeComponent,
     message,
     type,
-    isHTMLMessage
+    isHTMLMessage,
+    title
   });
 
   render(notificationComponent, container);

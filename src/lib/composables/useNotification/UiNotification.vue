@@ -2,13 +2,15 @@
   import { computed, onMounted, ref } from "vue";
 
   import { config, UiIcon } from "@/lib";
+  import { UiNotificationType } from "@/lib/composables/useNotification/types.ts";
 
   const props = withDefaults(
     defineProps<{
       id: string;
       top: number;
+      title?: string;
       message: string;
-      type?: "success" | "error";
+      type?: UiNotificationType;
       isHTMLMessage?: boolean;
     }>(),
     {
@@ -38,13 +40,20 @@
     <div v-show="show" class="ui-notification" :style="styleComputed">
       <div class="ui-notification__top">
         <ui-icon v-if="type === 'error'" name="block" type="400" color="#DD4C1E" />
-        <ui-icon v-else name="check-circle" type="400" color="#1F9649" />
-        <span class="ui-notification__title">
-          {{
-            type === "error"
-              ? config.uiNotification.translations.error
-              : config.uiNotification.translations.success + "!"
-          }}
+        <ui-icon v-else-if="type === 'success'" name="check-circle" type="400" color="#1F9649" />
+        <ui-icon v-else name="error" type="400" color="#B4FF29" />
+
+        <span :class="['ui-notification__title', `${type}`]">
+          <template v-if="title">{{ title }}</template>
+          <template v-else>
+            {{
+              type === "error"
+                ? config.uiNotification.translations.error
+                : type === "success"
+                  ? config.uiNotification.translations.success + "!"
+                  : title || config.uiNotification.translations.infoTitle
+            }}
+          </template>
         </span>
       </div>
       <div v-if="isHTMLMessage" v-html="message" class="ui-notification__text" />
@@ -79,6 +88,10 @@
       font-size: 16px;
       font-weight: 500;
       line-height: 20px;
+
+      &.info {
+        color: #b4ff29;
+      }
     }
 
     &__text {
