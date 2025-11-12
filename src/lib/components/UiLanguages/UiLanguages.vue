@@ -143,7 +143,7 @@
       <div class="ui-languages--drawer__wrapper">
         <div class="ui-languages--drawer__header">
           <p>{{ config.uiLanguages.translations.changeLanguage }}</p>
-          <UiIcon name="close" type="400" size="lg" />
+          <UiIcon style="cursor: pointer" name="close" type="400" size="lg" @click="isShow = false" />
         </div>
         <div class="ui-languages--drawer__search">
           <UiInput
