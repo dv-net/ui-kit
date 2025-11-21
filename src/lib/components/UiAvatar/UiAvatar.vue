@@ -60,7 +60,6 @@
 <style lang="scss">
   .ui-avatar {
     position: relative;
-    border-radius: 50%;
     user-select: none;
     transform: translateZ(0);
     will-change: transform;
