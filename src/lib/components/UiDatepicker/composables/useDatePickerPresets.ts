@@ -1,17 +1,21 @@
 import { PresetModel, UiDatepickerRangeProps } from '../types';
 
-import { computed } from 'vue';
+import dayjs, { type Dayjs } from 'dayjs';
+
+import { computed, type ComputedRef } from 'vue';
 
 import { useDatePicker } from '../composables/useDatePicker';
 
 import { config } from '@/lib/config';
 
-const { today, weekAgo, monthAgo, startOfMonth, quarterAgo, yearAgo } =
+const { today, weekAgo, startOfMonth, startOfYear, quarterAgo } =
   useDatePicker();
 
 export function useDatePickerPresets(params: {
   props: UiDatepickerRangeProps;
   beginDate: string;
+  startDate: ComputedRef<Dayjs | null>;
+  endDate: ComputedRef<Dayjs | null>;
 }) {
   const presets = computed((): PresetModel[] => {
     return [
@@ -35,10 +39,7 @@ export function useDatePickerPresets(params: {
       },
       {
         label: config.uiDatePicker.translations.presetMonth,
-        date: [
-          params.props.monthPresetFromMonthStart ? startOfMonth : monthAgo,
-          today,
-        ],
+        date: [startOfMonth, today],
         id: 'month',
         slider: {
           type: 'month',
@@ -56,7 +57,7 @@ export function useDatePickerPresets(params: {
       },
       {
         label: config.uiDatePicker.translations.presetYear,
-        date: [yearAgo, today],
+        date: [startOfYear, today],
         id: 'year',
         slider: {
           type: 'year',

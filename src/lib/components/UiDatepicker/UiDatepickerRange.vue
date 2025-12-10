@@ -12,6 +12,7 @@
   import { UiButton, UiIcon } from "@/lib";
   import { useDatePicker } from "@/lib/components/UiDatepicker/composables/useDatePicker";
   import { useDatePickerPresets } from "@/lib/components/UiDatepicker/composables/useDatePickerPresets";
+  import { useDatePickerSelected } from "@/lib/components/UiDatepicker/composables/useDatePickerSelected";
   import { PresetModel, UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
   import { config } from "@/lib/config";
 
@@ -19,7 +20,7 @@
 
   const modelValue = defineModel<string[]>({ default: [] });
   const { width } = useWindowSize();
-  const { dayjs, checkIsValidDate, today, endDate, startDate, beginDate, isFullMonthSelected, modelValueFormat } =
+  const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } =
     useDatePicker(modelValue);
 
   const pickerRef = ref();
@@ -31,47 +32,9 @@
   const currentMaxDate = computed(() => props.maxDate ?? today);
   const currentMinDate = computed(() => props.minDate);
 
-  const { presets } = useDatePickerPresets({ props, beginDate: formatingBeginDate.value ?? beginDate.value });
+  const { presets } = useDatePickerPresets({ props, beginDate: formatingBeginDate.value ?? beginDate.value, startDate, endDate });
 
-  const selectedDate = computed(() => {
-    if (!checkIsValidDate()) {
-      return config.uiDatePicker.translations.invalidDate;
-    }
-    if (!startDate.value || !endDate.value) {
-      return config.uiDatePicker.translations.emptyPlaceholder;
-    }
-
-    const isToday = endDate.value.isSame(dayjs(), "day") && startDate.value.isSame(dayjs(), "day");
-    const isYesterday =
-      startDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day") &&
-      endDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day");
-    const isCurrentYear = startDate.value.isSame(endDate.value, "year");
-    const isCurrentMonth = startDate.value.isSame(endDate.value, "month");
-    const dateFrom = startDate.value.locale(config.locale);
-    const dateTo = endDate.value.locale(config.locale);
-
-    if (isToday) {
-      return config.uiDatePicker.translations.todayPlaceholder;
-    }
-
-    if (isYesterday) {
-      return config.uiDatePicker.translations.yesterdayPlaceholder;
-    }
-
-    if (isFullMonthSelected.value) {
-      return dateFrom.format("MMMM YYYY");
-    }
-
-    if (isCurrentMonth) {
-      return `${dateFrom.format("DD")} - ${dateTo.format("DD")} ${dateTo.format("MMM YYYY")}`;
-    }
-    
-    if (isCurrentYear) {
-      return `${dateFrom.format("DD MMM")} - ${dateTo.format("DD MMM")} ${dateTo.format("YYYY")}`;
-    }
-
-    return `${dateFrom.format("DD MMM YY")} - ${dateTo.format("DD MMM YY")}`;
-  });
+  const { isAllTimeSelected, selectedDate, selectedRange } = useDatePickerSelected({ presets, startDate, endDate, minDate: currentMinDate, maxDate: currentMaxDate });
 
   function updatePresetHandler(preset: PresetModel) {
     updateModelValue(preset.date);
@@ -124,7 +87,7 @@
 </script>
 <template>
   <div class="ui-datepicker-range" :class="[size, { 'is-disabled': disabled }]">
-    <DatePickerSlider :disabled="!modelValue.length" v-model="modelValue">
+    <DatePickerSlider :disabled="!modelValue.length || isAllTimeSelected" v-model="modelValue" :selected-range="selectedRange">
       <VueDatePicker
         position="center"
         :locale="config.locale"
@@ -140,10 +103,10 @@
         :offset="0"
         @update:model-value="updateModelValue"
         @internal-model-change="updateIternalValue"
-        
       >
-        <template v-if="presets.length" #left-sidebar>
+        <template #left-sidebar>
           <DatePickerPresets
+             v-if="presets.length"
             :presets="presets"
             :date="processingData"
             @change="updatePresetHandler"

@@ -8,8 +8,8 @@ export interface UiKitConfig {
     inputFormat: string;
     translations: {
       invalidDate: string;
-      todayPlaceholder: string;
       yesterdayPlaceholder: string;
+      yearLabelSuffix: string;
       emptyPlaceholder: string;
       applyButton: string;
       clearButton: string;
@@ -79,8 +79,8 @@ export const config = reactive<UiKitConfig>({
     inputFormat: "DD.MM.YYYY",
     translations: {
       invalidDate: "The date is incorrect",
-      todayPlaceholder: "Today",
       yesterdayPlaceholder: "Yesterday",
+      yearLabelSuffix: "Year",
       emptyPlaceholder: "Choose date",
       applyButton: "Apply",
       clearButton: "Clear",
@@ -91,7 +91,7 @@ export const config = reactive<UiKitConfig>({
       presetMonth: "Month",
       presetQuarter: "Quarter",
       presetYear: "Year",
-      presetAllTime: "All time"
+      presetAllTime: "All time",
     }
   },
   uiLanguages: {

@@ -10,8 +10,10 @@ export interface UiDatepickerRangeProps {
   autoApply?: boolean;
   maxDate?: string;
   minDate?: string;
-  monthPresetFromMonthStart?: boolean;
+  range?: boolean;
 }
+
+export type DatepickerSwapRange = "week" | "month" | "year";
 
 export interface PresetModel {
   label: string;

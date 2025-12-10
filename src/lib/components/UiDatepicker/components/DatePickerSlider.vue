@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+  import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
+  import { Dayjs } from "dayjs";
+
   import { computed } from "vue";
 
   import { useDatePicker } from "../composables/useDatePicker";
@@ -7,33 +10,47 @@
   interface DatePickerSliderProps {
     isShow?: boolean;
     disabled?: boolean;
+    selectedRange?: DatepickerSwapRange;
   }
-  const { isShow = true } = defineProps<DatePickerSliderProps>();
+  const { isShow = true, selectedRange } = defineProps<DatePickerSliderProps>();
   const modelValue = defineModel<string[]>({ default: [] });
-  const { dayjs, modelValueFormat, isFullMonthSelected } = useDatePicker(modelValue);
+  const { dayjs, modelValueFormat } = useDatePicker(modelValue);
   const disableNextDayButton = computed(() => {
     return dayjs(modelValue.value[1]).isAfter(dayjs()) || dayjs().isSame(dayjs(modelValue.value[1]), "day");
   });
   function change(isPrev: boolean) {
-    let dateFrom = "";
-    let dateTo = "";
     const startDate = dayjs(modelValue.value[0]);
     const endDate = dayjs(modelValue.value[1]);
 
-    if (isFullMonthSelected.value) {
-      dateFrom = startDate.add(isPrev ? -1 : 1, "month").format(modelValueFormat.value);
-      dateTo = endDate.add(isPrev ? -1 : 1, "month").format(modelValueFormat.value);
-      dateTo = dayjs(dateTo).date(dayjs(dateTo).daysInMonth()).format(modelValueFormat.value);
-    } else {
-      const diffDays = endDate.diff(startDate, "day") || 1;
-      dateFrom = startDate.add(isPrev ? -diffDays : diffDays, "day").format(modelValueFormat.value);
-      dateTo = endDate.add(isPrev ? -diffDays : diffDays, "day").format(modelValueFormat.value);
-      if (dayjs(dateTo).isAfter(dayjs())) {
-        dateTo = dayjs().format(modelValueFormat.value);
+    let dateFrom: Dayjs | undefined = undefined;
+    let dateTo: Dayjs | undefined = undefined;
+
+    if (selectedRange) {
+
+      dateFrom = startDate.add(isPrev ? -1 : 1, selectedRange)
+
+      dateTo = endDate.add(isPrev ? -1 : 1, selectedRange);
+
+      if (['month', 'year'].includes(selectedRange)) {
+        dateFrom = dateFrom.startOf(selectedRange);
+
+        dateTo = dateFrom.endOf(selectedRange);
       }
+
+    } else {
+      const diff = endDate.diff(startDate, "day") || 1;
+
+      dateFrom = startDate.add(isPrev ? -diff : diff, 'day');
+
+      dateTo = endDate.add(isPrev ? -diff : diff, 'day');
     }
 
-    modelValue.value = [dateFrom, dateTo];
+    if (dayjs(dateTo).isAfter(dayjs())) {
+      dateTo = dayjs();
+    }
+
+
+    modelValue.value = [dateFrom?.format(modelValueFormat.value) || '', dateTo?.format(modelValueFormat.value) || ''];
   }
 </script>
 <template>
