@@ -60,8 +60,10 @@
 <style lang="scss">
   .ui-avatar {
     position: relative;
-    border-radius: 50%;
     user-select: none;
+    transform: translateZ(0);
+    will-change: transform;
+    contain: layout style paint;
 
     &.clickable {
       @media (hover: hover) and (pointer: fine) {
@@ -75,6 +77,7 @@
     &__inner {
       width: 100%;
       height: 100%;
+      display: block;
     }
 
     &__status {

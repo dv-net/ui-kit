@@ -231,7 +231,7 @@
     }
 
     &__title {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       line-height: 20px;
     }
@@ -308,7 +308,7 @@
 
       .ui-tooltip__title {
         color: #f7a700;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 400;
       }
 
