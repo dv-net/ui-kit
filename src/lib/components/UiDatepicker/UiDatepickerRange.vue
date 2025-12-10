@@ -106,6 +106,7 @@
       :disabled="!modelValue.length || isAllTimeSelected"
       v-model="modelValue"
       :selected-range="selectedRange"
+      :is-show="!hideSliderArrows"
     >
       <VueDatePicker
         position="center"

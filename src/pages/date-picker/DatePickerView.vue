@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import dayjs from "dayjs";
+  import dayjs from "dayjs";
 
   import UiDatepickerRange from "@/lib/components/UiDatepicker/UiDatepickerRange.vue";
+  import UiTag from "@/lib/components/UiTag/UiTag.vue";
 
   import { ref } from "vue";
 
   const date = ref([]);
 
-  const minDate = ref(dayjs().add(-3, 'days').toString());
+  const minDate = ref(dayjs().add(-3, "days").toString());
 
-  const maxDate = ref(dayjs().add(3, 'days').toString());
+  const maxDate = ref(dayjs().add(3, "days").toString());
 </script>
 
 <template>
@@ -64,6 +65,15 @@ import dayjs from "dayjs";
     <div class="grid">
       <div class="grid__header">56px(xl) Solo DatePicker</div>
       <UiDatepickerRange size="xl" v-model="date" :range="false" />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">56px(xl) Custom projection</div>
+      <UiDatepickerRange size="xl" v-model="date" hide-slider-arrows>
+        <template #trigger="{ selectedDate }">
+          <UiTag :text="selectedDate" class="pointer" size="lg" />
+        </template>
+      </UiDatepickerRange>
     </div>
   </div>
 </template>

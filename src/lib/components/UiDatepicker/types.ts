@@ -11,6 +11,7 @@ export interface UiDatepickerRangeProps {
   maxDate?: string;
   minDate?: string;
   range?: boolean;
+  hideSliderArrows?: boolean;
 }
 
 export type DatepickerSwapRange = "week" | "month" | "year";

@@ -58,7 +58,7 @@
     </button>
 
     <slot />
-
+    
     <button
       v-if="isShow"
       :disabled="disableNextDayButton || disabled"
