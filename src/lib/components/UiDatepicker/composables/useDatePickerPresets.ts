@@ -1,74 +1,66 @@
-import { PresetModel, UiDatepickerRangeProps } from '../types';
+import { PresetModel } from "../types";
 
-import dayjs, { type Dayjs } from 'dayjs';
+import { computed } from "vue";
 
-import { computed, type ComputedRef } from 'vue';
+import { useDatePicker } from "../composables/useDatePicker";
 
-import { useDatePicker } from '../composables/useDatePicker';
+import { config } from "@/lib/config";
 
-import { config } from '@/lib/config';
+const { today, weekAgo, startOfMonth, startOfYear, quarterAgo } = useDatePicker();
 
-const { today, weekAgo, startOfMonth, startOfYear, quarterAgo } =
-  useDatePicker();
-
-export function useDatePickerPresets(params: {
-  props: UiDatepickerRangeProps;
-  beginDate: string;
-  startDate: ComputedRef<Dayjs | null>;
-  endDate: ComputedRef<Dayjs | null>;
-}) {
+export function useDatePickerPresets(params: { beginDate: string }) {
   const presets = computed((): PresetModel[] => {
     return [
       {
         label: config.uiDatePicker.translations.presetToday,
         date: [today, today],
-        id: 'day',
+        id: "day",
         slider: {
-          type: 'day',
-          count: 1,
-        },
+          type: "day",
+          count: 1
+        }
       },
       {
         label: config.uiDatePicker.translations.presetWeek,
         date: [weekAgo, today],
-        id: 'week',
+        id: "week",
         slider: {
-          type: 'day',
-          count: 6,
-        },
+          type: "day",
+          count: 6
+        }
       },
       {
         label: config.uiDatePicker.translations.presetMonth,
         date: [startOfMonth, today],
-        id: 'month',
+        id: "month",
         slider: {
-          type: 'month',
-          count: 1,
-        },
+          type: "month",
+          count: 1
+        }
       },
       {
         label: config.uiDatePicker.translations.presetQuarter,
         date: [quarterAgo, today],
-        id: 'quarter',
+        id: "quarter",
         slider: {
-          type: 'month',
-          count: 3,
-        },
+          type: "month",
+          count: 3
+        }
       },
       {
         label: config.uiDatePicker.translations.presetYear,
         date: [startOfYear, today],
-        id: 'year',
+        id: "year",
         slider: {
-          type: 'year',
-          count: 1,
-        },
+          type: "year",
+          count: 1
+        }
       },
       {
         label: config.uiDatePicker.translations.presetAllTime,
         date: [params.beginDate, today],
-        id: 'all-time',
-      },
+        id: "all-time"
+      }
     ];
   });
 

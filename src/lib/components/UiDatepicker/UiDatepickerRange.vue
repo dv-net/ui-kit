@@ -16,12 +16,11 @@
   import { PresetModel, UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
   import { config } from "@/lib/config";
 
-  const props = withDefaults(defineProps<UiDatepickerRangeProps>(), { size: "xs" });
+  const props = withDefaults(defineProps<UiDatepickerRangeProps>(), { size: "xs", range: true });
 
   const modelValue = defineModel<string[]>({ default: [] });
   const { width } = useWindowSize();
-  const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } =
-    useDatePicker(modelValue);
+  const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } = useDatePicker(modelValue);
 
   const pickerRef = ref();
   const processingData = ref<string[]>(["", ""]);
@@ -32,20 +31,29 @@
   const currentMaxDate = computed(() => props.maxDate ?? today);
   const currentMinDate = computed(() => props.minDate);
 
-  const { presets } = useDatePickerPresets({ props, beginDate: formatingBeginDate.value ?? beginDate.value, startDate, endDate });
+  const { presets } = useDatePickerPresets({ beginDate: formatingBeginDate.value ?? beginDate.value });
 
-  const { isAllTimeSelected, selectedDate, selectedRange } = useDatePickerSelected({ presets, startDate, endDate, minDate: currentMinDate, maxDate: currentMaxDate });
+  const { isAllTimeSelected, selectedDate, selectedRange } = useDatePickerSelected({
+    presets,
+    startDate,
+    endDate,
+    minDate: currentMinDate,
+    maxDate: currentMaxDate
+  });
 
   function updatePresetHandler(preset: PresetModel) {
     updateModelValue(preset.date);
     pickerRef.value.closeMenu();
   }
 
-  function updateIternalValue(date: string[]) {
+  function updateIternalValue(date: string | string[]) {
     if (!date) return;
+
+    const currentDate = Array.isArray(date) ? date : [date, date];
+
     isDisabledBtn.value = date.length < 2;
-    if (date.length === 2) {
-      processingData.value = date;
+    if (currentDate.length === 2) {
+      processingData.value = currentDate;
     }
   }
 
@@ -53,19 +61,25 @@
     modelValue.value = [dayjs(date[0]).format(modelValueFormat.value), dayjs(date[1]).format(modelValueFormat.value)];
   }
 
-  function updateModelValue(date: string[]) {
+  function updateModelValue(date: string | string[]) {
+    const currentDate = Array.isArray(date) ? date : [date, date];
+
     if (startDate.value && endDate.value) {
-      const isSame = startDate.value.isSame(date[0], "day") && endDate.value.isSame(date[1], "day");
+      const isSame = startDate.value.isSame(currentDate[0], "day") && endDate.value.isSame(currentDate[1], "day");
       if (!isSame) {
-        setModelValue(date);
+        setModelValue(currentDate);
       }
     } else {
-      setModelValue(date);
+      setModelValue(currentDate);
     }
   }
 
   function changeInputsHandler() {
-    pickerRef.value?.updateInternalModelValue(processingData.value);
+    const currentData = props.range
+      ? processingData.value
+      : dayjs(processingData.value[0], config.uiDatePicker.modelValueFormat).toDate();
+
+    pickerRef.value?.updateInternalModelValue(currentData);
     pickerRef.value?.setMonthYear({
       month: dayjs(processingData.value[0]).month(),
       year: dayjs(processingData.value[0]).year()
@@ -85,17 +99,22 @@
     }
   });
 </script>
+
 <template>
   <div class="ui-datepicker-range" :class="[size, { 'is-disabled': disabled }]">
-    <DatePickerSlider :disabled="!modelValue.length || isAllTimeSelected" v-model="modelValue" :selected-range="selectedRange">
+    <DatePickerSlider
+      :disabled="!modelValue.length || isAllTimeSelected"
+      v-model="modelValue"
+      :selected-range="selectedRange"
+    >
       <VueDatePicker
         position="center"
         :locale="config.locale"
         ref="pickerRef"
-        :model-value="modelValue"
+        :model-value="range ? modelValue : modelValue[0]"
         :enable-time-picker="false"
-        range
-        :multi-calendars="width > 1000"
+        :range="range"
+        :multi-calendars="range && width > 1000"
         month-name-format="long"
         :max-date="currentMaxDate"
         :min-date="currentMinDate"
@@ -106,19 +125,34 @@
       >
         <template #left-sidebar>
           <DatePickerPresets
-             v-if="presets.length"
+            v-if="range && presets.length"
             :presets="presets"
             :date="processingData"
             @change="updatePresetHandler"
           />
-          <DatePickerInputs @change="changeInputsHandler" @submit="pickerRef.selectDate()" v-model="processingData" />
+
+          <DatePickerInputs
+            @change="changeInputsHandler"
+            @submit="pickerRef.selectDate()"
+            v-model="processingData"
+            :range="range"
+          />
         </template>
+
         <template #trigger>
-          <slot v-if="$slots.trigger" name="trigger" :date="modelValue" :presets="presets" :selected-date="selectedDate" />
+          <slot
+            v-if="$slots.trigger"
+            name="trigger"
+            :date="modelValue"
+            :presets="presets"
+            :selected-date="selectedDate"
+          />
+
           <button v-else class="ui-datepicker__trigger">
             <UiIcon type="400" name="calendar-month" />{{ selectedDate }}
           </button>
         </template>
+
         <template #month-year="{ month, months, handleMonthYearChange }">
           <div class="ui-datepicker__navigate">
             <UiIconButton
@@ -128,7 +162,11 @@
               icon-name="chevron-left 1"
               no-size
             />
-            <span class="ui-datepicker__navigate-value">{{ months?.find((item) => item.value === month)?.text }}</span>
+
+            <span class="ui-datepicker__navigate-value">
+              {{ months?.find((item) => item.value === month)?.text }}
+            </span>
+
             <UiIconButton
               @click="handleMonthYearChange && handleMonthYearChange(true)"
               icon-type="400"
@@ -138,10 +176,12 @@
             />
           </div>
         </template>
+
         <template #action-row="{ disabled, selectDate }">
           <UiButton :disabled="isDisabledBtn || disabled" mode="neutral" @click="selectDate">
             {{ config.uiDatePicker.translations.applyButton }}
           </UiButton>
+
           <UiButton v-if="modelValue.length && clearable" type="secondary" @click="clearDate">
             {{ config.uiDatePicker.translations.clearButton }}
           </UiButton>
@@ -150,6 +190,7 @@
     </DatePickerSlider>
   </div>
 </template>
+
 <style lang="scss">
   @use "./style/index";
 </style>

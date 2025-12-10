@@ -26,39 +26,39 @@
     let dateTo: Dayjs | undefined = undefined;
 
     if (selectedRange) {
-
-      dateFrom = startDate.add(isPrev ? -1 : 1, selectedRange)
+      dateFrom = startDate.add(isPrev ? -1 : 1, selectedRange);
 
       dateTo = endDate.add(isPrev ? -1 : 1, selectedRange);
 
-      if (['month', 'year'].includes(selectedRange)) {
+      if (["month", "year"].includes(selectedRange)) {
         dateFrom = dateFrom.startOf(selectedRange);
 
         dateTo = dateFrom.endOf(selectedRange);
       }
-
     } else {
       const diff = endDate.diff(startDate, "day") || 1;
 
-      dateFrom = startDate.add(isPrev ? -diff : diff, 'day');
+      dateFrom = startDate.add(isPrev ? -diff : diff, "day");
 
-      dateTo = endDate.add(isPrev ? -diff : diff, 'day');
+      dateTo = endDate.add(isPrev ? -diff : diff, "day");
     }
 
     if (dayjs(dateTo).isAfter(dayjs())) {
       dateTo = dayjs();
     }
 
-
-    modelValue.value = [dateFrom?.format(modelValueFormat.value) || '', dateTo?.format(modelValueFormat.value) || ''];
+    modelValue.value = [dateFrom?.format(modelValueFormat.value) || "", dateTo?.format(modelValueFormat.value) || ""];
   }
 </script>
+
 <template>
   <div class="com-datepicker-slider">
     <button v-if="isShow" :disabled="disabled" class="com-datepicker-slider__btn" @click="change(true)">
       <UiIcon type="400" name="chevron-left 1" />
     </button>
+
     <slot />
+
     <button
       v-if="isShow"
       :disabled="disableNextDayButton || disabled"
@@ -69,6 +69,7 @@
     </button>
   </div>
 </template>
+
 <style lang="scss">
   .com-datepicker-slider {
     display: flex;

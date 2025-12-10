@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+  import { UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
+
   import DatePickerInput from "./DatePickerInput.vue";
 
   import { useWindowSize } from "@vueuse/core";
@@ -8,6 +10,7 @@
 
   import { config } from "@/lib/config";
   const emits = defineEmits(["submit", "change"]);
+  const { range } = defineProps<Pick<UiDatepickerRangeProps, "range">>();
   const processingData = defineModel<string[]>("model-value", { default: [] });
   const { dayjs, inputFormat, modelValueFormat } = useDatePicker();
   const errors = ref<boolean[]>([false, false]);
@@ -63,15 +66,19 @@
         :maska="maska"
         v-model="startDate"
       />
-      <div class="com-datepicker-inputs--form__divider" />
-      <DatePickerInput
-        :label="width < 1000 ? config.uiDatePicker.translations.inputLabelEnd : ''"
-        :isError="errors[1]"
-        @input="(e) => update(e, false)"
-        :placeholder="placeholder"
-        :maska="maska"
-        v-model="endDate"
-      />
+
+      <template v-if="range">
+        <div class="com-datepicker-inputs--form__divider" />
+
+        <DatePickerInput
+          :label="width < 1000 ? config.uiDatePicker.translations.inputLabelEnd : ''"
+          :isError="errors[1]"
+          @input="(e) => update(e, false)"
+          :placeholder="placeholder"
+          :maska="maska"
+          v-model="endDate"
+        />
+      </template>
     </form>
   </div>
 </template>

@@ -62,8 +62,8 @@ import dayjs from "dayjs";
     </div>
 
     <div class="grid">
-      <div class="grid__header">56px(xl) Month Preset starts from start</div>
-      <UiDatepickerRange size="xl" v-model="date" />
+      <div class="grid__header">56px(xl) Solo DatePicker</div>
+      <UiDatepickerRange size="xl" v-model="date" :range="false" />
     </div>
   </div>
 </template>

@@ -80,7 +80,7 @@ export const config = reactive<UiKitConfig>({
     translations: {
       invalidDate: "The date is incorrect",
       yesterdayPlaceholder: "Yesterday",
-      yearLabelSuffix: "Year",
+      yearLabelSuffix: "year",
       emptyPlaceholder: "Choose date",
       applyButton: "Apply",
       clearButton: "Clear",

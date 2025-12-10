@@ -7,9 +7,18 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import weekOfYear from "dayjs/plugin/weekOfYear";
-import { computed, Ref } from "vue";
+import { computed, type Ref } from "vue";
 
+import "dayjs/locale/zh";
+import "dayjs/locale/uk";
 import "dayjs/locale/ru";
+import "dayjs/locale/ja";
+import "dayjs/locale/it";
+import "dayjs/locale/fr";
+import "dayjs/locale/es";
+import "dayjs/locale/de";
+import "dayjs/locale/ar";
+
 import { config } from "@/lib/config";
 
 dayjs.extend(utc);
