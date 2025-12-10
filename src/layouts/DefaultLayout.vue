@@ -25,7 +25,7 @@
           avatar="https://trashbox.ru/ifiles/220798_004e6a_img_20140503_122504/avatarki.-2.jpg"
           user-email="example@gmail.com"
           :menu-items="menuItems"
-          status="success"
+          status="pending"
         />
       </div>
     </template>

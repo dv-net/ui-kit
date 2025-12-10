@@ -147,6 +147,8 @@
         </div>
         <div class="ui-languages--drawer__search">
           <UiInput
+            ref="inputRef"
+            autofocus
             size="sm"
             v-model="searchValue"
             clearable

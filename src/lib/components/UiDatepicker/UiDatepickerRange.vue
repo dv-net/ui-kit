@@ -11,6 +11,7 @@
   import "@vuepic/vue-datepicker/dist/main.css";
   import { UiButton, UiIcon } from "@/lib";
   import { useDatePicker } from "@/lib/components/UiDatepicker/composables/useDatePicker";
+  import { useDatePickerPresets } from "@/lib/components/UiDatepicker/composables/useDatePickerPresets";
   import { PresetModel, UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
   import { config } from "@/lib/config";
 
@@ -20,45 +21,56 @@
   const { width } = useWindowSize();
   const { dayjs, checkIsValidDate, today, endDate, startDate, beginDate, isFullMonthSelected, modelValueFormat } =
     useDatePicker(modelValue);
+
   const pickerRef = ref();
   const processingData = ref<string[]>(["", ""]);
   const isDisabledBtn = ref(false);
   const formatingBeginDate = computed(() =>
     props.beginDate ? dayjs(props.beginDate).format(modelValueFormat.value) : null
   );
+  const currentMaxDate = computed(() => props.maxDate ?? today);
+  const currentMinDate = computed(() => props.minDate);
+
+  const { presets } = useDatePickerPresets({ props, beginDate: formatingBeginDate.value ?? beginDate.value });
+
   const selectedDate = computed(() => {
     if (!checkIsValidDate()) {
       return config.uiDatePicker.translations.invalidDate;
     }
-    if (startDate.value && endDate.value) {
-      const isToday = endDate.value.isSame(dayjs(), "day") && startDate.value.isSame(dayjs(), "day");
-      const isYesterday =
-        startDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day") &&
-        endDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day");
-      const isCurrentYear = startDate.value.isSame(endDate.value, "year");
-      const isCurrentMonth = startDate.value.isSame(endDate.value, "month");
-      const dateFrom = startDate.value.locale(config.locale);
-      const dateTo = endDate.value.locale(config.locale);
-
-      if (isToday) {
-        return config.uiDatePicker.translations.todayPlaceholder;
-      }
-      if (isYesterday) {
-        return config.uiDatePicker.translations.yesterdayPlaceholder;
-      }
-      if (isFullMonthSelected.value) {
-        return dateFrom.format("MMMM YYYY");
-      }
-      if (isCurrentMonth) {
-        return `${dateFrom.format("DD")} - ${dateTo.format("DD")} ${dateTo.format("MMM YYYY")}`;
-      }
-      if (isCurrentYear) {
-        return `${dateFrom.format("DD MMM")} - ${dateTo.format("DD MMM")} ${dateTo.format("YYYY")}`;
-      }
-      return `${dateFrom.format("DD MMM YY")} - ${dateTo.format("DD MMM YY")}`;
-    } else {
+    if (!startDate.value || !endDate.value) {
       return config.uiDatePicker.translations.emptyPlaceholder;
     }
+
+    const isToday = endDate.value.isSame(dayjs(), "day") && startDate.value.isSame(dayjs(), "day");
+    const isYesterday =
+      startDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day") &&
+      endDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day");
+    const isCurrentYear = startDate.value.isSame(endDate.value, "year");
+    const isCurrentMonth = startDate.value.isSame(endDate.value, "month");
+    const dateFrom = startDate.value.locale(config.locale);
+    const dateTo = endDate.value.locale(config.locale);
+
+    if (isToday) {
+      return config.uiDatePicker.translations.todayPlaceholder;
+    }
+
+    if (isYesterday) {
+      return config.uiDatePicker.translations.yesterdayPlaceholder;
+    }
+
+    if (isFullMonthSelected.value) {
+      return dateFrom.format("MMMM YYYY");
+    }
+
+    if (isCurrentMonth) {
+      return `${dateFrom.format("DD")} - ${dateTo.format("DD")} ${dateTo.format("MMM YYYY")}`;
+    }
+    
+    if (isCurrentYear) {
+      return `${dateFrom.format("DD MMM")} - ${dateTo.format("DD MMM")} ${dateTo.format("YYYY")}`;
+    }
+
+    return `${dateFrom.format("DD MMM YY")} - ${dateTo.format("DD MMM YY")}`;
   });
 
   function updatePresetHandler(preset: PresetModel) {
@@ -122,22 +134,24 @@
         range
         :multi-calendars="width > 1000"
         month-name-format="long"
-        :max-date="today"
+        :max-date="currentMaxDate"
+        :min-date="currentMinDate"
+        :auto-apply="autoApply"
         :offset="0"
         @update:model-value="updateModelValue"
         @internal-model-change="updateIternalValue"
         
       >
-        <template #left-sidebar>
+        <template v-if="presets.length" #left-sidebar>
           <DatePickerPresets
-            :begin-date="formatingBeginDate ?? beginDate"
+            :presets="presets"
             :date="processingData"
             @change="updatePresetHandler"
           />
           <DatePickerInputs @change="changeInputsHandler" @submit="pickerRef.selectDate()" v-model="processingData" />
         </template>
         <template #trigger>
-          <slot v-if="$slots.trigger" name="trigger" :date="modelValue" />
+          <slot v-if="$slots.trigger" name="trigger" :date="modelValue" :presets="presets" :selected-date="selectedDate" />
           <button v-else class="ui-datepicker__trigger">
             <UiIcon type="400" name="calendar-month" />{{ selectedDate }}
           </button>

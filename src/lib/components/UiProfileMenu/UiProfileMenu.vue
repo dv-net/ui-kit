@@ -1,13 +1,11 @@
 <script setup lang="ts">
   import UiProfileMenuItem from "@/lib/components/UiProfileMenu/components/UiProfileMenuItem.vue";
-  import { computed } from "vue";
+
   import { UiAvatar, UiDropdown } from "@/lib";
   import { UiProfileMenuProps } from "@/lib/components/UiProfileMenu/types.ts";
 
-  const { userEmail, status, menuItems, avatar } = defineProps<UiProfileMenuProps>();
+  defineProps<UiProfileMenuProps>();
   const isOpen = defineModel<boolean>("modelValue", { default: false });
-
-  const avatarKey = computed(() => `avatar-${userEmail || ''}-${avatar || ''}`);
 
   function closeMenu() {
     isOpen.value = false;
@@ -25,18 +23,12 @@
     >
       <template #reference>
         <div class="ui-profile-menu--trigger">
-          <UiAvatar :key="avatarKey" :avatar="avatar" :status="status" :email="userEmail" clickable />
+          <UiAvatar :avatar="avatar" :status="status" :email="userEmail" clickable/>
         </div>
       </template>
       <div class="ui-profile-menu--items">
         <div class="ui-profile-menu--header">
-          <UiAvatar
-            :key="`${avatarKey}-header`"
-            :avatar="avatar"
-            :status="status"
-            size="md"
-            :email="userEmail"
-          />
+          <UiAvatar :avatar="avatar" :status="status" size="md" :email="userEmail" />
           <div class="ui-profile-menu--header__info">
             <p class="ui-profile-menu--header__email">{{ userEmail ?? "-" }}</p>
           </div>

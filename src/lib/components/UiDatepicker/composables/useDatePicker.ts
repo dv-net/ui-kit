@@ -27,6 +27,7 @@ export function useDatePicker(modelValue?: Ref<string[]>) {
   const yesterday = dayjs().add(-1, "day").format();
   const weekAgo = dayjs().add(-6, "day").format();
   const monthAgo = dayjs().add(-1, "month").add(1, "day").format();
+  const startOfMonth = dayjs().startOf('month').format();
   const quarterAgo = dayjs().add(-3, "month").add(1, "day").format();
   const yearAgo = dayjs().add(-1, "year").add(1, "day").format();
   const modelValueFormat = computed(() => config.uiDatePicker.modelValueFormat);
@@ -59,6 +60,7 @@ export function useDatePicker(modelValue?: Ref<string[]>) {
     yesterday,
     weekAgo,
     monthAgo,
+    startOfMonth,
     yearAgo,
     dayjs,
     modelValueFormat,

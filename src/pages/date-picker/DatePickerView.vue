@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import dayjs from "dayjs";
+
   import UiDatepickerRange from "@/lib/components/UiDatepicker/UiDatepickerRange.vue";
 
   import { ref } from "vue";
 
   const date = ref([]);
+
+  const minDate = ref(dayjs().add(-3, 'days').toString());
+
+  const maxDate = ref(dayjs().add(3, 'days').toString());
 </script>
 
 <template>
@@ -38,6 +44,26 @@
     <div class="grid">
       <div class="grid__header">56px(xl) disabled</div>
       <UiDatepickerRange size="xl" v-model="date" disabled />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">56px(xl) Min Date</div>
+      <UiDatepickerRange size="xl" v-model="date" :min-date="minDate" />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">56px(xl) Max Date</div>
+      <UiDatepickerRange size="xl" v-model="date" :max-date="maxDate" />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">56px(xl) AutoApply</div>
+      <UiDatepickerRange size="xl" v-model="date" auto-apply />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">56px(xl) Month Preset starts from start</div>
+      <UiDatepickerRange size="xl" v-model="date" month-preset-from-month-start />
     </div>
   </div>
 </template>

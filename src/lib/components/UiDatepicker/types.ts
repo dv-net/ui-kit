@@ -7,6 +7,10 @@ export interface UiDatepickerRangeProps {
   beginDate?: string | null;
   size?: DatepickerSize;
   clearable?: boolean;
+  autoApply?: boolean;
+  maxDate?: string;
+  minDate?: string;
+  monthPresetFromMonthStart?: boolean;
 }
 
 export interface PresetModel {

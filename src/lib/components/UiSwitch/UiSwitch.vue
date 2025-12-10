@@ -8,14 +8,15 @@
   });
   const props = withDefaults(defineProps<UiSwitchProps>(), {
     disabled: false,
-    loading: false,
-    textPositionRight: true,
+    loading: false
   });
 
   const emits = defineEmits(["change"]);
 
   async function changeHandler() {
-    if (props.disabled || props.loading) return;
+    if (props.disabled || props.loading) {
+      return;
+    }
     if (!props.beforeChange) {
       modelValue.value = !modelValue.value;
     } else {
@@ -27,18 +28,12 @@
 
 <template>
   <label @click.prevent="changeHandler" class="ui-switch" :class="{ 'is-disabled': disabled, 'is-loading': loading }">
-    <div class="ui-switch__inner">
-      <input :checked="modelValue" :disabled="disabled || loading" class="ui-switch__input" type="checkbox" />
-      <span class="ui-switch__dot">
-        <UiLoading icon-color="#fff" :is-show="loading" />
-      </span>
-      <span class="ui-switch__slider"></span>
-    </div>
-    <div
-      v-if="label || text"
-      class="ui-switch__label"
-      :class="{ 'text-position-left': !textPositionRight }"
-    >
+    <input :checked="modelValue" :disabled="disabled || loading" class="ui-switch__input" type="checkbox" />
+    <span class="ui-switch__dot">
+      <UiLoading icon-color="#fff" :is-show="loading" />
+    </span>
+    <span class="ui-switch__slider"></span>
+    <div v-if="label || text" class="ui-switch__label">
       <h4>{{ label }}</h4>
       <p>{{ text }}</p>
     </div>
@@ -47,23 +42,14 @@
 
 <style lang="scss">
   .ui-switch {
+    position: relative;
     display: flex;
     align-items: center;
     cursor: pointer;
-    justify-content: flex-start;
     gap: 8px;
-
-    &__inner {
-      position: relative;
-      order: 2;
-    }
 
     &__label {
       user-select: none;
-      order: 3;
-      &.text-position-left {
-        order: 1;
-      }
 
       h4 {
         margin: 0;
