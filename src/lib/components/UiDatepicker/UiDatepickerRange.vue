@@ -121,6 +121,7 @@
         month-name-format="long"
         :max-date="currentMaxDate"
         :min-date="currentMinDate"
+        :start-date="currentMaxDate"
         :auto-apply="autoApply"
         :offset="0"
         @update:model-value="updateModelValue"

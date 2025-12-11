@@ -11,6 +11,8 @@
   const minDate = ref(dayjs().add(-3, "days").toString());
 
   const maxDate = ref(dayjs().add(3, "days").toString());
+
+  const brithday = ref(dayjs().add(-18, "years").toString());
 </script>
 
 <template>
@@ -64,7 +66,7 @@
 
     <div class="grid">
       <div class="grid__header">56px(xl) Single DatePicker</div>
-      <UiDatepickerRange size="xl" v-model="date" single />
+      <UiDatepickerRange size="xl" v-model="date" :range="false" :max-date="brithday" />
     </div>
 
     <div class="grid">
