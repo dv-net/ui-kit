@@ -75,9 +75,7 @@
       dateTo = rangeDates.value.end.add(isPrev ? -diff : diff, "day");
     }
 
-    dateFrom.isBefore(availableDates.value.min);
-
-    if (availableDates.value.min) {
+    if (availableDates.value.min && dateFrom.isBefore(availableDates.value.min)) {
       dateFrom = availableDates.value.min;
     }
 
