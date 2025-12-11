@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { vMaska } from "maska/vue";
-  import { ref } from "vue";
+  import { ref, onMounted, nextTick } from "vue";
 
   import { UiIconButton } from "@/lib";
 
@@ -9,10 +9,11 @@
     isError: boolean;
     maska: string;
     label: string;
+    autofocus?: boolean;
   }
 
   defineEmits(["input"]);
-  defineProps<DatePickerInputProps>();
+  const { autofocus } = defineProps<DatePickerInputProps>();
   const inputRef = ref();
   const modelValue = defineModel();
 
@@ -20,6 +21,16 @@
     modelValue.value = "";
     inputRef.value?.focus();
   }
+
+  onMounted(() => {
+    if (!autofocus) return;
+
+    nextTick(() => {
+      if (!inputRef.value) return;
+
+      inputRef.value?.focus();
+    });
+  });
 </script>
 <template>
   <label>

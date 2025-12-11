@@ -2,7 +2,7 @@
   import dayjs from "dayjs";
 
   import UiDatepickerRange from "@/lib/components/UiDatepicker/UiDatepickerRange.vue";
-  import UiTag from "@/lib/components/UiTag/UiTag.vue";
+  import { UiButton } from "@/lib";
 
   import { ref } from "vue";
 
@@ -63,7 +63,7 @@
     </div>
 
     <div class="grid">
-      <div class="grid__header">56px(xl) Solo DatePicker</div>
+      <div class="grid__header">56px(xl) Single DatePicker</div>
       <UiDatepickerRange size="xl" v-model="date" :range="false" />
     </div>
 
@@ -71,7 +71,9 @@
       <div class="grid__header">56px(xl) Custom projection</div>
       <UiDatepickerRange size="xl" v-model="date" hide-slider-arrows>
         <template #trigger="{ selectedDate }">
-          <UiTag :text="selectedDate" class="pointer" size="lg" />
+          <UiButton type="secondary">
+            {{ selectedDate }}
+          </UiButton>
         </template>
       </UiDatepickerRange>
     </div>

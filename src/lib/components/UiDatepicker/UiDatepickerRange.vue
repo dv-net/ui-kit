@@ -154,6 +154,36 @@
           </button>
         </template>
 
+        <!-- <template #month-overlay="{ year, items, updateMonthYear, toggle }">
+          <UiButton
+            v-for="item in items"
+            :key="item.value"
+            type="secondary"
+            @click="(updateMonthYear && updateMonthYear(item.value, year), toggle())"
+          >
+            {{ item.text }}
+          </UiButton>
+        </template>
+
+        <template #year-overlay="{ month, items, updateMonthYear, toggle }">
+          <UiButton
+            v-for="item in items"
+            :key="item.value"
+            type="secondary"
+            @click="(updateMonthYear && updateMonthYear(month, item.value), toggle())"
+          >
+            {{ item.text }}
+          </UiButton>
+        </template>
+
+        <template #arrow-left>
+          <UiIconButton icon-type="400" size="lg" icon-name="chevron-left 1" no-size />
+        </template>
+
+        <template #arrow-right>
+          <UiIconButton icon-type="400" size="lg" icon-name="chevron-right" no-size />
+        </template> -->
+
         <template #month-year="{ month, months, handleMonthYearChange }">
           <div class="ui-datepicker__navigate">
             <UiIconButton

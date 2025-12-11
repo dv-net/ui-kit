@@ -57,7 +57,7 @@
 </script>
 <template>
   <div class="com-datepicker-inputs">
-    <form class="com-datepicker-inputs--form">
+    <form class="com-datepicker-inputs--form" @submit.prevent>
       <DatePickerInput
         :label="width < 1000 ? config.uiDatePicker.translations.inputLabelStart : ''"
         :isError="errors[0]"
@@ -65,6 +65,7 @@
         :placeholder="placeholder"
         :maska="maska"
         v-model="startDate"
+        :autofocus="!range"
       />
 
       <template v-if="range">
