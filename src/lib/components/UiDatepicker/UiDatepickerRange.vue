@@ -107,6 +107,8 @@
       v-model="modelValue"
       :selected-range="selectedRange"
       :is-show="!hideSliderArrows"
+      :min-date="currentMinDate"
+      :max-date="currentMaxDate"
     >
       <VueDatePicker
         position="center"

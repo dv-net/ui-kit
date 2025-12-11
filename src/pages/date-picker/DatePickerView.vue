@@ -64,7 +64,7 @@
 
     <div class="grid">
       <div class="grid__header">56px(xl) Single DatePicker</div>
-      <UiDatepickerRange size="xl" v-model="date" :range="false" />
+      <UiDatepickerRange size="xl" v-model="date" single />
     </div>
 
     <div class="grid">

@@ -26,7 +26,7 @@
       dayjs(date, inputFormat.value).isAfter(dayjs(dayjs(), inputFormat.value), "day");
     if (isStart && date.length === 10) {
       errors.value[0] =
-        dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day") || isValid;
+        (range && dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day")) || isValid;
       if (!errors.value[0]) {
         processingData.value[0] = dayjs(date, inputFormat.value).format(modelValueFormat.value);
         emits("change");

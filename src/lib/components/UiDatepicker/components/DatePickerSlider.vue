@@ -11,13 +11,32 @@
     isShow?: boolean;
     disabled?: boolean;
     selectedRange?: DatepickerSwapRange;
+    minDate?: string;
+    maxDate: string;
   }
-  const { isShow = true, selectedRange } = defineProps<DatePickerSliderProps>();
+  const { minDate, maxDate, isShow = true, selectedRange } = defineProps<DatePickerSliderProps>();
   const modelValue = defineModel<string[]>({ default: [] });
   const { dayjs, modelValueFormat } = useDatePicker(modelValue);
   const disableNextDayButton = computed(() => {
-    return dayjs(modelValue.value[1]).isAfter(dayjs()) || dayjs().isSame(dayjs(modelValue.value[1]), "day");
+    const date = dayjs(modelValue.value[1]);
+
+    return (
+      date.isAfter(dayjs(maxDate)) ||
+      dayjs(maxDate).isSame(date, "day") ||
+      date.add(1, selectedRange || "day").isAfter(dayjs(maxDate))
+    );
   });
+
+  const disablePrevDayButton = computed(() => {
+    const date = dayjs(modelValue.value[0]);
+
+    return (
+      date.isBefore(dayjs(minDate)) ||
+      dayjs(minDate).isSame(date, "day") ||
+      date.add(-1, selectedRange || "day").isAfter(dayjs(minDate))
+    );
+  });
+
   function change(isPrev: boolean) {
     const startDate = dayjs(modelValue.value[0]);
     const endDate = dayjs(modelValue.value[1]);
@@ -53,12 +72,17 @@
 
 <template>
   <div class="com-datepicker-slider">
-    <button v-if="isShow" :disabled="disabled" class="com-datepicker-slider__btn" @click="change(true)">
+    <button
+      v-if="isShow"
+      :disabled="disablePrevDayButton || disabled"
+      class="com-datepicker-slider__btn"
+      @click="change(true)"
+    >
       <UiIcon type="400" name="chevron-left 1" />
     </button>
 
     <slot />
-    
+
     <button
       v-if="isShow"
       :disabled="disableNextDayButton || disabled"
