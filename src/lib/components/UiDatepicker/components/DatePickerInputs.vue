@@ -10,7 +10,7 @@
 
   import { config } from "@/lib/config";
   const emits = defineEmits(["submit", "change"]);
-  const { range } = defineProps<Pick<UiDatepickerRangeProps, "range">>();
+  const { single } = defineProps<Pick<UiDatepickerRangeProps, "single">>();
   const processingData = defineModel<string[]>("model-value", { default: [] });
   const { dayjs, inputFormat, modelValueFormat } = useDatePicker();
   const errors = ref<boolean[]>([false, false]);
@@ -26,7 +26,7 @@
       dayjs(date, inputFormat.value).isAfter(dayjs(dayjs(), inputFormat.value), "day");
     if (isStart && date.length === 10) {
       errors.value[0] =
-        (range && dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day")) || isValid;
+        (!single && dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day")) || isValid;
       if (!errors.value[0]) {
         processingData.value[0] = dayjs(date, inputFormat.value).format(modelValueFormat.value);
         emits("change");
@@ -65,10 +65,10 @@
         :placeholder="placeholder"
         :maska="maska"
         v-model="startDate"
-        :autofocus="!range"
+        :autofocus="single"
       />
 
-      <template v-if="range">
+      <template v-if="!single">
         <div class="com-datepicker-inputs--form__divider" />
 
         <DatePickerInput

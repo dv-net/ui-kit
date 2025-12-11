@@ -16,7 +16,7 @@
   import { PresetModel, UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
   import { config } from "@/lib/config";
 
-  const props = withDefaults(defineProps<UiDatepickerRangeProps>(), { size: "xs", range: true });
+  const props = withDefaults(defineProps<UiDatepickerRangeProps>(), { size: "xs" });
 
   const modelValue = defineModel<string[]>({ default: [] });
   const { width } = useWindowSize();
@@ -33,7 +33,7 @@
 
   const { presets } = useDatePickerPresets({ beginDate: formatingBeginDate.value ?? beginDate.value });
 
-  const { isAllTimeSelected, selectedDate, selectedRange } = useDatePickerSelected({
+  const { isAllTimeSelected, selectedDate, formattedSelectedDate, selectedRange } = useDatePickerSelected({
     presets,
     startDate,
     endDate,
@@ -75,7 +75,7 @@
   }
 
   function changeInputsHandler() {
-    const currentData = props.range
+    const currentData = !props.single
       ? processingData.value
       : dayjs(processingData.value[0], config.uiDatePicker.modelValueFormat).toDate();
 
@@ -114,10 +114,10 @@
         position="center"
         :locale="config.locale"
         ref="pickerRef"
-        :model-value="range ? modelValue : modelValue[0]"
+        :model-value="single ? modelValue[0] : modelValue"
         :enable-time-picker="false"
-        :range="range"
-        :multi-calendars="range && width > 1000"
+        :range="!single"
+        :multi-calendars="!single && width > 1000"
         month-name-format="long"
         :max-date="currentMaxDate"
         :min-date="currentMinDate"
@@ -129,7 +129,7 @@
       >
         <template #left-sidebar>
           <DatePickerPresets
-            v-if="range && presets.length"
+            v-if="!single && presets.length"
             :presets="presets"
             :date="processingData"
             @change="updatePresetHandler"
@@ -139,7 +139,7 @@
             @change="changeInputsHandler"
             @submit="pickerRef.selectDate()"
             v-model="processingData"
-            :range="range"
+            :single="single"
           />
         </template>
 
@@ -150,42 +150,13 @@
             :date="modelValue"
             :presets="presets"
             :selected-date="selectedDate"
+            :formatted-selected-date="formattedSelectedDate"
           />
 
           <button v-else class="ui-datepicker__trigger">
             <UiIcon type="400" name="calendar-month" />{{ selectedDate }}
           </button>
         </template>
-
-        <!-- <template #month-overlay="{ year, items, updateMonthYear, toggle }">
-          <UiButton
-            v-for="item in items"
-            :key="item.value"
-            type="secondary"
-            @click="(updateMonthYear && updateMonthYear(item.value, year), toggle())"
-          >
-            {{ item.text }}
-          </UiButton>
-        </template>
-
-        <template #year-overlay="{ month, items, updateMonthYear, toggle }">
-          <UiButton
-            v-for="item in items"
-            :key="item.value"
-            type="secondary"
-            @click="(updateMonthYear && updateMonthYear(month, item.value), toggle())"
-          >
-            {{ item.text }}
-          </UiButton>
-        </template>
-
-        <template #arrow-left>
-          <UiIconButton icon-type="400" size="lg" icon-name="chevron-left 1" no-size />
-        </template>
-
-        <template #arrow-right>
-          <UiIconButton icon-type="400" size="lg" icon-name="chevron-right" no-size />
-        </template> -->
 
         <template #month-year="{ month, months, handleMonthYearChange }">
           <div class="ui-datepicker__navigate">

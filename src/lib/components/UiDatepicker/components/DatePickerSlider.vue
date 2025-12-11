@@ -14,56 +14,75 @@
     minDate?: string;
     maxDate: string;
   }
+
   const { minDate, maxDate, isShow = true, selectedRange } = defineProps<DatePickerSliderProps>();
+
   const modelValue = defineModel<string[]>({ default: [] });
+
   const { dayjs, modelValueFormat } = useDatePicker(modelValue);
+
+  const availableDates = computed(() => {
+    return {
+      min: minDate ? dayjs(minDate) : undefined,
+      max: maxDate ? dayjs(maxDate) : undefined
+    };
+  });
+
+  const rangeDates = computed(() => {
+    return {
+      start: dayjs(modelValue.value[0]),
+      end: dayjs(modelValue.value[1])
+    };
+  });
+
   const disableNextDayButton = computed(() => {
-    const date = dayjs(modelValue.value[1]);
+    if (!availableDates.value.max) return;
 
     return (
-      date.isAfter(dayjs(maxDate)) ||
-      dayjs(maxDate).isSame(date, "day") ||
-      date.add(1, selectedRange || "day").isAfter(dayjs(maxDate))
+      rangeDates.value.end.isAfter(availableDates.value.max) ||
+      availableDates.value.max.isSame(rangeDates.value.end, "day")
     );
   });
 
   const disablePrevDayButton = computed(() => {
-    const date = dayjs(modelValue.value[0]);
+    if (!availableDates.value.min) return;
 
     return (
-      date.isBefore(dayjs(minDate)) ||
-      dayjs(minDate).isSame(date, "day") ||
-      date.add(-1, selectedRange || "day").isAfter(dayjs(minDate))
+      rangeDates.value.start.isBefore(availableDates.value.min) ||
+      availableDates.value.min.isSame(rangeDates.value.start, "day")
     );
   });
 
   function change(isPrev: boolean) {
-    const startDate = dayjs(modelValue.value[0]);
-    const endDate = dayjs(modelValue.value[1]);
+    let diff = rangeDates.value.end.diff(rangeDates.value.start, "day") || 1;
 
     let dateFrom: Dayjs | undefined = undefined;
     let dateTo: Dayjs | undefined = undefined;
 
     if (selectedRange) {
-      dateFrom = startDate.add(isPrev ? -1 : 1, selectedRange);
+      dateFrom = rangeDates.value.start.add(isPrev ? -1 : 1, selectedRange);
 
-      dateTo = endDate.add(isPrev ? -1 : 1, selectedRange);
+      dateTo = rangeDates.value.end.add(isPrev ? -1 : 1, selectedRange);
 
       if (["month", "year"].includes(selectedRange)) {
         dateFrom = dateFrom.startOf(selectedRange);
 
-        dateTo = dateFrom.endOf(selectedRange);
+        dateTo = dateTo.endOf(selectedRange);
       }
     } else {
-      const diff = endDate.diff(startDate, "day") || 1;
+      dateFrom = rangeDates.value.start.add(isPrev ? -diff : diff, "day");
 
-      dateFrom = startDate.add(isPrev ? -diff : diff, "day");
-
-      dateTo = endDate.add(isPrev ? -diff : diff, "day");
+      dateTo = rangeDates.value.end.add(isPrev ? -diff : diff, "day");
     }
 
-    if (dayjs(dateTo).isAfter(dayjs())) {
-      dateTo = dayjs();
+    dateFrom.isBefore(availableDates.value.min);
+
+    if (availableDates.value.min) {
+      dateFrom = availableDates.value.min;
+    }
+
+    if (availableDates.value.max && dateTo.isAfter(availableDates.value.max)) {
+      dateTo = availableDates.value.max;
     }
 
     modelValue.value = [dateFrom?.format(modelValueFormat.value) || "", dateTo?.format(modelValueFormat.value) || ""];

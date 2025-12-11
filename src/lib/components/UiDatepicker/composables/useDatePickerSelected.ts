@@ -67,6 +67,16 @@ export function useDatePickerSelected(params: {
     }
   });
 
+  const formattedSelectedDate = computed(() => {
+    if (!checkIsValidDate() || !params.startDate.value || !params.endDate.value) {
+      return [];
+    }
+
+    return [params.startDate.value, params.endDate.value].map((date) =>
+      dayjs(date, config.uiDatePicker.modelValueFormat).format(config.uiDatePicker.inputFormat)
+    );
+  });
+
   const selectedDate = computed(() => {
     if (!checkIsValidDate()) {
       return config.uiDatePicker.translations.invalidDate;
@@ -117,5 +127,5 @@ export function useDatePickerSelected(params: {
     return `${dateFrom.format("DD MMM YY")} - ${dateTo.format("DD MMM YY")}`;
   });
 
-  return { selectedPreset, isAllTimeSelected, selectedRange, selectedDate };
+  return { selectedPreset, formattedSelectedDate, isAllTimeSelected, selectedRange, selectedDate };
 }
