@@ -7,9 +7,18 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import weekOfYear from "dayjs/plugin/weekOfYear";
-import { computed, Ref } from "vue";
+import { computed, type Ref } from "vue";
 
+import "dayjs/locale/zh";
+import "dayjs/locale/uk";
 import "dayjs/locale/ru";
+import "dayjs/locale/ja";
+import "dayjs/locale/it";
+import "dayjs/locale/fr";
+import "dayjs/locale/es";
+import "dayjs/locale/de";
+import "dayjs/locale/ar";
+
 import { config } from "@/lib/config";
 
 dayjs.extend(utc);
@@ -26,23 +35,14 @@ export function useDatePicker(modelValue?: Ref<string[]>) {
   const today = dayjs().format();
   const yesterday = dayjs().add(-1, "day").format();
   const weekAgo = dayjs().add(-6, "day").format();
-  const monthAgo = dayjs().add(-1, "month").add(1, "day").format();
+  const startOfMonth = dayjs().startOf('month').format();
+  const startOfYear = dayjs().startOf('year').format();
   const quarterAgo = dayjs().add(-3, "month").add(1, "day").format();
-  const yearAgo = dayjs().add(-1, "year").add(1, "day").format();
   const modelValueFormat = computed(() => config.uiDatePicker.modelValueFormat);
   const inputFormat = computed(() => config.uiDatePicker.inputFormat);
   const beginDate = computed(() => dayjs(config.uiDatePicker.beginDate).format());
   const startDate = computed(() => (modelValue?.value[0] ? dayjs(modelValue?.value[0]) : null));
   const endDate = computed(() => (modelValue?.value[1] ? dayjs(modelValue?.value[1]) : null));
-  const isFullMonthSelected = computed(() => {
-    if (startDate.value && endDate.value) {
-      return (
-        startDate.value.isSame(startDate.value.startOf("month"), "day") &&
-        endDate.value.isSame(endDate.value.endOf("month"), "day")
-      );
-    }
-    return false;
-  });
 
   function checkIsValidDate() {
     const dateFromIsValid = dayjs(modelValue?.value[0], modelValueFormat.value).isValid();
@@ -58,11 +58,10 @@ export function useDatePicker(modelValue?: Ref<string[]>) {
     today,
     yesterday,
     weekAgo,
-    monthAgo,
-    yearAgo,
+    startOfMonth,
+    startOfYear,
     dayjs,
     modelValueFormat,
-    isFullMonthSelected,
     inputFormat,
     quarterAgo,
     beginDate,

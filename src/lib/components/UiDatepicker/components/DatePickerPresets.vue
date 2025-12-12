@@ -1,77 +1,23 @@
 <script lang="ts" setup>
-  import { computed, ref, watch } from "vue";
+  import { ref, watch } from "vue";
 
   import { useDatePicker } from "../composables/useDatePicker";
   import { PresetModel } from "../types";
-  const { dayjs, today, weekAgo, monthAgo, quarterAgo, yearAgo } = useDatePicker();
-  import { config } from "@/lib/config";
+  const { dayjs } = useDatePicker();
+
   interface DatePickerPresetProps {
     date: string[];
-    beginDate: string;
+    presets: PresetModel[];
   }
   const props = defineProps<DatePickerPresetProps>();
 
   const emits = defineEmits(["change"]);
 
   const activePreset = ref<PresetModel | null>(null);
-  const presets = computed<PresetModel[]>(() => {
-    return [
-      {
-        label: config.uiDatePicker.translations.presetToday,
-        date: [today, today],
-        id: "day",
-        slider: {
-          type: "day",
-          count: 1
-        }
-      },
-      {
-        label: config.uiDatePicker.translations.presetWeek,
-        date: [weekAgo, today],
-        id: "week",
-        slider: {
-          type: "day",
-          count: 6
-        }
-      },
-      {
-        label: config.uiDatePicker.translations.presetMonth,
-        date: [monthAgo, today],
-        id: "month",
-        slider: {
-          type: "month",
-          count: 1
-        }
-      },
-      {
-        label: config.uiDatePicker.translations.presetQuarter,
-        date: [quarterAgo, today],
-        id: "quarter",
-        slider: {
-          type: "month",
-          count: 3
-        }
-      },
-      {
-        label: config.uiDatePicker.translations.presetYear,
-        date: [yearAgo, today],
-        id: "year",
-        slider: {
-          type: "year",
-          count: 1
-        }
-      },
-      {
-        label: config.uiDatePicker.translations.presetAllTime,
-        date: [props.beginDate, today],
-        id: "all-time"
-      }
-    ];
-  });
 
   function checkCurrentPreset(date: string[]) {
     activePreset.value =
-      presets.value.find((item) => {
+      props.presets.find((item) => {
         return dayjs(item.date[0]).isSame(date[0], "day") && dayjs(item.date[1]).isSame(date[1], "day");
       }) ?? null;
   }

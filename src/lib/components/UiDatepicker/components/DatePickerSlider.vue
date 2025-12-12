@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+  import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
+  import { Dayjs } from "dayjs";
+
   import { computed } from "vue";
 
   import { useDatePicker } from "../composables/useDatePicker";
@@ -7,41 +10,96 @@
   interface DatePickerSliderProps {
     isShow?: boolean;
     disabled?: boolean;
+    selectedRange?: DatepickerSwapRange;
+    minDate?: string;
+    maxDate: string;
   }
-  const { isShow = true } = defineProps<DatePickerSliderProps>();
-  const modelValue = defineModel<string[]>({ default: [] });
-  const { dayjs, modelValueFormat, isFullMonthSelected } = useDatePicker(modelValue);
-  const disableNextDayButton = computed(() => {
-    return dayjs(modelValue.value[1]).isAfter(dayjs()) || dayjs().isSame(dayjs(modelValue.value[1]), "day");
-  });
-  function change(isPrev: boolean) {
-    let dateFrom = "";
-    let dateTo = "";
-    const startDate = dayjs(modelValue.value[0]);
-    const endDate = dayjs(modelValue.value[1]);
 
-    if (isFullMonthSelected.value) {
-      dateFrom = startDate.add(isPrev ? -1 : 1, "month").format(modelValueFormat.value);
-      dateTo = endDate.add(isPrev ? -1 : 1, "month").format(modelValueFormat.value);
-      dateTo = dayjs(dateTo).date(dayjs(dateTo).daysInMonth()).format(modelValueFormat.value);
-    } else {
-      const diffDays = endDate.diff(startDate, "day") || 1;
-      dateFrom = startDate.add(isPrev ? -diffDays : diffDays, "day").format(modelValueFormat.value);
-      dateTo = endDate.add(isPrev ? -diffDays : diffDays, "day").format(modelValueFormat.value);
-      if (dayjs(dateTo).isAfter(dayjs())) {
-        dateTo = dayjs().format(modelValueFormat.value);
+  const { minDate, maxDate, isShow = true, selectedRange } = defineProps<DatePickerSliderProps>();
+
+  const modelValue = defineModel<string[]>({ default: [] });
+
+  const { dayjs, modelValueFormat } = useDatePicker(modelValue);
+
+  const availableDates = computed(() => {
+    return {
+      min: minDate ? dayjs(minDate) : undefined,
+      max: maxDate ? dayjs(maxDate) : undefined
+    };
+  });
+
+  const rangeDates = computed(() => {
+    return {
+      start: dayjs(modelValue.value[0]),
+      end: dayjs(modelValue.value[1])
+    };
+  });
+
+  const disableNextDayButton = computed(() => {
+    if (!availableDates.value.max) return;
+
+    return (
+      rangeDates.value.end.isAfter(availableDates.value.max) ||
+      availableDates.value.max.isSame(rangeDates.value.end, "day")
+    );
+  });
+
+  const disablePrevDayButton = computed(() => {
+    if (!availableDates.value.min) return;
+
+    return (
+      rangeDates.value.start.isBefore(availableDates.value.min) ||
+      availableDates.value.min.isSame(rangeDates.value.start, "day")
+    );
+  });
+
+  function change(isPrev: boolean) {
+    let diff = rangeDates.value.end.diff(rangeDates.value.start, "day") || 1;
+
+    let dateFrom: Dayjs | undefined = undefined;
+    let dateTo: Dayjs | undefined = undefined;
+
+    if (selectedRange) {
+      dateFrom = rangeDates.value.start.add(isPrev ? -1 : 1, selectedRange);
+
+      dateTo = rangeDates.value.end.add(isPrev ? -1 : 1, selectedRange);
+
+      if (["month", "year"].includes(selectedRange)) {
+        dateFrom = dateFrom.startOf(selectedRange);
+
+        dateTo = dateTo.endOf(selectedRange);
       }
+    } else {
+      dateFrom = rangeDates.value.start.add(isPrev ? -diff : diff, "day");
+
+      dateTo = rangeDates.value.end.add(isPrev ? -diff : diff, "day");
     }
 
-    modelValue.value = [dateFrom, dateTo];
+    if (availableDates.value.min && dateFrom.isBefore(availableDates.value.min)) {
+      dateFrom = availableDates.value.min;
+    }
+
+    if (availableDates.value.max && dateTo.isAfter(availableDates.value.max)) {
+      dateTo = availableDates.value.max;
+    }
+
+    modelValue.value = [dateFrom?.format(modelValueFormat.value) || "", dateTo?.format(modelValueFormat.value) || ""];
   }
 </script>
+
 <template>
   <div class="com-datepicker-slider">
-    <button v-if="isShow" :disabled="disabled" class="com-datepicker-slider__btn" @click="change(true)">
+    <button
+      v-if="isShow"
+      :disabled="disablePrevDayButton || disabled"
+      class="com-datepicker-slider__btn"
+      @click="change(true)"
+    >
       <UiIcon type="400" name="chevron-left 1" />
     </button>
+
     <slot />
+
     <button
       v-if="isShow"
       :disabled="disableNextDayButton || disabled"
@@ -52,6 +110,7 @@
     </button>
   </div>
 </template>
+
 <style lang="scss">
   .com-datepicker-slider {
     display: flex;

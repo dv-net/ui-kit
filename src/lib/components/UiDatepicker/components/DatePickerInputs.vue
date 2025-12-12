@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+  import { UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
+
   import DatePickerInput from "./DatePickerInput.vue";
 
   import { useWindowSize } from "@vueuse/core";
@@ -8,6 +10,7 @@
 
   import { config } from "@/lib/config";
   const emits = defineEmits(["submit", "change"]);
+  const { single } = defineProps<Pick<UiDatepickerRangeProps, "single">>();
   const processingData = defineModel<string[]>("model-value", { default: [] });
   const { dayjs, inputFormat, modelValueFormat } = useDatePicker();
   const errors = ref<boolean[]>([false, false]);
@@ -23,7 +26,7 @@
       dayjs(date, inputFormat.value).isAfter(dayjs(dayjs(), inputFormat.value), "day");
     if (isStart && date.length === 10) {
       errors.value[0] =
-        dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day") || isValid;
+        (!single && dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day")) || isValid;
       if (!errors.value[0]) {
         processingData.value[0] = dayjs(date, inputFormat.value).format(modelValueFormat.value);
         emits("change");
@@ -54,7 +57,7 @@
 </script>
 <template>
   <div class="com-datepicker-inputs">
-    <form class="com-datepicker-inputs--form">
+    <form class="com-datepicker-inputs--form" @submit.prevent>
       <DatePickerInput
         :label="width < 1000 ? config.uiDatePicker.translations.inputLabelStart : ''"
         :isError="errors[0]"
@@ -62,16 +65,21 @@
         :placeholder="placeholder"
         :maska="maska"
         v-model="startDate"
+        :autofocus="single"
       />
-      <div class="com-datepicker-inputs--form__divider" />
-      <DatePickerInput
-        :label="width < 1000 ? config.uiDatePicker.translations.inputLabelEnd : ''"
-        :isError="errors[1]"
-        @input="(e) => update(e, false)"
-        :placeholder="placeholder"
-        :maska="maska"
-        v-model="endDate"
-      />
+
+      <template v-if="!single">
+        <div class="com-datepicker-inputs--form__divider" />
+
+        <DatePickerInput
+          :label="width < 1000 ? config.uiDatePicker.translations.inputLabelEnd : ''"
+          :isError="errors[1]"
+          @input="(e) => update(e, false)"
+          :placeholder="placeholder"
+          :maska="maska"
+          v-model="endDate"
+        />
+      </template>
     </form>
   </div>
 </template>

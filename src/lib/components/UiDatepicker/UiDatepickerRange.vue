@@ -11,6 +11,8 @@
   import "@vuepic/vue-datepicker/dist/main.css";
   import { UiButton, UiIcon } from "@/lib";
   import { useDatePicker } from "@/lib/components/UiDatepicker/composables/useDatePicker";
+  import { useDatePickerPresets } from "@/lib/components/UiDatepicker/composables/useDatePickerPresets";
+  import { useDatePickerSelected } from "@/lib/components/UiDatepicker/composables/useDatePickerSelected";
   import { PresetModel, UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
   import { config } from "@/lib/config";
 
@@ -18,47 +20,25 @@
 
   const modelValue = defineModel<string[]>({ default: [] });
   const { width } = useWindowSize();
-  const { dayjs, checkIsValidDate, today, endDate, startDate, beginDate, isFullMonthSelected, modelValueFormat } =
-    useDatePicker(modelValue);
+  const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } = useDatePicker(modelValue);
+
   const pickerRef = ref();
   const processingData = ref<string[]>(["", ""]);
   const isDisabledBtn = ref(false);
   const formatingBeginDate = computed(() =>
     props.beginDate ? dayjs(props.beginDate).format(modelValueFormat.value) : null
   );
-  const selectedDate = computed(() => {
-    if (!checkIsValidDate()) {
-      return config.uiDatePicker.translations.invalidDate;
-    }
-    if (startDate.value && endDate.value) {
-      const isToday = endDate.value.isSame(dayjs(), "day") && startDate.value.isSame(dayjs(), "day");
-      const isYesterday =
-        startDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day") &&
-        endDate.value.isSame(dayjs().subtract(1, "day").startOf("day"), "day");
-      const isCurrentYear = startDate.value.isSame(endDate.value, "year");
-      const isCurrentMonth = startDate.value.isSame(endDate.value, "month");
-      const dateFrom = startDate.value.locale(config.locale);
-      const dateTo = endDate.value.locale(config.locale);
+  const currentMaxDate = computed(() => props.maxDate ?? today);
+  const currentMinDate = computed(() => props.minDate);
 
-      if (isToday) {
-        return config.uiDatePicker.translations.todayPlaceholder;
-      }
-      if (isYesterday) {
-        return config.uiDatePicker.translations.yesterdayPlaceholder;
-      }
-      if (isFullMonthSelected.value) {
-        return dateFrom.format("MMMM YYYY");
-      }
-      if (isCurrentMonth) {
-        return `${dateFrom.format("DD")} - ${dateTo.format("DD")} ${dateTo.format("MMM YYYY")}`;
-      }
-      if (isCurrentYear) {
-        return `${dateFrom.format("DD MMM")} - ${dateTo.format("DD MMM")} ${dateTo.format("YYYY")}`;
-      }
-      return `${dateFrom.format("DD MMM YY")} - ${dateTo.format("DD MMM YY")}`;
-    } else {
-      return config.uiDatePicker.translations.emptyPlaceholder;
-    }
+  const { presets } = useDatePickerPresets({ beginDate: formatingBeginDate.value ?? beginDate.value });
+
+  const { isAllTimeSelected, selectedDate, formattedSelectedDate, selectedRange } = useDatePickerSelected({
+    presets,
+    startDate,
+    endDate,
+    minDate: currentMinDate,
+    maxDate: currentMaxDate
   });
 
   function updatePresetHandler(preset: PresetModel) {
@@ -66,11 +46,14 @@
     pickerRef.value.closeMenu();
   }
 
-  function updateIternalValue(date: string[]) {
+  function updateIternalValue(date: string | string[]) {
     if (!date) return;
+
+    const currentDate = Array.isArray(date) ? date : [date, date];
+
     isDisabledBtn.value = date.length < 2;
-    if (date.length === 2) {
-      processingData.value = date;
+    if (currentDate.length === 2) {
+      processingData.value = currentDate;
     }
   }
 
@@ -78,19 +61,25 @@
     modelValue.value = [dayjs(date[0]).format(modelValueFormat.value), dayjs(date[1]).format(modelValueFormat.value)];
   }
 
-  function updateModelValue(date: string[]) {
+  function updateModelValue(date: string | string[]) {
+    const currentDate = Array.isArray(date) ? date : [date, date];
+
     if (startDate.value && endDate.value) {
-      const isSame = startDate.value.isSame(date[0], "day") && endDate.value.isSame(date[1], "day");
+      const isSame = startDate.value.isSame(currentDate[0], "day") && endDate.value.isSame(currentDate[1], "day");
       if (!isSame) {
-        setModelValue(date);
+        setModelValue(currentDate);
       }
     } else {
-      setModelValue(date);
+      setModelValue(currentDate);
     }
   }
 
   function changeInputsHandler() {
-    pickerRef.value?.updateInternalModelValue(processingData.value);
+    const currentData = !props.single
+      ? processingData.value
+      : dayjs(processingData.value[0], config.uiDatePicker.modelValueFormat).toDate();
+
+    pickerRef.value?.updateInternalModelValue(currentData);
     pickerRef.value?.setMonthYear({
       month: dayjs(processingData.value[0]).month(),
       year: dayjs(processingData.value[0]).year()
@@ -110,38 +99,66 @@
     }
   });
 </script>
+
 <template>
   <div class="ui-datepicker-range" :class="[size, { 'is-disabled': disabled }]">
-    <DatePickerSlider :disabled="!modelValue.length" v-model="modelValue">
+    <DatePickerSlider
+      :disabled="!modelValue.length || isAllTimeSelected"
+      v-model="modelValue"
+      :selected-range="selectedRange"
+      :is-show="!hideSliderArrows"
+      :min-date="currentMinDate"
+      :max-date="currentMaxDate"
+    >
       <VueDatePicker
         position="center"
         :locale="config.locale"
         ref="pickerRef"
-        :model-value="modelValue"
+        :model-value="single ? modelValue[0] : modelValue"
         :enable-time-picker="false"
-        range
-        :multi-calendars="width > 1000"
+        :range="!single"
+        :multi-calendars="!single && width > 1000"
         month-name-format="long"
-        :max-date="today"
+        :max-date="currentMaxDate"
+        :min-date="currentMinDate"
+        :start-date="currentMaxDate"
+        :auto-apply="autoApply"
         :offset="0"
+        :timezone="timezone"
         @update:model-value="updateModelValue"
         @internal-model-change="updateIternalValue"
-        
       >
         <template #left-sidebar>
           <DatePickerPresets
-            :begin-date="formatingBeginDate ?? beginDate"
+            v-if="!single && presets.length"
+            :presets="presets"
             :date="processingData"
             @change="updatePresetHandler"
           />
-          <DatePickerInputs @change="changeInputsHandler" @submit="pickerRef.selectDate()" v-model="processingData" />
+
+          <DatePickerInputs
+            @change="changeInputsHandler"
+            @submit="pickerRef.selectDate()"
+            v-model="processingData"
+            :single="single"
+          />
         </template>
+
         <template #trigger>
-          <slot v-if="$slots.trigger" name="trigger" :date="modelValue" />
+          <slot
+            v-if="$slots.trigger"
+            name="trigger"
+            :date="modelValue"
+            :presets="presets"
+            :selected-date="selectedDate"
+            :formatted-selected-date="formattedSelectedDate"
+          />
+
           <button v-else class="ui-datepicker__trigger">
             <UiIcon type="400" name="calendar-month" />{{ selectedDate }}
           </button>
         </template>
+
         <template #month-year="{ month, months, handleMonthYearChange }">
           <div class="ui-datepicker__navigate">
             <UiIconButton
@@ -151,7 +168,11 @@
               icon-name="chevron-left 1"
               no-size
             />
-            <span class="ui-datepicker__navigate-value">{{ months?.find((item) => item.value === month)?.text }}</span>
+
+            <span class="ui-datepicker__navigate-value">
+              {{ months?.find((item) => item.value === month)?.text }}
+            </span>
+
             <UiIconButton
               @click="handleMonthYearChange && handleMonthYearChange(true)"
               icon-type="400"
@@ -161,10 +182,12 @@
             />
           </div>
         </template>
+
         <template #action-row="{ disabled, selectDate }">
           <UiButton :disabled="isDisabledBtn || disabled" mode="neutral" @click="selectDate">
             {{ config.uiDatePicker.translations.applyButton }}
           </UiButton>
+
           <UiButton v-if="modelValue.length && clearable" type="secondary" @click="clearDate">
             {{ config.uiDatePicker.translations.clearButton }}
           </UiButton>
@@ -173,6 +196,7 @@
     </DatePickerSlider>
   </div>
 </template>
+
 <style lang="scss">
   @use "./style/index";
 </style>

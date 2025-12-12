@@ -7,7 +7,15 @@ export interface UiDatepickerRangeProps {
   beginDate?: string | null;
   size?: DatepickerSize;
   clearable?: boolean;
+  autoApply?: boolean;
+  maxDate?: string;
+  minDate?: string;
+  timezone?: string;
+  single?: boolean;
+  hideSliderArrows?: boolean;
 }
+
+export type DatepickerSwapRange = "week" | "month" | "year";
 
 export interface PresetModel {
   label: string;
