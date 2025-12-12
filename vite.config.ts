@@ -47,7 +47,16 @@ export default defineConfig(({ mode }) => {
          output: {
            assetFileNames: "[name][extname]",
            entryFileNames: "[name].js",
-           chunkFileNames: `chunks/[name]-[hash].js`
+
+          chunkFileNames: (chunkInfo) => {
+            let name = '[name]';
+
+            if (chunkInfo.name?.match(/\s/)?.[0]) {
+              name = chunkInfo.name.replace(/\s/gim, '');
+            }
+
+            return `assets/${name}.[hash].js`;
+          },
          }
        },
        lib: {
