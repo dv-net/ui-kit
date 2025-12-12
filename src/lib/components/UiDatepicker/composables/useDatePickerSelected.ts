@@ -49,7 +49,8 @@ export function useDatePickerSelected(params: {
       (params.startDate.value.isSame(params.startDate.value.startOf("month"), "day") ||
         (params.minDate.value && params.startDate.value.isSame(dayjs(params.minDate.value), "day"))) &&
       (params.endDate.value.isSame(params.endDate.value.endOf("month"), "day") ||
-        params.endDate.value.isSame(dayjs(params.maxDate.value), "day"));
+        (params.maxDate.value && params.endDate.value.isSame(dayjs(params.maxDate.value), "day")) ||
+        params.endDate.value.isSame(dayjs(), "day"));
 
     if (isMonthSelected) {
       return "month";
@@ -60,7 +61,8 @@ export function useDatePickerSelected(params: {
       (params.startDate.value.isSame(params.startDate.value.startOf("year"), "day") ||
         (params.minDate.value && params.startDate.value.isSame(dayjs(params.minDate.value), "day"))) &&
       (params.endDate.value.isSame(params.endDate.value.endOf("year"), "day") ||
-        params.endDate.value.isSame(dayjs(params.maxDate.value), "day"));
+        params.endDate.value.isSame(dayjs(params.maxDate.value), "day") ||
+        params.endDate.value.isSame(dayjs(), "day"));
 
     if (isYearSelected) {
       return "year";

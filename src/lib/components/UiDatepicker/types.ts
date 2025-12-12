@@ -10,6 +10,7 @@ export interface UiDatepickerRangeProps {
   autoApply?: boolean;
   maxDate?: string;
   minDate?: string;
+  timezone?: string;
   single?: boolean;
   hideSliderArrows?: boolean;
 }

@@ -124,6 +124,7 @@
         :start-date="currentMaxDate"
         :auto-apply="autoApply"
         :offset="0"
+        :timezone="timezone"
         @update:model-value="updateModelValue"
         @internal-model-change="updateIternalValue"
       >
