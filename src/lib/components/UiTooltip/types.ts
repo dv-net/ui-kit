@@ -24,4 +24,9 @@ export interface UiTooltipProps {
   teleport?: string | boolean;
   isShowIconClose?: boolean;
   tabindex?: number;
+  backgroundColor?: string;
+  maxWidth?: string | number;
+  padding?: string | number;
+  borderRadius?: string | number;
+  width?: string | number;
 }

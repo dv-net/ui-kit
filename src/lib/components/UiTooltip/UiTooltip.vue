@@ -19,7 +19,12 @@
     disabled: false,
     timeout: 100,
     teleport: "body",
-    tabindex: 0
+    tabindex: 0,
+    backgroundColor: "#222",
+    maxWidth: "314px",
+    padding: "16px",
+    borderRadius: "8px",
+    width: "fit-content"
   });
 
   let timeoutStorage: ReturnType<typeof setTimeout> | null = null;
@@ -70,7 +75,8 @@
       top: data?.y != null ? `${data?.y}px` : "",
       right: "",
       bottom: "",
-      [staticSide!]: "-8px"
+      [staticSide!]: "-8px",
+      fill: props.backgroundColor
     };
   });
 
@@ -161,7 +167,16 @@
           @mouseenter="handleMouseBody('enter')"
           @mouseleave="handleMouseBody('leave')"
         >
-          <div class="ui-tooltip__content">
+          <div
+            class="ui-tooltip__content"
+            :style="{
+              backgroundColor: props.backgroundColor,
+              maxWidth: typeof props.maxWidth === 'number' ? `${props.maxWidth}px` : props.maxWidth,
+              padding: typeof props.padding === 'number' ? `${props.padding}px` : props.padding,
+              borderRadius: typeof props.borderRadius === 'number' ? `${props.borderRadius}px` : props.borderRadius,
+              width: typeof props.width === 'number' ? `${props.width}px` : props.width
+            }"
+          >
             <div class="ui-tooltip__content-inner">
               <div v-if="$slots.title || title" :class="[{ 'ui-tooltip__title': title }, 'ui-tooltip--title']">
                 <template v-if="title">{{ title }}</template>
@@ -290,12 +305,7 @@
     &__content {
       position: relative;
       display: flex;
-      width: fit-content;
-      max-width: 314px;
       flex-direction: column;
-      padding: 16px;
-      border-radius: 8px;
-      background: #222;
       box-shadow:
         0 6px 12px 0 rgb(0 16 61 / 6%),
         0 0 6px 0 rgb(0 0 0 / 6%),
