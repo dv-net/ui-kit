@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref } from "vue";
+  import { computed, onMounted, onUnmounted, ref } from "vue";
 
   import { config, UiIcon } from "@/lib";
   import { UiNotificationType } from "@/lib/composables/useNotification/types.ts";
+  import { isMobileDevice } from "@/lib/helpers/is-mobile-device";
 
   const props = withDefaults(
     defineProps<{
@@ -12,32 +13,77 @@
       message: string;
       type?: UiNotificationType;
       isHTMLMessage?: boolean;
+      pauseOnHover?: boolean;
+      duration?: number;
     }>(),
     {
       type: "error",
-      isHTMLMessage: true
+      isHTMLMessage: true,
+      pauseOnHover: true,
+      duration: 5000
     }
   );
 
   const emit = defineEmits(["remove", "delete-from-list"]);
   const show = ref(false);
+  const timerId = ref<ReturnType<typeof setTimeout> | null>(null);
 
   const styleComputed = computed(() => {
     return `top: ${props.top}px`;
   });
 
+  const shouldPauseOnHover = computed(() => {
+    return props.pauseOnHover && !isMobileDevice();
+  });
+
+  const hideNotification = () => {
+    emit("delete-from-list", props.id);
+    show.value = false;
+  };
+
+  const startTimer = () => {
+    if (timerId.value) {
+      clearTimeout(timerId.value);
+    }
+    timerId.value = setTimeout(() => {
+      hideNotification();
+    }, props.duration);
+  };
+
+  const pauseTimer = () => {
+    if (timerId.value && shouldPauseOnHover.value) {
+      clearTimeout(timerId.value);
+      timerId.value = null;
+    }
+  };
+
+  const resumeTimer = () => {
+    if (shouldPauseOnHover.value) {
+      startTimer();
+    }
+  };
+
   onMounted(() => {
-    setTimeout(() => {
-      emit("delete-from-list", props.id);
-      show.value = false;
-    }, 5000);
+    startTimer();
     show.value = true;
+  });
+
+  onUnmounted(() => {
+    if (timerId.value) {
+      clearTimeout(timerId.value);
+    }
   });
 </script>
 
 <template>
   <transition name="notification" @after-leave="emit('remove')">
-    <div v-show="show" class="ui-notification" :style="styleComputed">
+    <div
+      v-show="show"
+      class="ui-notification"
+      :style="styleComputed"
+      @mouseenter="pauseTimer"
+      @mouseleave="resumeTimer"
+    >
       <div class="ui-notification__top">
         <ui-icon v-if="type === 'error'" name="block" type="400" color="#DD4C1E" />
         <ui-icon v-else-if="type === 'success'" name="check-circle" type="400" color="#1F9649" />
