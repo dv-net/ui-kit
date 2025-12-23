@@ -10,6 +10,7 @@ export interface InputProps {
   inside?: boolean;
   type?: string;
   readonly?: boolean;
+  readonlyInteractive?: boolean;
   autofocus?: boolean;
   clearable?: boolean;
   isEmptyValueNull?: boolean;

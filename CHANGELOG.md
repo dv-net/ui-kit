@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.4.2] - 2025-12-23
+
+- feat: added `readonlyInteractive` prop to UiInput to allow fully interactive, non-editable inputs [DV-4036]
+
+## [7.4.1] - 2025-12-20
+
+- feat: adjusted the Month and Year presets to select the same calendar day one month or one year earlier, respectively, while all other behavior remains unchanged
+
 ## [7.4.0] - 2025-12-17
 
 - feat: the UiNotification no longer disappears when you hover over it with your mouse [DV-4002]
