@@ -26,6 +26,21 @@
   const appendRef = ref();
   const prependRef = ref();
 
+  const readonlyInteractiveAllowedKeys = [
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowUp",
+    "ArrowDown",
+    "Tab",
+    "Home",
+    "End",
+    "Shift",
+    "Control",
+    "Alt",
+    "Meta",
+    "Escape"
+  ];
+
   function onBlur() {
     isFocus.value = false;
     inputRef.value?.blur();
@@ -48,6 +63,23 @@
     if (props.disabled || props.readonly) return;
     isFocus.value = true;
     inputRef.value?.focus();
+  }
+
+  function onKeydown(e: KeyboardEvent) {
+    if (!props.readonlyInteractive) return;
+    if (!readonlyInteractiveAllowedKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  }
+
+  function onBeforeInput(e: Event) {
+    if (!props.readonlyInteractive) return;
+    e.preventDefault();
+  }
+
+  function onPaste(e: ClipboardEvent) {
+    if (!props.readonlyInteractive) return;
+    e.preventDefault();
   }
 
   defineExpose({
@@ -91,6 +123,9 @@
         :type="showPassword ? (isShowPassword ? 'text' : 'password') : type"
         :placeholder="inside ? '' : placeholder"
         :disabled="disabled"
+        @keydown="onKeydown"
+        @beforeinput="onBeforeInput"
+        @paste="onPaste"
         @blur="onBlur"
         @focus="onFocus"
         @change="$emit('change')"
