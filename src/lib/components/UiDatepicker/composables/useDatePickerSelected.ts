@@ -30,6 +30,8 @@ export function useDatePickerSelected(params: {
   });
 
   const isAllTimeSelected = computed(() => selectedPreset.value?.id === "all-time");
+  const isMonthSelected = computed(() => selectedPreset.value?.id === "month");
+  const isYearSelected = computed(() => selectedPreset.value?.id === "year");
 
   const selectedRange = computed((): DatepickerSwapRange | undefined => {
     if (!params.startDate.value || !params.endDate.value) return;
@@ -43,28 +45,30 @@ export function useDatePickerSelected(params: {
       return "week";
     }
 
-    const isMonthSelected =
-      isSameMonth &&
-      isSameYear &&
-      (params.startDate.value.isSame(params.startDate.value.startOf("month"), "day") ||
-        (params.minDate.value && params.startDate.value.isSame(dayjs(params.minDate.value), "day"))) &&
-      (params.endDate.value.isSame(params.endDate.value.endOf("month"), "day") ||
-        (params.maxDate.value && params.endDate.value.isSame(dayjs(params.maxDate.value), "day")) ||
-        params.endDate.value.isSame(dayjs(), "day"));
+    const isMonth =
+      isMonthSelected.value ||
+      (isSameMonth &&
+        isSameYear &&
+        (params.startDate.value.isSame(params.startDate.value.startOf("month"), "day") ||
+          (params.minDate.value && params.startDate.value.isSame(dayjs(params.minDate.value), "day"))) &&
+        (params.endDate.value.isSame(params.endDate.value.endOf("month"), "day") ||
+          (params.maxDate.value && params.endDate.value.isSame(dayjs(params.maxDate.value), "day")) ||
+          params.endDate.value.isSame(dayjs(), "day")));
 
-    if (isMonthSelected) {
+    if (isMonth) {
       return "month";
     }
 
-    const isYearSelected =
-      isSameYear &&
-      (params.startDate.value.isSame(params.startDate.value.startOf("year"), "day") ||
-        (params.minDate.value && params.startDate.value.isSame(dayjs(params.minDate.value), "day"))) &&
-      (params.endDate.value.isSame(params.endDate.value.endOf("year"), "day") ||
-        params.endDate.value.isSame(dayjs(params.maxDate.value), "day") ||
-        params.endDate.value.isSame(dayjs(), "day"));
+    const isYear =
+      isYearSelected.value ||
+      (isSameYear &&
+        (params.startDate.value.isSame(params.startDate.value.startOf("year"), "day") ||
+          (params.minDate.value && params.startDate.value.isSame(dayjs(params.minDate.value), "day"))) &&
+        (params.endDate.value.isSame(params.endDate.value.endOf("year"), "day") ||
+          params.endDate.value.isSame(dayjs(params.maxDate.value), "day") ||
+          params.endDate.value.isSame(dayjs(), "day")));
 
-    if (isYearSelected) {
+    if (isYear) {
       return "year";
     }
   });
