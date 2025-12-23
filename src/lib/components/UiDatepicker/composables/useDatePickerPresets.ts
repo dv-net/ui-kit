@@ -6,7 +6,7 @@ import { useDatePicker } from "../composables/useDatePicker";
 
 import { config } from "@/lib/config";
 
-const { today, weekAgo, startOfMonth, startOfYear, quarterAgo } = useDatePicker();
+const { today, weekAgo, monthAgo, yearAgo, quarterAgo } = useDatePicker();
 
 export function useDatePickerPresets(params: { beginDate: string }) {
   const presets = computed((): PresetModel[] => {
@@ -31,7 +31,7 @@ export function useDatePickerPresets(params: { beginDate: string }) {
       },
       {
         label: config.uiDatePicker.translations.presetMonth,
-        date: [startOfMonth, today],
+        date: [monthAgo, today],
         id: "month",
         slider: {
           type: "month",
@@ -49,7 +49,7 @@ export function useDatePickerPresets(params: { beginDate: string }) {
       },
       {
         label: config.uiDatePicker.translations.presetYear,
-        date: [startOfYear, today],
+        date: [yearAgo, today],
         id: "year",
         slider: {
           type: "year",

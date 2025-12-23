@@ -65,9 +65,15 @@
       dateTo = rangeDates.value.end.add(isPrev ? -1 : 1, selectedRange);
 
       if (["month", "year"].includes(selectedRange)) {
-        dateFrom = dateFrom.startOf(selectedRange);
+        if (!isPrev) {
+          dateFrom = dateFrom.startOf(selectedRange);
 
-        dateTo = dateTo.endOf(selectedRange);
+          dateTo = dateFrom.endOf(selectedRange);
+        } else {
+          dateFrom = dateTo.startOf(selectedRange);
+
+          dateTo = dateTo.endOf(selectedRange);
+        }
       }
     } else {
       dateFrom = rangeDates.value.start.add(isPrev ? -diff : diff, "day");
