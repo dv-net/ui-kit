@@ -7,22 +7,39 @@
 
   type ChatAction = "remind-ticket" | "change-operator" | "close-ticket";
 
+  interface ChatActionOption {
+    value: ChatAction;
+    label: string;
+    icon: string;
+    color?: string;
+  }
+
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
   }>();
 
   const message = ref("");
 
-  const actionsValue = ref(null);
-  const actionsOptions = [
-    { value: "remind-ticket", label: "Remind about ticket", icon: "notification  2", color: "" },
-    { value: "change-operator", label: "Change operator", icon: "swap-horizontal  1", color: "" },
-    { value: "close-ticket", label: "Close ticket", icon: "trash  1", color: "var(--color-text-negative)" }
+  const actionsValue = ref<ChatAction | null>(null);
+  const actionsOptions: ChatActionOption[] = [
+    {
+      value: "remind-ticket",
+      label: "Remind about ticket",
+      icon: "notifications-active"
+    },
+    { value: "change-operator", label: "Change operator", icon: "sync-alt" },
+    {
+      value: "close-ticket",
+      label: "Close ticket",
+      icon: "delete",
+      color: "var(--color-text-negative)"
+    }
   ];
 
   const onActionChange = () => {
-    const action = actionsValue.value;
-    if (action) emit("action-ticket", action);
+    if (actionsValue.value) {
+      emit("action-ticket", actionsValue.value);
+    }
     actionsValue.value = null;
   };
 </script>
@@ -33,7 +50,7 @@
     <div class="ui-chat__header">
       <div class="ui-chat__header-content">
         <div class="ui-chat__header-icon">
-          <UiIcon name="headphones  1" type="400" size="sm" />
+          <ui-icon name="support-agent  2" type="100" />
         </div>
         <div class="ui-chat__header-info">
           <div class="ui-chat__header-ticket">
@@ -47,24 +64,25 @@
         </div>
       </div>
       <div class="actions">
-        <UiSelect
+        <ui-select
           v-model="actionsValue"
           :options="actionsOptions"
           size="sm"
           placement="bottom-end"
-          popper-class="ui-chat__actions-popper"
+          :fit-content-width="false"
+          :teleport="false"
           @change="onActionChange"
         >
           <template #selected>
-            <span>Actions</span>
+            <span class="actions__selected">Actions</span>
           </template>
           <template #default="{ option }">
-            <div class="ui-chat__action-item" :style="option.color && { color: option.color }">
-              <UiIcon :name="option.icon" type="400" size="xs" />
+            <span class="actions__item" :style="option.color && { color: option.color }">
+              <UiIcon :name="option.icon" type="400" size="sm" />
               <span>{{ option.label }}</span>
-            </div>
+            </span>
           </template>
-        </UiSelect>
+        </ui-select>
       </div>
     </div>
 
@@ -86,112 +104,87 @@
 
 <style lang="scss">
   .ui-chat {
-    --ui-chat-padding: 16px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    min-height: 0;
     border: 1px solid var(--color-separator-border-primary);
     border-radius: 16px;
     background: var(--color-background-primary);
     overflow: hidden;
-
-    @media screen and (min-width: 768px) {
-      --ui-chat-padding: 24px;
-    }
-
-    // Header
     &__header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      padding: var(--ui-chat-padding);
+      padding: 24px;
       background: var(--color-background-secondary);
-      flex-shrink: 0;
-    }
-
-    &__header-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-grow: 1;
-      overflow: hidden;
-      max-width: 100%;
-    }
-
-    &__header-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
-      flex-shrink: 0;
-      background: var(--color-background-tertiary);
-      border-radius: 50%;
-      color: var(--color-state-accent);
-    }
-
-    &__header-info {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      overflow: hidden;
-    }
-
-    &__header-ticket {
-      display: flex;
-      align-items: baseline;
-      gap: 0.45em;
-    }
-
-    &__header-title {
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 125%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: 50%;
-    }
-
-    &__header-id {
-      white-space: nowrap;
-      color: var(--color-text-secondary);
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 142%;
-      flex-shrink: 0;
-    }
-
-    &__header-support {
-      display: flex;
-      align-items: baseline;
-      gap: 0.45em;
-      line-height: 125%;
-    }
-
-    &__header-name {
-      color: var(--color-text-tertiary);
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: -0.11px;
-    }
-
-    &__header-status {
-      font-size: 12px;
-      color: var(--color-state-positive);
-    }
-
-    &__header-actions {
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    &__action-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      .actions {
+        .ui-dropdown__content {
+          min-width: 230px;
+        }
+        &__selected {
+          min-width: 80px;
+        }
+        &__item {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          font-weight: 400;
+          gap: 8px;
+          min-width: 200px;
+        }
+      }
+      &-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      &-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        background: var(--color-background-info);
+        border-radius: 50%;
+        color: var(--color-separator-border-accent);
+      }
+      &-info {
+        display: flex;
+        flex-direction: column;
+      }
+      &-ticket {
+        display: flex;
+        align-items: center;
+        gap: 0.45em;
+      }
+      &-title {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 125%;
+      }
+      &-id {
+        color: var(--color-separator-border-contrast-secondary);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 142%;
+      }
+      &-support {
+        display: flex;
+        align-items: center;
+        gap: 0.45em;
+        line-height: 125%;
+      }
+      &-name {
+        color: var(--color-text-secondary);
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: -0.11px;
+      }
+      &-status {
+        font-size: 12px;
+        color: var(--color-text-accent);
+      }
     }
 
     // Body
@@ -242,12 +235,6 @@
       &::placeholder {
         color: var(--color-text-tertiary);
       }
-    }
-  }
-
-  .ui-chat__actions-popper {
-    .ui-dropdown__content {
-      min-width: 230px;
     }
   }
 </style>
