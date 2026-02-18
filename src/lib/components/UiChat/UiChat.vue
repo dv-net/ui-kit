@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="actions">
+      <div class="ui-chat__actions">
         <ui-select
           v-model="actionsValue"
           :options="actionsOptions"
@@ -74,10 +74,10 @@
           @change="onActionChange"
         >
           <template #selected>
-            <span class="actions__selected">Actions</span>
+            <span class="ui-chat__actions-selected">Actions</span>
           </template>
           <template #default="{ option }">
-            <span class="actions__item" :style="option.color && { color: option.color }">
+            <span class="ui-chat__actions-item" :style="option.color && { color: option.color }">
               <UiIcon :name="option.icon" type="400" size="sm" />
               <span>{{ option.label }}</span>
             </span>
@@ -117,14 +117,14 @@
       gap: 16px;
       padding: 24px;
       background: var(--color-background-secondary);
-      .actions {
+      &-actions {
         .ui-dropdown__content {
           min-width: 230px;
         }
-        &__selected {
+        &-selected {
           min-width: 80px;
         }
-        &__item {
+        &-item {
           display: flex;
           align-items: center;
           font-size: 14px;
