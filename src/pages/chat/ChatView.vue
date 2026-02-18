@@ -5,7 +5,8 @@
 <template>
   <div class="page">
     <h1 class="global-title">Chat</h1>
-    <UiChat />
+    <UiChat>
+    </UiChat>
   </div>
 </template>
 

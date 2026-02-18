@@ -15,7 +15,7 @@
     copy: false,
     rows: 1
   });
-  const emits = defineEmits(["input", "blur", "focus", "change"]);
+  const emits = defineEmits(["input", "blur", "focus", "change", "submit"]);
   const modelValue = defineModel<string | null>({ default: null });
   const isFocus = ref(false);
   const textareaRef = ref();
@@ -45,6 +45,17 @@
     isFocus.value = true;
     emits("focus");
     resize();
+  }
+
+  function onKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      textareaRef.value?.blur();
+      return;
+    }
+    if (props.submitOnEnter && e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      emits("submit");
+    }
   }
 
   function onKeyup() {
@@ -89,7 +100,7 @@
       @input="onInput"
       @change="onChange"
       @keyup="onKeyup"
-      @keydown.esc="textareaRef?.blur()"
+      @keydown="onKeydown"
       :rows="rows"
     />
     <slot name="append" />

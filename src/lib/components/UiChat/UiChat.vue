@@ -3,6 +3,7 @@
   import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
   import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
   import UiTextarea from "@/lib/components/UiTextarea/UiTextarea.vue";
+  import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
 
   import { ref } from "vue";
 
@@ -36,6 +37,9 @@
       color: "var(--color-text-negative)"
     }
   ];
+
+  const ATTACH_MAX_FILES = 10;
+  const ATTACH_FORMATS = "jpg, jpeg, png, heic & heif";
 
   const onActionChange = () => {
     if (actionsValue.value) {
@@ -92,25 +96,37 @@
 
     <!-- Footer -->
     <div class="ui-chat__footer">
-      <ui-icon-button
-        icon-name="attach-file_add"
-        type="clear"
-        icon-type="100"
-        icon-color="#1968e5"
-        size="xl"
-        style="margin-left: -16px"
-      />
+      <UiTooltip>
+        <template #text>
+          <p class="ui-chat__footer-tooltip">
+            <span>Maximum files: {{ ATTACH_MAX_FILES }}</span>
+            <span>Supports formats: {{ ATTACH_FORMATS }}</span>
+          </p>
+        </template>
+        <slot name="footer-left">
+          <ui-icon-button
+            icon-name="attach-file_add"
+            type="clear"
+            icon-type="100"
+            icon-color="#1968e5"
+            size="xl"
+            style="margin-left: -16px"
+          />
+        </slot>
+      </UiTooltip>
       <div class="ui-chat__footer-input">
-        <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" />
+        <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" submitOnEnter />
       </div>
-      <ui-icon-button
-        icon-name="play-circle"
-        type="clear"
-        icon-type="100"
-        icon-color="#1968e5"
-        size="xl"
-        style="margin-right: -16px"
-      />
+      <slot name="footer-right">
+        <ui-icon-button
+          icon-name="play-circle"
+          type="clear"
+          icon-type="100"
+          icon-color="#1968e5"
+          size="xl"
+          style="margin-right: -16px"
+        />
+      </slot>
     </div>
   </div>
 </template>
@@ -214,6 +230,12 @@
       background: var(--color-background-secondary);
       &-input {
         flex-grow: 1;
+      }
+      &-tooltip {
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
       }
       .ui-textarea {
         padding: 6px 12px;
