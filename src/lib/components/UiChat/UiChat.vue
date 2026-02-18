@@ -92,11 +92,39 @@
     <!-- Footer -->
     <div class="ui-chat__footer">
       <div class="ui-chat__entry">
-        <UiIconButton iconName="attachment  1" iconType="400" size="md" />
+        <button>
+          <svg
+            data-v-b1c095be=""
+            width="20"
+            viewBox="0 0 20 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon"
+          >
+            <path
+              d="M7.3332 27.0255C5.47678 27.0255 3.89301 26.3699 2.5819 25.0588C1.27079 23.7477 0.615234 22.1639 0.615234 20.3075V5.487C0.615234 4.14727 1.09227 3.00037 2.04633 2.0463C3.0004 1.09226 4.1473 0.615234 5.48703 0.615234C6.82679 0.615234 7.9737 1.09226 8.92777 2.0463C9.88181 3.00037 10.3588 4.14727 10.3588 5.487V16.8203H9.17937V5.487C9.17937 4.45316 8.82224 3.57931 8.10797 2.86547C7.3937 2.15162 6.51933 1.7947 5.48487 1.7947C4.45042 1.7947 3.57679 2.15162 2.86397 2.86547C2.15115 3.57931 1.79473 4.45316 1.79473 5.487V20.3075C1.79473 21.8426 2.33609 23.1494 3.4188 24.228C4.50149 25.3067 5.80303 25.846 7.32343 25.846C7.99148 25.846 8.62166 25.7362 9.21397 25.5165C9.80628 25.2968 10.3417 24.9896 10.8204 24.5947V26.046C10.3093 26.3588 9.75928 26.6003 9.17043 26.7703C8.58157 26.9404 7.96916 27.0255 7.3332 27.0255ZM13.9999 25.3332V21.3332H9.99987V19.9998H13.9999V15.9998H15.3332V19.9998H19.3332V21.3332H15.3332V25.3332H13.9999ZM7.3332 20.6665V21.846C6.48533 21.846 5.76909 21.5535 5.18447 20.9686C4.59987 20.3836 4.30757 19.6675 4.30757 18.8203V5.487H5.48703V18.8203C5.48703 19.3434 5.66397 19.7819 6.01783 20.1357C6.37168 20.4896 6.81013 20.6665 7.3332 20.6665ZM12.8717 12.9742V5.487H14.0512V12.9742H12.8717Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        </button>
         <div class="ui-chat__entry-input">
           <textarea v-model="message" class="ui-chat__textarea" rows="1" placeholder="Ваше сообщение..." />
         </div>
-        <UiIconButton iconName="send  2" iconType="400" size="md" />
+        <button>
+          <svg
+            data-v-b1c095be=""
+            width="26"
+            viewBox="0 0 26 22"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon"
+          >
+            <path
+              d="M0 21.6663V0.333008L25.3333 10.9997L0 21.6663ZM2 18.5663L20.1333 10.9997L2 3.33301V8.93301L10.0667 10.9997L2 12.9997V18.5663Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -186,8 +214,6 @@
         color: var(--color-text-accent);
       }
     }
-
-    // Body
     &__body {
       display: flex;
       flex-direction: column;
@@ -195,14 +221,12 @@
       min-height: 0;
       overflow: hidden;
     }
-
-    // Footer
     &__footer {
-      flex-shrink: 0;
-      margin-block-start: auto;
-      border-radius: 0 0 16px 16px;
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      background: var(--color-background-secondary);
     }
-
     &__entry {
       display: flex;
       align-items: center;
