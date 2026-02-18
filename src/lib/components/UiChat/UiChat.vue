@@ -4,7 +4,6 @@
   import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
   import UiTextarea from "@/lib/components/UiTextarea/UiTextarea.vue";
   import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
-
   import { ref } from "vue";
 
   type ChatAction = "remind-ticket" | "change-operator" | "close-ticket";
@@ -18,10 +17,12 @@
 
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
+    (e: "submit"): void;
   }>();
 
+  const ATTACH_MAX_FILES = 10;
+  const ATTACH_FORMATS = "jpg, jpeg, png, heic & heif";
   const message = ref("");
-
   const actionsValue = ref<ChatAction | null>(null);
   const actionsOptions: ChatActionOption[] = [
     {
@@ -37,9 +38,6 @@
       color: "var(--color-text-negative)"
     }
   ];
-
-  const ATTACH_MAX_FILES = 10;
-  const ATTACH_FORMATS = "jpg, jpeg, png, heic & heif";
 
   const onActionChange = () => {
     if (actionsValue.value) {
@@ -115,18 +113,13 @@
         </slot>
       </UiTooltip>
       <div class="ui-chat__footer-input">
-        <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" submitOnEnter />
+        <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" submitOnEnter @submit="emit('submit')" />
       </div>
-      <slot name="footer-right">
-        <ui-icon-button
-          icon-name="play-circle"
-          type="clear"
-          icon-type="100"
-          icon-color="#1968e5"
-          size="xl"
-          style="margin-right: -16px"
-        />
-      </slot>
+      <div style="margin-right: -16px" @click="emit('submit')">
+        <slot name="footer-right">
+          <ui-icon-button icon-name="send  1" type="clear" icon-type="100" icon-color="#1968e5" size="xl" />
+        </slot>
+      </div>
     </div>
   </div>
 </template>
