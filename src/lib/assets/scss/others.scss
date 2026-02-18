@@ -85,6 +85,12 @@ select:-webkit-autofill:focus {
   opacity: 0;
 }
 
+/* Edge */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
