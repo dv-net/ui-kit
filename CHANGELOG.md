@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- feat: new hovers have been added to the buttons
+
 ## [7.4.2] - 2025-12-23
 
 - feat: added `readonlyInteractive` prop to UiInput to allow fully interactive, non-editable inputs [DV-4036]
