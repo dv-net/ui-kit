@@ -18,6 +18,7 @@
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
     (e: "submit"): void;
+    (e: "attach"): void;
   }>();
 
   const ATTACH_MAX_FILES = 10;
@@ -101,16 +102,11 @@
             <span>Supports formats: {{ ATTACH_FORMATS }}</span>
           </p>
         </template>
-        <slot name="footer-left">
-          <ui-icon-button
-            icon-name="attach-file_add"
-            type="clear"
-            icon-type="100"
-            icon-color="#1968e5"
-            size="xl"
-            style="margin-left: -16px"
-          />
-        </slot>
+        <div style="margin-left: -16px" @click="emit('attach')">
+          <slot name="footer-left">
+            <ui-icon-button icon-name="attach-file_add" type="clear" icon-type="100" icon-color="#1968e5" size="xl" />
+          </slot>
+        </div>
       </UiTooltip>
       <div class="ui-chat__footer-input">
         <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" submitOnEnter @submit="emit('submit')" />
