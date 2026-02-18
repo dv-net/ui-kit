@@ -46,11 +46,10 @@
           </div>
         </div>
       </div>
-      <div class="ui-chat__header-actions">
+      <div class="actions">
         <UiSelect
           v-model="actionsValue"
           :options="actionsOptions"
-          placeholder="Actions"
           size="sm"
           placement="bottom-end"
           popper-class="ui-chat__actions-popper"
