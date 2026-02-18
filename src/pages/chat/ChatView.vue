@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { UiChat } from "@/lib";
-  import type { UiChatMessage, UiChatTicket } from "@/lib/components/UiChat/UiChat.vue";
+  import type { UiChatMessage, UiChatTicket } from "@/lib/components/UiChat/types";
 
   const MY_UUID = "user-001";
   const SUPPORT_UUID = "support-001";

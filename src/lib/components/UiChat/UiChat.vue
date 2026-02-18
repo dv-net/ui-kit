@@ -5,72 +5,13 @@
   import UiTextarea from "@/lib/components/UiTextarea/UiTextarea.vue";
   import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
   import { ref, computed } from "vue";
+  import type { UiChatMessage, UiChatProps, ChatAction, ChatActionOption } from "./types";
 
-  type ChatAction = "remind-ticket" | "change-operator" | "close-ticket";
-
-  interface ChatActionOption {
-    value: ChatAction;
-    label: string;
-    icon: string;
-    color?: string;
-  }
-
-  export interface UiChatMessageUser {
-    uuid: string;
-    avatar: string | null;
-    telegram: string | null;
-    email: string;
-    name: string | null;
-  }
-
-  export interface UiChatMessageAttachment {
-    uuid: string;
-    type: string;
-    title: string;
-    url: string;
-    file_size: number;
-  }
-
-  export interface UiChatMessage {
-    id: number;
-    ticket_id: number;
-    message: string;
-    created_at: string;
-    updated_at: string;
-    files: string[];
-    attachments: UiChatMessageAttachment[];
-    user: UiChatMessageUser;
-  }
-
-  export interface UiChatTicketStatus {
-    name: string;
-    value: number;
-  }
-
-  export interface UiChatTicket {
-    id: number;
-    subject: string;
-    status: UiChatTicketStatus;
-    created_at: string;
-    updated_at: string;
-    closed_at: string | null;
-    messages_count: number;
-    init_message: UiChatMessage;
-    support_name: string;
-  }
-
-  const props = withDefaults(
-    defineProps<{
-      ticket?: UiChatTicket;
-      messages?: UiChatMessage[];
-      currentUserUuid?: string;
-    }>(),
-    {
-      ticket: undefined,
-      messages: () => [],
-      currentUserUuid: "",
-    }
-  );
+  const {
+    ticket = undefined,
+    messages = [],
+    currentUserUuid = ""
+  } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
@@ -78,9 +19,9 @@
     (e: "attach"): void;
   }>();
 
-  const ATTACH_MAX_FILES = 10;
-  const ATTACH_FORMATS = "jpg, jpeg, png, heic & heif";
-  const message = ref("");
+  const ATTACH_MAX_FILES: number = 10;
+  const ATTACH_FORMATS: string = "jpg, jpeg, png, heic & heif";
+  const message = ref<string>("");
   const actionsValue = ref<ChatAction | null>(null);
   const actionsOptions: ChatActionOption[] = [
     {
@@ -99,11 +40,11 @@
 
   const getDate = (datetime: string) => datetime.split(" ")[0];
   const getTime = (datetime: string) => datetime.split(" ")[1]?.slice(0, 5);
-  const isOwnMessage = (msg: UiChatMessage) => msg.user.uuid === props.currentUserUuid;
+  const isOwnMessage = (msg: UiChatMessage) => msg.user.uuid === currentUserUuid;
 
   const groupedMessages = computed(() => {
     const groups: Record<string, UiChatMessage[]> = {};
-    for (const msg of props.messages) {
+    for (const msg of messages) {
       const date = getDate(msg.created_at);
       if (!groups[date]) groups[date] = [];
       groups[date].push(msg);
@@ -163,11 +104,7 @@
 
     <!-- Body -->
     <div class="ui-chat__body">
-      <div
-        v-for="(groupMessages, date) in groupedMessages"
-        :key="date"
-        class="ui-chat__group"
-      >
+      <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
         <div class="ui-chat__group-date">
           <span>{{ date }}</span>
         </div>
