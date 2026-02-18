@@ -5,18 +5,24 @@
 
   import { ref } from "vue";
 
+  type ChatAction = "remind-ticket" | "change-operator" | "close-ticket";
+
+  const emit = defineEmits<{
+    (e: "action-ticket", value: ChatAction): void;
+  }>();
+
   const message = ref("");
 
   const actionsValue = ref(null);
   const actionsOptions = [
-    { value: "remind", label: "Remind about ticket", icon: "notification  2", color: "" },
-    { value: "switch", label: "Change operator", icon: "swap-horizontal  1", color: "" },
-    { value: "close", label: "Close ticket", icon: "trash  1", color: "var(--color-text-negative)" }
+    { value: "remind-ticket", label: "Remind about ticket", icon: "notification  2", color: "" },
+    { value: "change-operator", label: "Change operator", icon: "swap-horizontal  1", color: "" },
+    { value: "close-ticket", label: "Close ticket", icon: "trash  1", color: "var(--color-text-negative)" }
   ];
 
   const onActionChange = () => {
     const action = actionsValue.value;
-    console.log("Action selected:", action);
+    if (action) emit("action-ticket", action);
     actionsValue.value = null;
   };
 </script>
@@ -64,19 +70,14 @@
     </div>
 
     <!-- Body -->
-    <div class="ui-chat__body"></div>
+    <div class="ui-chat__body" style="min-height: 400px"></div>
 
     <!-- Footer -->
     <div class="ui-chat__footer">
       <div class="ui-chat__entry">
         <UiIconButton iconName="attachment  1" iconType="400" size="md" />
         <div class="ui-chat__entry-input">
-          <textarea
-            v-model="message"
-            class="ui-chat__textarea"
-            rows="1"
-            placeholder="Ваше сообщение..."
-          />
+          <textarea v-model="message" class="ui-chat__textarea" rows="1" placeholder="Ваше сообщение..." />
         </div>
         <UiIconButton iconName="send  2" iconType="400" size="md" />
       </div>
