@@ -2,6 +2,7 @@
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
   import { computed, ref } from "vue";
+  import { config } from "@/lib/config";
   import type { UiChatTicket, ChatAction, ChatActionOption } from "./types";
 
   const { ticket, isEmpty } = defineProps<{
@@ -14,20 +15,24 @@
   }>();
 
   const actionsValue = ref<ChatAction | null>(null);
-  const actionsOptions: ChatActionOption[] = [
+  const actionsOptions = computed<ChatActionOption[]>(() => [
     {
       value: "remind-ticket",
-      label: "Remind about ticket",
+      label: config.uiChat.translations.remindAboutTicket,
       icon: "notifications-active"
     },
-    { value: "change-operator", label: "Change operator", icon: "sync-alt" },
+    {
+      value: "change-operator",
+      label: config.uiChat.translations.changeOperator,
+      icon: "sync-alt"
+    },
     {
       value: "close-ticket",
-      label: "Close ticket",
+      label: config.uiChat.translations.closeTicket,
       icon: "delete",
       color: "var(--color-text-negative)"
     }
-  ];
+  ]);
 
   const isShowActionSelect = computed<boolean>(() => !isEmpty && ticket?.status?.value !== 5);
 
@@ -48,9 +53,9 @@
       <div class="ui-chat__header-info">
         <div class="ui-chat__header-ticket">
           <span class="ui-chat__header-title">
-            {{ ticket?.subject || "Новый тикет" }}
+            {{ ticket?.subject || config.uiChat.translations.newTicket }}
           </span>
-          <span v-if="ticket?.id" class="ui-chat__header-id"> Тикет №{{ ticket.id }} </span>
+          <span v-if="ticket?.id" class="ui-chat__header-id"> {{ config.uiChat.translations.ticket }} #{{ ticket.id }} </span>
         </div>
         <div class="ui-chat__header-support">
           <span class="ui-chat__header-name">
@@ -71,7 +76,7 @@
         @change="onActionChange"
       >
         <template #selected>
-          <span class="ui-chat__actions-selected">Actions</span>
+          <span class="ui-chat__actions-selected">{{ config.uiChat.translations.actions }}</span>
         </template>
         <template #default="{ option }">
           <span class="ui-chat__actions-item" :style="option.color && { color: option.color }">

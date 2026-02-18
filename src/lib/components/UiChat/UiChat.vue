@@ -4,6 +4,7 @@
   import UiChatMessage from "./UiChatMessage.vue";
   import { computed } from "vue";
   import dayjs from "dayjs";
+  import { config } from "@/lib/config";
   import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction } from "./types";
 
   const {
@@ -29,7 +30,7 @@
     return [{
       id: 0,
       ticket_id: 0,
-      message: "Здравствуйте.\nЧем я могу Вам помочь?",
+      message: config.uiChat.translations.defaultMessage,
       created_at: now,
       updated_at: now,
       files: [],

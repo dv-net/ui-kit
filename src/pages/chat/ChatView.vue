@@ -37,7 +37,7 @@
 <template>
   <div class="page">
     <h1 class="global-title">Chat</h1>
-    <UiChat :ticket="null" :messages="[]" :current-user-uuid="MY_UUID" />
+    <UiChat :ticket="ticket" :messages="messages" :current-user-uuid="MY_UUID" />
   </div>
 </template>
 

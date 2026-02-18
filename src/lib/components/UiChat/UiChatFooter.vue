@@ -3,6 +3,7 @@
   import UiTextarea from "@/lib/components/UiTextarea/UiTextarea.vue";
   import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
   import { ref } from "vue";
+  import { config } from "@/lib/config";
 
   defineProps<{
     isEmpty: boolean;
@@ -23,8 +24,8 @@
     <UiTooltip>
       <template #text>
         <p class="ui-chat__footer-tooltip">
-          <span>Maximum files: {{ ATTACH_MAX_FILES }}</span>
-          <span>Supports formats: {{ ATTACH_FORMATS }}</span>
+          <span>{{ config.uiChat.translations.maxFiles }}: {{ ATTACH_MAX_FILES }}</span>
+          <span>{{ config.uiChat.translations.supportsFormats }}: {{ ATTACH_FORMATS }}</span>
         </p>
       </template>
       <div style="margin-left: -16px" @click="emit('attach')">
@@ -34,7 +35,7 @@
       </div>
     </UiTooltip>
     <div class="ui-chat__footer-input">
-      <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" submitOnEnter @submit="emit('submit')" is-empty-value-null />
+      <UiTextarea v-model="message" size="auto" :placeholder="config.uiChat.translations.messagePlaceholder" submitOnEnter @submit="emit('submit')" is-empty-value-null />
     </div>
     <div style="margin-right: -16px" @click="emit('submit')">
       <slot name="footer-right">

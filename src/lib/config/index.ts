@@ -69,6 +69,20 @@ export interface UiKitConfig {
       infoTitle: string;
     };
   };
+  uiChat: {
+    translations: {
+      newTicket: string;
+      ticket: string;
+      actions: string;
+      remindAboutTicket: string;
+      changeOperator: string;
+      closeTicket: string;
+      defaultMessage: string;
+      messagePlaceholder: string;
+      maxFiles: string;
+      supportsFormats: string;
+    };
+  };
 }
 
 export const config = reactive<UiKitConfig>({
@@ -138,6 +152,20 @@ export const config = reactive<UiKitConfig>({
       error: "Error",
       success: "Success",
       infoTitle: "Information"
+    }
+  },
+  uiChat: {
+    translations: {
+      newTicket: "New ticket",
+      ticket: "Ticket",
+      actions: "Actions",
+      remindAboutTicket: "Remind about ticket",
+      changeOperator: "Change operator",
+      closeTicket: "Close ticket",
+      defaultMessage: "Hello. How can I help you?",
+      messagePlaceholder: "Your message",
+      maxFiles: "Maximum files",
+      supportsFormats: "Supports formats"
     }
   }
 });
