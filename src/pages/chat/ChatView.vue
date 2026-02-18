@@ -24,7 +24,7 @@
   const ticket: UiChatTicket = {
     id: 83545,
     subject: "Мне необходимо оплатить другим способом",
-    status: { name: "Closed by manager", value: 5 },
+    status: { name: "Online", value: 3 },
     created_at: "2025-10-12 22:17:45",
     updated_at: "2025-10-13 00:27:12",
     closed_at: null,
@@ -37,7 +37,7 @@
 <template>
   <div class="page">
     <h1 class="global-title">Chat</h1>
-    <UiChat :ticket="ticket" :messages="messages" :current-user-uuid="MY_UUID" />
+    <UiChat :ticket="null" :messages="[]" :current-user-uuid="MY_UUID" />
   </div>
 </template>
 

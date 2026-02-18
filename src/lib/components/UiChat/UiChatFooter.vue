@@ -4,6 +4,10 @@
   import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
   import { ref } from "vue";
 
+  defineProps<{
+    isEmpty: boolean;
+  }>();
+
   const emit = defineEmits<{
     (e: "submit"): void;
     (e: "attach"): void;
@@ -11,7 +15,7 @@
 
   const ATTACH_MAX_FILES: number = 10;
   const ATTACH_FORMATS: string = "jpg, jpeg, png, heic & heif";
-  const message = ref<string>("");
+  const message = ref<string | null>(null);
 </script>
 
 <template>
@@ -30,11 +34,11 @@
       </div>
     </UiTooltip>
     <div class="ui-chat__footer-input">
-      <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" submitOnEnter @submit="emit('submit')" />
+      <UiTextarea v-model="message" size="auto" placeholder="Ваше сообщение" submitOnEnter @submit="emit('submit')" is-empty-value-null />
     </div>
     <div style="margin-right: -16px" @click="emit('submit')">
       <slot name="footer-right">
-        <ui-icon-button icon-name="send  1" type="clear" icon-type="100" icon-color="#1968e5" size="xl" />
+        <ui-icon-button icon-name="send" type="clear" icon-type="400" icon-color="#1968e5" size="xl" :disabled="!message" />
       </slot>
     </div>
   </div>

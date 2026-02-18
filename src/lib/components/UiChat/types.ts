@@ -52,7 +52,7 @@ export interface ChatActionOption {
 }
 
 export interface UiChatProps {
-  ticket?: UiChatTicket;
+  ticket: UiChatTicket | null | undefined;
   messages?: UiChatMessage[];
   currentUserUuid?: string;
 }

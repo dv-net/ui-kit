@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
-  import { ref } from "vue";
+  import { computed, ref } from "vue";
   import type { UiChatTicket, ChatAction, ChatActionOption } from "./types";
 
-  defineProps<{
-    ticket?: UiChatTicket;
+  const { ticket, isEmpty } = defineProps<{
+    ticket: UiChatTicket | null | undefined;
+    isEmpty: boolean;
   }>();
 
   const emit = defineEmits<{
@@ -28,6 +29,8 @@
     }
   ];
 
+  const isShowActionSelect = computed<boolean>(() => !isEmpty && ticket?.status?.value !== 5);
+
   const onActionChange = () => {
     if (actionsValue.value) {
       emit("action-ticket", actionsValue.value);
@@ -44,16 +47,20 @@
       </div>
       <div class="ui-chat__header-info">
         <div class="ui-chat__header-ticket">
-          <span class="ui-chat__header-title">{{ ticket?.subject }}</span>
-          <span class="ui-chat__header-id">Тикет №{{ ticket?.id }}</span>
+          <span class="ui-chat__header-title">
+            {{ ticket?.subject || "Новый тикет" }}
+          </span>
+          <span v-if="ticket?.id" class="ui-chat__header-id"> Тикет №{{ ticket.id }} </span>
         </div>
         <div class="ui-chat__header-support">
-          <span class="ui-chat__header-name">{{ ticket?.support_name }}</span>
+          <span class="ui-chat__header-name">
+            {{ ticket?.support_name || "Sofia" }}
+          </span>
           <span class="ui-chat__header-status">Online</span>
         </div>
       </div>
     </div>
-    <div class="ui-chat__actions">
+    <div v-if="isShowActionSelect" class="ui-chat__actions">
       <ui-select
         v-model="actionsValue"
         :options="actionsOptions"

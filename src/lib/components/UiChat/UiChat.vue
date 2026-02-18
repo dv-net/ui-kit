@@ -3,12 +3,13 @@
   import UiChatFooter from "./UiChatFooter.vue";
   import UiChatMessage from "./UiChatMessage.vue";
   import { computed } from "vue";
+  import dayjs from "dayjs";
   import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction } from "./types";
 
   const {
-    ticket = undefined,
+    ticket,
     messages = [],
-    currentUserUuid = ""
+    currentUserUuid
   } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{
@@ -20,9 +21,26 @@
   const getDate = (datetime: string) => datetime.split(" ")[0];
   const isOwnMessage = (msg: UiChatMessageType) => msg.user.uuid === currentUserUuid;
 
+  const isEmpty = computed(() => !messages.length || !ticket || !currentUserUuid);
+
+  const actualMessages = computed<UiChatMessageType[]>(() => {
+    if (!isEmpty.value) return messages;
+    const now = dayjs().format("DD.MM.YYYY HH:mm");
+    return [{
+      id: 0,
+      ticket_id: 0,
+      message: "Здравствуйте.\nЧем я могу Вам помочь?",
+      created_at: now,
+      updated_at: now,
+      files: [],
+      attachments: [],
+      user: { uuid: "", avatar: null, telegram: null, email: "", name: null },
+    }];
+  });
+
   const groupedMessages = computed(() => {
     const groups: Record<string, UiChatMessageType[]> = {};
-    for (const msg of messages) {
+    for (const msg of actualMessages.value) {
       const date = getDate(msg.created_at);
       if (!groups[date]) groups[date] = [];
       groups[date].push(msg);
@@ -33,7 +51,7 @@
 
 <template>
   <div class="ui-chat">
-    <UiChatHeader :ticket="ticket" @action-ticket="(v) => emit('action-ticket', v)" />
+    <UiChatHeader :ticket="ticket" :is-empty="isEmpty" @action-ticket="(v) => emit('action-ticket', v)" />
 
     <!-- Body -->
     <div class="ui-chat__body">
@@ -51,7 +69,7 @@
       </div>
     </div>
 
-    <UiChatFooter @submit="emit('submit')" @attach="emit('attach')" />
+    <UiChatFooter :is-empty="isEmpty" @submit="emit('submit')" @attach="emit('attach')" />
   </div>
 </template>
 

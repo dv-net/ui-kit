@@ -80,6 +80,7 @@
         font-size: 14px;
         line-height: 125%;
         margin: 0;
+        white-space: pre-line;
       }
       &-time {
         align-self: flex-end;
