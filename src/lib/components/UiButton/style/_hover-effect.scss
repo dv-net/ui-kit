@@ -1,0 +1,100 @@
+.ui-button {
+  --ui-button-effect-opacity: 0.06;
+  --ui-button-effect-color: currentColor;
+
+  &__hover-effect {
+    position: absolute;
+    z-index: 2;
+    border-radius: inherit;
+    pointer-events: none;
+    overflow: hidden;
+    inset: 0;
+    isolation: isolate;
+
+    &::after,
+    &::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      aspect-ratio: 1/1;
+      inset-inline-start: 50%;
+      inset-block-start: 50%;
+      translate: -50% -50%;
+      z-index: -1;
+      background: var(--ui-button-effect-color);
+      border-radius: 50%;
+      scale: 0 0;
+      opacity: var(--ui-button-effect-opacity);
+    }
+
+    &::before {
+      transition-duration: 0.25s, 0.25s;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled):not(.is-loading) {
+      .ui-button__hover-effect {
+        &::after {
+          transition:
+            scale 0.5s ease,
+            opacity 0.5s ease 0.25s;
+          scale: 1 1;
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  &:active:not(:disabled):not(.is-loading),
+  &:focus-visible:not(:disabled):not(.is-loading) {
+    .ui-button__hover-effect {
+      &::before {
+        transition:
+          scale 0.5s ease,
+          opacity 0.5s ease 0.25s;
+        scale: 1 1;
+        opacity: 0;
+      }
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  &.type-primary {
+    --ui-button-effect-opacity: 0.1;
+    --ui-button-effect-color: var(--color-white, #fff);
+  }
+
+  &.type-secondary {
+    --ui-button-effect-opacity: 0.04;
+    --ui-button-effect-color: var(--color-text-primary, currentColor);
+  }
+
+  &.type-tertiary {
+    --ui-button-effect-opacity: 0.06;
+    --ui-button-effect-color: var(--color-state-accent, currentColor);
+  }
+
+  &.type-outline {
+    --ui-button-effect-opacity: 0.06;
+    --ui-button-effect-color: var(--color-state-accent, currentColor);
+  }
+
+  &.type-outline-light {
+    --ui-button-effect-opacity: 0.06;
+    --ui-button-effect-color: var(--color-state-accent, currentColor);
+  }
+
+  &.type-negative {
+    --ui-button-effect-opacity: 0.08;
+    --ui-button-effect-color: var(--color-text-negative, currentColor);
+  }
+
+  &.type-social {
+    --ui-button-effect-opacity: 0.04;
+    --ui-button-effect-color: var(--color-state-primary, currentColor);
+  }
+}

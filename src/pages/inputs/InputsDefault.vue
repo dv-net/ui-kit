@@ -6,6 +6,7 @@
   import { ref } from "vue";
 
   const value = ref("");
+  const readonlyInteractive = ref("Readonly interactive text");
 </script>
 
 <template>
@@ -68,6 +69,18 @@
         <UiInput v-model="value" placeholder="Placeholder" size="xl" disabled filled></UiInput>
         <UiInput v-model="value" placeholder="Placeholder" size="xl" error></UiInput>
         <UiInput v-model="value" placeholder="Placeholder" size="xl" disabled error></UiInput>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">Readonly interactive input</div>
+      <div class="grid__content">
+        <UiInput v-model="readonlyInteractive" placeholder="Placeholder" readonlyInteractive></UiInput>
+        <UiInput v-model="readonlyInteractive" placeholder="Placeholder" readonlyInteractive disabled></UiInput>
+        <UiInput v-model="readonlyInteractive" placeholder="Placeholder" readonlyInteractive filled></UiInput>
+        <UiInput v-model="readonlyInteractive" placeholder="Placeholder" readonlyInteractive disabled filled></UiInput>
+        <UiInput v-model="readonlyInteractive" placeholder="Placeholder" readonlyInteractive error></UiInput>
+        <UiInput v-model="readonlyInteractive" placeholder="Placeholder" readonlyInteractive disabled error></UiInput>
       </div>
     </div>
   </div>

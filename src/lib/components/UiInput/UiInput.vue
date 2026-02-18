@@ -66,7 +66,7 @@
   }
 
   function onKeydown(e: KeyboardEvent) {
-    if (!props.readonlyInteractive) return;
+    if (!props.readonlyInteractive || e.ctrlKey || e.metaKey) return;
     if (!readonlyInteractiveAllowedKeys.includes(e.key)) {
       e.preventDefault();
     }

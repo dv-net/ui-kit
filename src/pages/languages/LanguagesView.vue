@@ -14,12 +14,12 @@
 
     <div class="grid">
       <div class="grid__header">Basic</div>
-      <ui-languages v-model="lang" :locales="locales" />
+      <ui-languages class="grid__languages" v-model="lang" :locales="locales" />
     </div>
 
     <div class="grid">
       <div class="grid__header">For header</div>
-      <ui-languages for-header v-model="lang" :locales="locales" />
+      <ui-languages class="grid__languages" for-header v-model="lang" :locales="locales" />
     </div>
 
     <div class="grid">
@@ -34,19 +34,20 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-
     .grid {
       display: grid;
       align-items: center;
       gap: 12px;
       grid-template-columns: 1fr;
-
       &__header {
         width: max-content;
         border-bottom: 1px solid;
         margin-bottom: 8px;
         font-size: 18px;
         font-weight: bold;
+      }
+      &__languages {
+        width: max-content;
       }
     }
   }
