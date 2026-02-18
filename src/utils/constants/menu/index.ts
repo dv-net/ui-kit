@@ -175,6 +175,14 @@ export const menu = ref<RouteItem[]>([
     }
   },
   {
+    path: "/chat",
+    meta: {
+      title: "Chat",
+      icon: "home",
+      iconActive: "home"
+    }
+  },
+  {
     path: "/summary",
       meta: {
         title: "Summary",
