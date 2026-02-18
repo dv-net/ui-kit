@@ -57,6 +57,7 @@
       <UiIcon :type="rightIconType" :name="rightIconName" :color="rightIconColor" :size="rightIconSize" />
     </span>
     <UiLoading :is-show="loading" icon-size="fill" />
+    <div class="ui-button__hover-effect" />
   </component>
 </template>
 
