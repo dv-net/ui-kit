@@ -6,12 +6,9 @@
   import dayjs from "dayjs";
   import { config } from "@/lib/config";
   import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction } from "./types";
+  import { defaultChatMessage } from "@/utils/constants/chat";
 
-  const {
-    ticket,
-    messages = [],
-    currentUserUuid
-  } = defineProps<UiChatProps>();
+  const { ticket, messages = [], currentUserUuid } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
@@ -19,24 +16,15 @@
     (e: "attach"): void;
   }>();
 
-  const getDate = (datetime: string) => datetime.split(" ")[0];
-  const isOwnMessage = (msg: UiChatMessageType) => msg.user.uuid === currentUserUuid;
+  const getDate = (datetime: string): string => datetime.split(" ")[0];
+  const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
-  const isEmpty = computed(() => !messages.length || !ticket || !currentUserUuid);
+  const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
 
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
     const now = dayjs().format("DD.MM.YYYY HH:mm");
-    return [{
-      id: 0,
-      ticket_id: 0,
-      message: config.uiChat.translations.defaultMessage,
-      created_at: now,
-      updated_at: now,
-      files: [],
-      attachments: [],
-      user: { uuid: "", avatar: null, telegram: null, email: "", name: null },
-    }];
+    return [defaultChatMessage(config.uiChat.translations.defaultMessage, now)];
   });
 
   const groupedMessages = computed(() => {
@@ -53,23 +41,14 @@
 <template>
   <div class="ui-chat">
     <UiChatHeader :ticket="ticket" :is-empty="isEmpty" @action-ticket="(v) => emit('action-ticket', v)" />
-
-    <!-- Body -->
     <div class="ui-chat__body">
       <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
         <div class="ui-chat__group-date">
           <span>{{ date }}</span>
         </div>
-
-        <UiChatMessage
-          v-for="msg in groupMessages"
-          :key="msg.id"
-          :message="msg"
-          :is-own="isOwnMessage(msg)"
-        />
+        <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
       </div>
     </div>
-
     <UiChatFooter :is-empty="isEmpty" @submit="emit('submit')" @attach="emit('attach')" />
   </div>
 </template>

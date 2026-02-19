@@ -1,144 +1,223 @@
 <script setup lang="ts">
-  import { computed, onMounted, onUnmounted, ref } from "vue";
+  import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+  import { UiGalleryProps } from "./types";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
 
-  import { UiGalleryProps } from "./types.ts";
-
-  import { UiIconButton, UiModal } from "@/lib";
-
-  const { images } = defineProps<UiGalleryProps<unknown>>();
+  const props = withDefaults(defineProps<UiGalleryProps>(), {
+    initialIndex: 0,
+  });
 
   const modelValue = defineModel<boolean>("modelValue", { required: true });
 
-  const galleryImagesIndex = ref(0);
+  const currentIndex = ref(props.initialIndex);
+  const isInitialOpen = ref(true);
 
-  const galleryImageUrl = computed(
-    () =>
-      images[galleryImagesIndex.value]?.url ||
-      (images[galleryImagesIndex.value]?.file && URL.createObjectURL(images[galleryImagesIndex.value].file!))
-  );
+  const canPrev = computed(() => currentIndex.value > 0);
+  const canNext = computed(() => currentIndex.value < props.images.length - 1);
 
-  const goSlidePreview = (direction: "-" | "+") => {
-    if (direction === "-") {
-      if (galleryImagesIndex.value === 0) galleryImagesIndex.value = images.length - 1;
-      else galleryImagesIndex.value--;
-    } else {
-      if (galleryImagesIndex.value === images.length - 1) galleryImagesIndex.value = 0;
-      else galleryImagesIndex.value++;
+  const currentImageUrl = computed(() => {
+    const img = props.images[currentIndex.value];
+    if (!img) return "";
+    return img.url || (img.file ? URL.createObjectURL(img.file) : "");
+  });
+
+  const goSlide = (direction: "prev" | "next") => {
+    isInitialOpen.value = false;
+    if (direction === "prev" && canPrev.value) {
+      currentIndex.value--;
+    } else if (direction === "next" && canNext.value) {
+      currentIndex.value++;
     }
   };
 
-  const eventListenerHandler = (e: KeyboardEvent) => {
-    if (!modelValue.value) return;
-    if (e.key === "ArrowLeft") goSlidePreview("-");
-    if (e.key === "ArrowRight") goSlidePreview("+");
-    if (e.key === "Escape") modelValue.value = false;
+  const close = () => {
+    modelValue.value = false;
   };
 
-  onMounted(() => {
-    if (images.length > 1) document.addEventListener("keydown", eventListenerHandler);
-  });
+  const onKeydown = (e: KeyboardEvent) => {
+    if (!modelValue.value) return;
+    if (e.key === "ArrowLeft") goSlide("prev");
+    if (e.key === "ArrowRight") goSlide("next");
+    if (e.key === "Escape") close();
+  };
 
-  onUnmounted(() => {
-    if (images.length > 1) document.removeEventListener("keydown", eventListenerHandler);
-  });
+  watch(
+    () => modelValue.value,
+    (val) => {
+      if (val) {
+        currentIndex.value = props.initialIndex;
+        isInitialOpen.value = true;
+      }
+    }
+  );
+
+  onMounted(() => document.addEventListener("keydown", onKeydown));
+  onUnmounted(() => document.removeEventListener("keydown", onKeydown));
 </script>
 
 <template>
-  <UiModal v-if="images.length && galleryImageUrl" v-model="modelValue" popperClass="ui-gallery">
-    <div class="image-container">
-      <Transition name="image-slide" mode="out-in">
-        <img :key="galleryImagesIndex" :src="galleryImageUrl" alt="Preview Image" />
-      </Transition>
-    </div>
+  <Teleport to="body">
+    <Transition name="ui-gallery-fade">
+      <div v-if="modelValue && images.length && currentImageUrl" class="ui-gallery" @click.self="close">
+        <button
+          class="ui-gallery__nav ui-gallery__nav--prev"
+          :class="{ 'ui-gallery__nav--active': canPrev }"
+          :disabled="!canPrev"
+          @click="goSlide('prev')"
+        >
+          <UiIcon name="chevron-left" type="400" />
+        </button>
 
-    <template v-if="images.length > 1">
-      <UiIconButton
-        icon-name="keyboard-arrow-up"
-        icon-type="400"
-        class="ui-gallery__img-preview-btn left"
-        type="contrast"
-        @click="goSlidePreview('-')"
-      />
-      <UiIconButton
-        icon-name="keyboard-arrow-up"
-        icon-type="400"
-        class="ui-gallery__img-preview-btn right"
-        type="contrast"
-        @click="goSlidePreview('+')"
-      />
-    </template>
-  </UiModal>
+        <div class="ui-gallery__slider">
+          <button class="ui-gallery__close" @click="close">
+            <UiIcon name="close" type="400" />
+          </button>
+
+          <div class="ui-gallery__slide">
+            <Transition name="ui-gallery-crossfade" mode="out-in">
+              <img :key="currentIndex" :src="currentImageUrl" alt="" class="ui-gallery__image" :class="{ 'ui-gallery__image--initial': isInitialOpen }" />
+            </Transition>
+          </div>
+        </div>
+
+        <button
+          class="ui-gallery__nav ui-gallery__nav--next"
+          :class="{ 'ui-gallery__nav--active': canNext }"
+          :disabled="!canNext"
+          @click="goSlide('next')"
+        >
+          <UiIcon name="chevron-right" type="400" />
+        </button>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style lang="scss">
   .ui-gallery {
-    .ui-modal__content {
+    display: flex;
+    align-items: stretch;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.7);
+    overscroll-behavior: contain;
+    --gallery-padding: 22px;
+    --gallery-inset: 80px;
+
+    &__nav {
       display: flex;
-      width: 60vw;
-      height: 50vh;
       align-items: center;
       justify-content: center;
+      padding: 0 var(--gallery-padding);
+      border: none;
+      background: none;
+      color: #fff;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      &--active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      @media (hover: hover) {
+        &:hover {
+          background: rgba(255, 255, 255, 0.025);
+        }
+      }
+      &:active {
+        background: rgba(255, 255, 255, 0.035);
+      }
+      .ui-icon {
+        width: 20px;
+        height: 20px;
+      }
     }
 
-    .image-container {
-      position: relative;
+    &__slider {
       display: flex;
-      overflow: hidden;
+      align-items: center;
+      width: 100%;
+      padding: var(--gallery-inset) 0;
+      position: relative;
+      pointer-events: none;
+    }
+
+    &__close {
+      position: absolute;
+      right: 50%;
+      top: calc(var(--gallery-inset) / 2);
+      translate: 50% -50%;
+      z-index: 5;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: opacity 0.15s;
+      .ui-icon {
+        width: 32px;
+        height: 32px;
+      }
+      &:hover {
+        opacity: 0.75;
+      }
+      &:active {
+        opacity: 0.65;
+      }
+    }
+
+    &__slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
       height: 100%;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-      img {
-        display: block;
-        max-width: 100%;
-        max-height: 100%;
-        border: 1px solid #e0e0e0;
-        margin: auto;
-        object-fit: contain;
+    &__image {
+      max-width: 100%;
+      max-height: 100%;
+      pointer-events: auto;
+      object-fit: contain;
+      &--initial {
+        opacity: 0;
+        transform: perspective(1200px) rotate3d(10, 40, 0, 40deg);
+        animation: ui-gallery-show 0.5s ease forwards;
       }
     }
+  }
 
-    &__img-preview-btn {
-      position: fixed;
-      z-index: 10000;
-      top: 50%;
-
-      &.left {
-        left: 20px;
-        rotate: 270deg;
-      }
-
-      &.right {
-        right: 20px;
-        rotate: 90deg;
-      }
-    }
-
-    .image-slide-enter-active,
-    .image-slide-leave-active {
-      position: absolute;
-      transition: all 0.2s cubic-bezier(0.42, 0, 0.58, 1);
-    }
-
-    .image-slide-enter-from {
-      opacity: 0;
-      transform: translateX(40px);
-    }
-
-    .image-slide-enter-to {
+  @keyframes ui-gallery-show {
+    to {
       opacity: 1;
-      transform: translateX(0);
+      transform: none;
     }
+  }
 
-    .image-slide-leave-from {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  .ui-gallery-fade-enter-active,
+  .ui-gallery-fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .ui-gallery-fade-enter-from,
+  .ui-gallery-fade-leave-to {
+    opacity: 0;
+  }
 
-    .image-slide-leave-to {
-      opacity: 0;
-      transform: translateX(-40px);
-    }
+  .ui-gallery-crossfade-enter-active,
+  .ui-gallery-crossfade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .ui-gallery-crossfade-enter-from,
+  .ui-gallery-crossfade-leave-to {
+    opacity: 0;
   }
 </style>
