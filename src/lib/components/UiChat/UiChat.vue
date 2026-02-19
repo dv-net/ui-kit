@@ -5,15 +5,15 @@
   import { computed } from "vue";
   import dayjs from "dayjs";
   import { config } from "@/lib/config";
-  import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction } from "./types";
+  import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction, UiChatSubmitPayload } from "./types";
   import { defaultChatMessage } from "@/utils/constants/chat";
 
   const { ticket, messages = [], currentUserUuid } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
-    (e: "submit"): void;
-    (e: "attach"): void;
+    (e: "submit", payload: UiChatSubmitPayload): void;
+    (e: "attach", files: File[]): void;
   }>();
 
   const getDate = (datetime: string): string => datetime.split(" ")[0];
@@ -49,7 +49,7 @@
         <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
       </div>
     </div>
-    <UiChatFooter :is-empty="isEmpty" @submit="emit('submit')" @attach="emit('attach')" />
+    <UiChatFooter :is-empty="isEmpty" @submit="(p) => emit('submit', p)" @attach="(f) => emit('attach', f)" />
   </div>
 </template>
 

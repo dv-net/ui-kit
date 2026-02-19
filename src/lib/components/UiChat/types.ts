@@ -51,6 +51,11 @@ export interface ChatActionOption {
   color?: string;
 }
 
+export interface UiChatSubmitPayload {
+  message: string;
+  files: File[];
+}
+
 export interface UiChatProps {
   ticket: UiChatTicket | null | undefined;
   messages?: UiChatMessage[];

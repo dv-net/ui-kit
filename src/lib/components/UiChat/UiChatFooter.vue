@@ -4,33 +4,35 @@
   import UiTextarea from "@/lib/components/UiTextarea/UiTextarea.vue";
   import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
 
-  import { ref } from "vue";
+  import { ref, computed } from "vue";
 
   import { config } from "@/lib/config";
   import { ATTACH_MAX_FILES, ATTACH_FORMATS } from "@/utils/constants/chat";
+  import type { UiChatSubmitPayload } from "./types";
 
   defineProps<{ isEmpty: boolean }>();
 
   const emit = defineEmits<{
-    (e: "submit"): void;
+    (e: "submit", payload: UiChatSubmitPayload): void;
     (e: "attach", files: File[]): void;
   }>();
 
   const message = ref<string | null>(null);
+  const files = ref<File[]>([]);
   const attachmentsRef = ref<InstanceType<typeof UiChatAttachments>>();
+
+  const isMaxFiles = computed<boolean>(() => files.value.length >= ATTACH_MAX_FILES);
+
+  const onSubmit = () => {
+    if (!message.value) return;
+    emit("submit", { message: message.value, files: files.value });
+  };
 </script>
 
 <template>
   <div class="ui-chat__footer-wrapper">
-    <UiChatAttachments
-      ref="attachmentsRef"
-      :max-files="ATTACH_MAX_FILES"
-      class="ui-chat__footer-attachments"
-      @change="(files) => emit('attach', files)"
-    />
-
     <div class="ui-chat__footer">
-      <UiTooltip>
+      <UiTooltip v-if="!isMaxFiles">
         <template #text>
           <p class="ui-chat__footer-tooltip">
             <span>{{ config.uiChat.translations.maxFiles }}: {{ ATTACH_MAX_FILES }}</span>
@@ -49,11 +51,11 @@
           size="auto"
           :placeholder="config.uiChat.translations.messagePlaceholder"
           submitOnEnter
-          @submit="emit('submit')"
+          @submit="onSubmit"
           is-empty-value-null
         />
       </div>
-      <div style="margin-right: -16px" @click="emit('submit')">
+      <div style="margin-right: -16px" @click="onSubmit">
         <slot name="footer-right">
           <ui-icon-button
             icon-name="send"
@@ -66,15 +68,19 @@
         </slot>
       </div>
     </div>
+    <UiChatAttachments
+      ref="attachmentsRef"
+      :max-files="ATTACH_MAX_FILES"
+      :class="['ui-chat__footer-attachments', { 'ui-chat__footer-attachments--empty': !files.length }]"
+      @change="(f) => { files = f; emit('attach', f); }"
+    />
   </div>
 </template>
 
 <style lang="scss">
   .ui-chat {
-    &__footer-wrapper {
-      background: var(--color-background-secondary);
-    }
     &__footer {
+      background: var(--color-background-secondary);
       display: flex;
       align-items: center;
       gap: 4px;
@@ -92,7 +98,10 @@
         padding: 6px 12px;
       }
       &-attachments {
-        padding: 12px 24px 0;
+        padding: 24px;
+        &--empty {
+          padding: 0;
+        }
       }
     }
   }

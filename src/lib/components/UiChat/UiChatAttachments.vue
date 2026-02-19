@@ -2,17 +2,15 @@
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiGallery from "@/lib/components/UiGallery/UiGallery.vue";
   import { ref, computed } from "vue";
+  import { ATTACH_MAX_FILES, ATTACH_ACCEPT } from "@/utils/constants/chat";
 
-  const props = withDefaults(
-    defineProps<{
-      maxFiles?: number;
-      accept?: string;
-    }>(),
-    {
-      maxFiles: 10,
-      accept: ".jpg,.jpeg,.png,.heic,.heif",
-    }
-  );
+  const { 
+    maxFiles = ATTACH_MAX_FILES,
+    accept = ATTACH_ACCEPT,
+  } = defineProps<{
+    maxFiles?: number;
+    accept?: string;
+  }>();
 
   const emit = defineEmits<{
     (e: "change", files: File[]): void;
@@ -23,7 +21,7 @@
   const previewUrls = ref<Map<File, string>>(new Map());
 
   const openFileDialog = () => {
-    if (attachedFiles.value.length >= props.maxFiles) return;
+    if (attachedFiles.value.length >= maxFiles) return;
     fileInput.value?.click();
   };
 
@@ -31,7 +29,7 @@
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
 
-    const remaining = props.maxFiles - attachedFiles.value.length;
+    const remaining = maxFiles - attachedFiles.value.length;
     const newFiles = Array.from(input.files).slice(0, remaining);
 
     attachedFiles.value.push(...newFiles);
@@ -90,9 +88,6 @@
           <button class="ui-chat-attachments__btn ui-chat-attachments__btn--show" @click="openGallery(index)">
             <UiIcon name="visibility" type="400" />
           </button>
-          <a class="ui-chat-attachments__btn ui-chat-attachments__btn--link" :href="getPreviewUrl(file)" target="_blank">
-            <UiIcon name="link" type="400" />
-          </a>
           <button class="ui-chat-attachments__btn ui-chat-attachments__btn--remove" @click="removeFile(index)">
             <UiIcon name="close" type="400" />
           </button>
@@ -177,9 +172,6 @@
       }
       &--show {
         background: var(--color-text-positive, #22c55e);
-      }
-      &--link {
-        background: var(--color-text-accent, #3b82f6);
       }
       &--remove {
         background: var(--color-text-negative, #ef4444);

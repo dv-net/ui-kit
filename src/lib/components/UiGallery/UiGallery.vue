@@ -3,20 +3,18 @@
   import { UiGalleryProps } from "./types";
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
 
-  const props = withDefaults(defineProps<UiGalleryProps>(), {
-    initialIndex: 0,
-  });
+  const { initialIndex = 0, images } = defineProps<UiGalleryProps>();
 
   const modelValue = defineModel<boolean>("modelValue", { required: true });
 
-  const currentIndex = ref(props.initialIndex);
+  const currentIndex = ref(initialIndex);
   const isInitialOpen = ref(true);
 
   const canPrev = computed(() => currentIndex.value > 0);
-  const canNext = computed(() => currentIndex.value < props.images.length - 1);
+  const canNext = computed(() => currentIndex.value < images.length - 1);
 
   const currentImageUrl = computed(() => {
-    const img = props.images[currentIndex.value];
+    const img = images[currentIndex.value];
     if (!img) return "";
     return img.url || (img.file ? URL.createObjectURL(img.file) : "");
   });
@@ -45,7 +43,7 @@
     () => modelValue.value,
     (val) => {
       if (val) {
-        currentIndex.value = props.initialIndex;
+        currentIndex.value = initialIndex;
         isInitialOpen.value = true;
       }
     }
@@ -65,7 +63,7 @@
           :disabled="!canPrev"
           @click="goSlide('prev')"
         >
-          <UiIcon name="chevron-left" type="400" />
+          <UiIcon name="chevron-left 1" type="400" size="xxl" />
         </button>
 
         <div class="ui-gallery__slider">
@@ -86,7 +84,7 @@
           :disabled="!canNext"
           @click="goSlide('next')"
         >
-          <UiIcon name="chevron-right" type="400" />
+          <UiIcon name="chevron-right" type="400" size="xxl" />
         </button>
       </div>
     </Transition>
