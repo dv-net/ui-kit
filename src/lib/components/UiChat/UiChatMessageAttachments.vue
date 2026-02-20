@@ -34,6 +34,7 @@
       <div class="ui-chat-msg-attachments__wrap" :data-count="moreCount">
         <img class="ui-chat-msg-attachments__img" :src="imageAttachments[0].url" alt="" />
       </div>
+      <div class="ui-chat-msg-attachments__hover-effect" />
     </button>
 
     <UiGallery
@@ -113,6 +114,67 @@
       z-index: 2;
       height: 100%;
       object-fit: cover;
+    }
+
+    &__hover-effect {
+      position: absolute;
+      z-index: 3;
+      border-radius: inherit;
+      pointer-events: none;
+      overflow: hidden;
+      inset: 0;
+      isolation: isolate;
+
+      &::after,
+      &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        aspect-ratio: 1/1;
+        inset-inline-start: 50%;
+        inset-block-start: 50%;
+        translate: -50% -50%;
+        z-index: -1;
+        background: var(--color-white, #fff);
+        border-radius: 50%;
+        scale: 0 0;
+        opacity: 0.15;
+      }
+
+      &::before {
+        transition-duration: 0.25s, 0.25s;
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &__group:hover {
+        .ui-chat-msg-attachments__hover-effect {
+          &::after {
+            transition:
+              scale 0.5s ease,
+              opacity 0.5s ease 0.25s;
+            scale: 1 1;
+            opacity: 0;
+          }
+        }
+      }
+    }
+
+    &__group:active,
+    &__group:focus-visible {
+      .ui-chat-msg-attachments__hover-effect {
+        &::before {
+          transition:
+            scale 0.5s ease,
+            opacity 0.5s ease 0.25s;
+          scale: 1 1;
+          opacity: 0;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
     }
   }
 </style>
