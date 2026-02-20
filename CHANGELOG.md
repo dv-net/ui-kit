@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [7.5.0] - 2026-02-20
+## [7.5.1] - 2026-02-20
 
 - feat: new components added: UIChat, UiGallery
 - feat: new hovers have been added to the buttons
