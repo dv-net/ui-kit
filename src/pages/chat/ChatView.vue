@@ -11,7 +11,7 @@
     {
       id: 1,
       ticket_id: 1,
-      message: "Здравствуйте! У меня проблема с оплатой заказа.",
+      message: "Hello! I'm having a problem with my order payment.",
       created_at: "2026-02-15 10:01:00",
       updated_at: "2026-02-15 10:01:00",
       files: [],
@@ -21,7 +21,7 @@
     {
       id: 2,
       ticket_id: 1,
-      message: "Добрый день! Подскажите, пожалуйста, номер заказа.",
+      message: "Good afternoon! Could you please provide the order number?",
       created_at: "2026-02-15 10:02:00",
       updated_at: "2026-02-15 10:02:00",
       files: [],
@@ -31,7 +31,7 @@
     {
       id: 3,
       ticket_id: 1,
-      message: "Заказ №48291. Оплата не проходит уже второй раз.",
+      message: "Order #48291. The payment has failed for the second time already.",
       created_at: "2026-02-15 10:03:00",
       updated_at: "2026-02-15 10:03:00",
       files: [],
@@ -41,7 +41,7 @@
     {
       id: 4,
       ticket_id: 1,
-      message: "Спасибо, сейчас проверю. Одну минуту.",
+      message: "Thank you, let me check. One moment please.",
       created_at: "2026-02-15 10:04:00",
       updated_at: "2026-02-15 10:04:00",
       files: [],
@@ -51,7 +51,7 @@
     {
       id: 5,
       ticket_id: 1,
-      message: "Проблема была на стороне платёжного шлюза. Попробуйте повторить оплату сейчас.",
+      message: "The issue was on the payment gateway side. Please try again now.",
       created_at: "2026-02-15 10:12:00",
       updated_at: "2026-02-15 10:12:00",
       files: [],
@@ -61,7 +61,7 @@
     {
       id: 6,
       ticket_id: 1,
-      message: "Всё прошло, спасибо!",
+      message: "It went through, thank you!",
       created_at: "2026-02-15 10:14:00",
       updated_at: "2026-02-15 10:14:00",
       files: [],
@@ -71,7 +71,7 @@
     {
       id: 7,
       ticket_id: 1,
-      message: "Рад помочь! Если возникнут ещё вопросы — обращайтесь.",
+      message: "Happy to help! Feel free to reach out if you have any more questions.",
       created_at: "2026-02-15 10:15:00",
       updated_at: "2026-02-15 10:15:00",
       files: [],
@@ -81,7 +81,7 @@
     {
       id: 8,
       ticket_id: 1,
-      message: "Добрый день, снова я. Хотел уточнить статус доставки.",
+      message: "Hi, it's me again. I wanted to check the delivery status.",
       created_at: "2026-02-16 14:30:00",
       updated_at: "2026-02-16 14:30:00",
       files: [],
@@ -91,7 +91,7 @@
     {
       id: 9,
       ticket_id: 1,
-      message: "Здравствуйте! Ваш заказ передан курьеру, ожидайте доставку сегодня до 18:00.",
+      message: "Hello! Your order has been handed to the courier, expect delivery today by 6:00 PM.",
       created_at: "2026-02-16 14:35:00",
       updated_at: "2026-02-16 14:35:00",
       files: [],
@@ -101,16 +101,16 @@
     {
       id: 10,
       ticket_id: 1,
-      message: "Отлично, буду ждать. Спасибо!",
+      message: "Great, I'll be waiting. Thanks!",
       created_at: "2026-02-16 14:36:00",
       updated_at: "2026-02-16 14:36:00",
-      files: ["https://epnnet.dev//storage/converted/69947fadb8b499.42059641.jpg"],
+      files: ["https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg"],
       attachments: [
         {
           uuid: "img-001",
           type: "image/jpeg",
-          title: "photo.jpg",
-          url: "https://epnnet.dev//storage/converted/6992e2d96541e5.73846050.jpg",
+          title: "frog.jpg",
+          url: "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
           file_size: 1024
         }
       ],
@@ -123,22 +123,22 @@
       created_at: "2026-02-16 14:40:00",
       updated_at: "2026-02-16 14:40:00",
       files: [
-        "https://epnnet.dev//storage/converted/6992e2d96541e5.73846050.jpg",
-        "https://epnnet.dev//storage/converted/69947fadb8b499.42059641.jpg"
+        "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
+        "https://avatarko.ru/img/kartinka/18/multfilm_kotenok_snezhinka_17593.jpg"
       ],
       attachments: [
         {
           uuid: "img-001",
           type: "image/jpeg",
-          title: "photo.jpg",
-          url: "https://epnnet.dev//storage/converted/6992e2d96541e5.73846050.jpg",
+          title: "frog.jpg",
+          url: "https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg",
           file_size: 1024
         },
         {
           uuid: "img-002",
           type: "image/jpeg",
-          title: "photo222.jpg",
-          url: "https://epnnet.dev//storage/converted/69947fadb8b499.42059641.jpg",
+          title: "kitten.jpg",
+          url: "https://avatarko.ru/img/kartinka/18/multfilm_kotenok_snezhinka_17593.jpg",
           file_size: 1024
         }
       ],
@@ -148,7 +148,7 @@
 
   const ticket: UiChatTicket = {
     id: 83545,
-    subject: "Мне необходимо оплатить другим способом",
+    subject: "I need to pay using a different method",
     status: { name: "Online", value: 3 },
     created_at: "2025-10-12 22:17:45",
     updated_at: "2025-10-13 00:27:12",
