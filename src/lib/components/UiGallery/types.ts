@@ -1,3 +1,9 @@
-export interface UiGalleryProps<T> {
-  images: Array<{ url?: string; file?: File } & T>;
+export interface UiGalleryImage {
+  url?: string;
+  file?: File;
+}
+
+export interface UiGalleryProps {
+  images: UiGalleryImage[];
+  initialIndex?: number;
 }

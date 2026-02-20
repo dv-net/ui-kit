@@ -30,6 +30,8 @@ import Tooltip from "@/pages/tooltip/TooltipView.vue";
 import UiAvatar from "@/pages/ui-avatar/UiAvatarView.vue";
 import UiLink from "@/pages/ui-link/UiLinkView.vue";
 import UiModal from "@/pages/ui-modal/UiModalView.vue";
+import Chat from "@/pages/chat/ChatView.vue";
+import Gallery from "@/pages/gallery/GalleryView.vue";
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: RouteRecordRaw[] = [
@@ -72,6 +74,8 @@ const routes: RouteRecordRaw[] = [
   { path: "/summary/modal", component: UiModal },
   { path: "/summary/drawer", component: Drawer },
   { path: "/summary/avatar", component: UiAvatar },
+  { path: "/chat", component: Chat },
+  { path: "/gallery", component: Gallery },
 ];
 
 export const router = createRouter({
