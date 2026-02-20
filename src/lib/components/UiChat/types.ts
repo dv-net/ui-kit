@@ -25,9 +25,17 @@ export interface UiChatMessage {
   user: UiChatMessageUser;
 }
 
+export enum UiChatTicketStatusValue {
+  MANAGER_CLOSED = 5,
+  USER_CLOSED = 4,
+  USER_WAITING = 3,
+  IN_PROGRESS = 2,
+  MANAGER_WAITING = 1,
+}
+
 export interface UiChatTicketStatus {
   name: string;
-  value: number;
+  value: UiChatTicketStatusValue;
 }
 
 export interface UiChatTicket {
@@ -62,4 +70,6 @@ export interface UiChatProps {
   currentUserUuid?: string;
   showManagerAlert?: boolean;
   managerAlertSeconds?: number;
+  ticketLoading?: boolean;
+  sendingLoading?: boolean;
 }

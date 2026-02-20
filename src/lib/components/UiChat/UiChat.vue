@@ -15,6 +15,8 @@
     currentUserUuid,
     showManagerAlert = false,
     managerAlertSeconds,
+    ticketLoading = false,
+    sendingLoading = false,
   } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{

@@ -102,6 +102,8 @@
         display: flex;
         align-items: center;
         gap: 16px;
+        min-width: 0;
+        overflow: hidden;
       }
       &-icon {
         display: flex;
@@ -117,6 +119,8 @@
       &-info {
         display: flex;
         flex-direction: column;
+        min-width: 0;
+        overflow: hidden;
       }
       &-ticket {
         display: flex;
@@ -124,9 +128,14 @@
         gap: 0.45em;
       }
       &-title {
+        max-width: 50%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: 16px;
         font-weight: 500;
         line-height: 125%;
+        color: var(--color-text-primary);
       }
       &-id {
         color: var(--color-separator-border-contrast-secondary);
@@ -152,6 +161,7 @@
       }
     }
     &__actions {
+      flex-shrink: 0;
       .ui-dropdown__content {
         min-width: 230px;
       }
