@@ -10,7 +10,7 @@
 
   import { config } from "@/lib/config";
   const emits = defineEmits(["submit", "change"]);
-  const { single } = defineProps<Pick<UiDatepickerRangeProps, "single">>();
+  const { single, minDate, maxDate } = defineProps<Pick<UiDatepickerRangeProps, "single" | "minDate" | "maxDate">>();
   const processingData = defineModel<string[]>("model-value", { default: [] });
   const { dayjs, inputFormat, modelValueFormat } = useDatePicker();
   const errors = ref<boolean[]>([false, false]);
@@ -22,11 +22,15 @@
   const placeholder = computed(() => dayjs().format(inputFormat.value));
   function update(date: string, isStart: boolean) {
     const isValid =
-      !dayjs(date, inputFormat.value).isValid() ||
-      dayjs(date, inputFormat.value).isAfter(dayjs(dayjs(), inputFormat.value), "day");
+      dayjs(date, inputFormat.value).isValid() &&
+      (!minDate || dayjs(date, inputFormat.value).isAfter(dayjs(minDate).add(-1, "day"), "day")) &&
+      (!maxDate || dayjs(date, inputFormat.value).isBefore(dayjs(maxDate).add(1, "day"), "day"));
+
+      console.log(123, date, dayjs(date, inputFormat.value).isValid(), inputFormat.value, dayjs(date, inputFormat.value).day())
+
     if (isStart && date.length === 10) {
       errors.value[0] =
-        (!single && dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day")) || isValid;
+        (!single && dayjs(date, inputFormat.value).isAfter(dayjs(endDate.value, inputFormat.value), "day")) || !isValid;
       if (!errors.value[0]) {
         processingData.value[0] = dayjs(date, inputFormat.value).format(modelValueFormat.value);
         emits("change");
@@ -37,7 +41,7 @@
 
     if (!isStart && date.length === 10) {
       errors.value[1] =
-        dayjs(date, inputFormat.value).isBefore(dayjs(startDate.value, inputFormat.value), "day") || isValid;
+        dayjs(date, inputFormat.value).isBefore(dayjs(startDate.value, inputFormat.value), "day") || !isValid;
       if (!errors.value[1]) {
         processingData.value[1] = dayjs(date, inputFormat.value).format(modelValueFormat.value);
         emits("change");

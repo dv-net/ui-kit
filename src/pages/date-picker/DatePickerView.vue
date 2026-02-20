@@ -4,6 +4,8 @@
   import UiDatepickerRange from "@/lib/components/UiDatepicker/UiDatepickerRange.vue";
   import { UiButton } from "@/lib";
 
+  import { config } from "@/lib/config";
+
   import { ref } from "vue";
 
   const date = ref([]);
@@ -13,11 +15,16 @@
   const maxDate = ref(dayjs().add(3, "days").toString());
 
   const brithday = ref(dayjs().add(-18, "years").toString());
+
+  const clickHandler = () => {
+    config.uiDatePicker.inputFormat = "MM-DD-YYYY";
+  };
 </script>
 
 <template>
   <div class="page">
     <h1 class="global-title">Date Picker</h1>
+    <h1 class="global-title" @click="clickHandler">aaaa</h1>
 
     <div class="grid">
       <div class="grid__header">Selected</div>
