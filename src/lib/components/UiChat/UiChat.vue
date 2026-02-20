@@ -70,6 +70,23 @@
       padding: 24px;
       gap: 16px;
       height: 415px;
+      &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        border-radius: 0 16px 0 0;
+        background: transparent;
+        margin: 15px 0;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #cbd1db;
+        border-radius: 16px;
+        &:hover {
+          background: #aaadb3;
+          background-clip: padding-box;
+        }
+      }
     }
     &__group {
       display: flex;

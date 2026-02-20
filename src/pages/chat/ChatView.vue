@@ -119,7 +119,7 @@
     {
       id: 11,
       ticket_id: 1,
-      message: "test",
+      message: "Go to link: \n https://github.com/",
       created_at: "2026-02-16 14:40:00",
       updated_at: "2026-02-16 14:40:00",
       files: [
