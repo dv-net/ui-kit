@@ -60,4 +60,6 @@ export interface UiChatProps {
   ticket: UiChatTicket | null | undefined;
   messages?: UiChatMessage[];
   currentUserUuid?: string;
+  showManagerAlert?: boolean;
+  managerAlertSeconds?: number;
 }

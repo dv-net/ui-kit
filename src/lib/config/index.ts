@@ -81,6 +81,7 @@ export interface UiKitConfig {
       messagePlaceholder: string;
       maxFiles: string;
       supportsFormats: string;
+      managerAlert: string;
     };
   };
 }
@@ -165,7 +166,8 @@ export const config = reactive<UiKitConfig>({
       defaultMessage: "Hello. How can I help you?",
       messagePlaceholder: "Your message",
       maxFiles: "Maximum files",
-      supportsFormats: "Supports formats"
+      supportsFormats: "Supports formats",
+      managerAlert: "Connecting operator"
     }
   }
 });

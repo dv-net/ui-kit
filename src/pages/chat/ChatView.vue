@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { ref, onMounted, onUnmounted } from "vue";
   import { UiChat } from "@/lib";
   import type { UiChatMessage, UiChatTicket } from "@/lib/components/UiChat/types";
 
@@ -157,12 +158,34 @@
     init_message: messages[0],
     support_name: "Sofia"
   };
+
+  const showAlert = ref(true);
+  const alertSeconds = ref(90);
+  let timer: ReturnType<typeof setInterval>;
+
+  onMounted(() => {
+    timer = setInterval(() => {
+      if (alertSeconds.value > 0) {
+        alertSeconds.value--;
+      } else {
+        clearInterval(timer);
+      }
+    }, 1000);
+  });
+
+  onUnmounted(() => clearInterval(timer));
 </script>
 
 <template>
   <div class="page">
     <h1 class="global-title">Chat</h1>
-    <UiChat :ticket="ticket" :messages="messages" :current-user-uuid="MY_UUID" />
+    <UiChat
+      :ticket="ticket"
+      :messages="messages"
+      :current-user-uuid="MY_UUID"
+      :show-manager-alert="showAlert"
+      :manager-alert-seconds="alertSeconds"
+    />
   </div>
 </template>
 

@@ -2,13 +2,20 @@
   import UiChatHeader from "./UiChatHeader.vue";
   import UiChatFooter from "./UiChatFooter.vue";
   import UiChatMessage from "./UiChatMessage.vue";
+  import UiChatManagerAlert from "./UiChatManagerAlert.vue";
   import { computed } from "vue";
   import dayjs from "dayjs";
   import { config } from "@/lib/config";
   import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction, UiChatSubmitPayload } from "./types";
   import { defaultChatMessage } from "@/utils/constants/chat";
 
-  const { ticket, messages = [], currentUserUuid } = defineProps<UiChatProps>();
+  const {
+    ticket,
+    messages = [],
+    currentUserUuid,
+    showManagerAlert = false,
+    managerAlertSeconds,
+  } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
@@ -42,6 +49,10 @@
   <div class="ui-chat">
     <UiChatHeader :ticket="ticket" :is-empty="isEmpty" @action-ticket="(v) => emit('action-ticket', v)" />
     <div class="ui-chat__body">
+      <Transition name="alert" mode="out-in" appear>
+        <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
+      </Transition>
+
       <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
         <div class="ui-chat__group-date">
           <span>{{ date }}</span>
