@@ -15,7 +15,11 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
-      dts({ include: ["./src/lib"] }),
+      dts({
+        include: ["./src/lib"],
+        tsconfigPath: "./tsconfig-build.json",
+        entryRoot: "./src/lib"
+      }),
       svgLoader({
         svgoConfig: {
           multipass: true,
