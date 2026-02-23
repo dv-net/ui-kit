@@ -28,7 +28,7 @@
 
 .dp__menu_inner {
   padding: 0;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .dp__calendar_next {
@@ -61,6 +61,16 @@
 
 .dp__menu_content_wrapper {
   flex-direction: column;
+}
+
+.dp--tp-wrap {
+  width: 100%;
+  max-width: unset;
+  margin-bottom: 12px;
+}
+
+.dp__time_display {
+  width: 100%;
 }
 
 .dp__inner_nav {
