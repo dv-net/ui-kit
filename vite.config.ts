@@ -10,9 +10,6 @@ export default defineConfig(({ mode }) => {
   const isDemo = mode === "demo";
 
   return {
-    server: {
-      port: 5823
-    },
     plugins: [
       vue(),
       dts({

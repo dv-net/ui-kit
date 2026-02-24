@@ -5,10 +5,8 @@
 
   const MY_UUID = "user-001";
   const SUPPORT_UUID = "support-001";
-
   const emptyUser = (uuid: string) => ({ uuid, avatar: null, telegram: null, email: "", name: null });
-
-  const messages: UiChatMessage[] = [
+  const mockMessages: UiChatMessage[] = [
     {
       id: 1,
       ticket_id: 1,
@@ -146,7 +144,6 @@
       user: emptyUser(MY_UUID)
     }
   ];
-
   const ticket: UiChatTicket = {
     id: 83545,
     subject: "I need to pay using a different method",
@@ -155,15 +152,42 @@
     updated_at: "2025-10-13 00:27:12",
     closed_at: null,
     messages_count: 9,
-    init_message: messages[0],
+    init_message: mockMessages[0],
     support_name: "Sofia"
   };
 
   const showAlert = ref(true);
+  const isLoadingMessages = ref(false);
+  const isLoadingSend = ref(false);
+  const uiChatRef = ref();
+  const messages = ref<UiChatMessage[]>([]);
   const alertSeconds = ref(90);
   let timer: ReturnType<typeof setInterval>;
 
+  const loadMessages = async () => {
+    try {
+      isLoadingMessages.value = true;
+      await new Promise((res) => setTimeout(res, 3000));
+      messages.value = mockMessages;
+    } finally {
+      isLoadingMessages.value = false;
+    }
+  };
+
+  const onSubmit = async () => {
+    try {
+      isLoadingSend.value = true;
+      await new Promise((res) => setTimeout(res, 3000))
+      uiChatRef.value?.clearInputAndFiles();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      isLoadingSend.value = false;
+    }
+  };
+
   onMounted(() => {
+    void loadMessages();
     timer = setInterval(() => {
       if (alertSeconds.value > 0) {
         alertSeconds.value--;
@@ -180,11 +204,15 @@
   <div class="page">
     <h1 class="global-title">Chat</h1>
     <UiChat
+      ref="uiChatRef"
       :ticket="ticket"
+      :ticket-loading="isLoadingMessages"
       :messages="messages"
       :current-user-uuid="MY_UUID"
       :show-manager-alert="showAlert"
       :manager-alert-seconds="alertSeconds"
+      :sending-loading="isLoadingSend"
+      @submit="onSubmit"
     />
   </div>
 </template>

@@ -10,7 +10,11 @@
   import { ATTACH_MAX_FILES, ATTACH_FORMATS } from "@/utils/constants/chat";
   import type { UiChatSubmitPayload } from "./types";
 
-  defineProps<{ isEmpty: boolean }>();
+  const { sendingLoading = false, isClosedTicket } = defineProps<{
+    isEmpty: boolean;
+    isClosedTicket: boolean;
+    sendingLoading?: boolean;
+  }>();
 
   const emit = defineEmits<{
     (e: "submit", payload: UiChatSubmitPayload): void;
@@ -24,13 +28,25 @@
   const isMaxFiles = computed<boolean>(() => files.value.length >= ATTACH_MAX_FILES);
 
   const onSubmit = () => {
-    if (!message.value) return;
+    if (!message.value || sendingLoading) return;
     emit("submit", { message: message.value, files: files.value });
   };
+
+  const clearInputAndFiles = () => {
+    message.value = null;
+    if (attachmentsRef.value?.clearFiles) {
+      attachmentsRef.value.clearFiles();
+      return;
+    }
+    files.value = [];
+    emit("attach", []);
+  };
+
+  defineExpose({ clearInputAndFiles });
 </script>
 
 <template>
-  <div class="ui-chat__footer-wrapper">
+  <div v-if="!isClosedTicket" class="ui-chat__footer-wrapper">
     <div class="ui-chat__footer">
       <UiTooltip v-if="!isMaxFiles">
         <template #text>
@@ -41,7 +57,14 @@
         </template>
         <div style="margin-left: -16px" @click="attachmentsRef?.openFileDialog()">
           <slot name="footer-left">
-            <ui-icon-button icon-name="attach-file_add" type="clear" icon-type="100" icon-color="#1968e5" size="xl" />
+            <ui-icon-button
+              icon-name="attach-file_add"
+              type="clear"
+              icon-type="100"
+              icon-color="#1968e5"
+              size="xl"
+              :disabled="sendingLoading"
+            />
           </slot>
         </div>
       </UiTooltip>
@@ -51,11 +74,12 @@
           size="auto"
           :placeholder="config.uiChat.translations.messagePlaceholder"
           submitOnEnter
+          :disabled="sendingLoading"
           @submit="onSubmit"
           is-empty-value-null
         />
       </div>
-      <div style="margin-right: -16px" @click="onSubmit">
+      <div style="margin-right: -16px; width: 48px; height: 48px" @click="onSubmit">
         <slot name="footer-right">
           <ui-icon-button
             icon-name="send"
@@ -63,6 +87,7 @@
             icon-type="400"
             icon-color="#1968e5"
             size="xl"
+            :loading="sendingLoading"
             :disabled="!message"
           />
         </slot>
@@ -71,8 +96,14 @@
     <UiChatAttachments
       ref="attachmentsRef"
       :max-files="ATTACH_MAX_FILES"
+      :sending-loading="sendingLoading"
       :class="['ui-chat__footer-attachments', { 'ui-chat__footer-attachments--empty': !files.length }]"
-      @change="(f) => { files = f; emit('attach', f); }"
+      @change="
+        (f) => {
+          files = f;
+          emit('attach', f);
+        }
+      "
     />
   </div>
 </template>

@@ -4,12 +4,14 @@
   import { ref, computed } from "vue";
   import { ATTACH_MAX_FILES, ATTACH_ACCEPT } from "@/utils/constants/chat";
 
-  const { 
+  const {
     maxFiles = ATTACH_MAX_FILES,
     accept = ATTACH_ACCEPT,
+    sendingLoading = false
   } = defineProps<{
     maxFiles?: number;
     accept?: string;
+    sendingLoading?: boolean;
   }>();
 
   const emit = defineEmits<{
@@ -21,7 +23,7 @@
   const previewUrls = ref<Map<File, string>>(new Map());
 
   const openFileDialog = () => {
-    if (attachedFiles.value.length >= maxFiles) return;
+    if (attachedFiles.value.length >= maxFiles || sendingLoading) return;
     fileInput.value?.click();
   };
 
@@ -39,6 +41,7 @@
   };
 
   const removeFile = (index: number) => {
+    if (sendingLoading) return;
     const url = previewUrls.value.get(attachedFiles.value[index]);
     if (url) {
       window.URL.revokeObjectURL(url);
@@ -58,28 +61,26 @@
   const galleryVisible = ref(false);
   const galleryInitialIndex = ref(0);
 
-  const galleryImages = computed(() =>
-    attachedFiles.value.map((file) => ({ file }))
-  );
+  const galleryImages = computed(() => attachedFiles.value.map((file) => ({ file })));
 
   const openGallery = (index: number) => {
     galleryInitialIndex.value = index;
     galleryVisible.value = true;
   };
 
-  defineExpose({ openFileDialog });
+  const clearFiles = () => {
+    previewUrls.value.forEach((url) => window.URL.revokeObjectURL(url));
+    previewUrls.value.clear();
+    attachedFiles.value = [];
+    emit("change", []);
+  };
+
+  defineExpose({ openFileDialog, clearFiles });
 </script>
 
 <template>
   <div class="ui-chat-attachments">
-    <input
-      ref="fileInput"
-      type="file"
-      :accept="accept"
-      :multiple="maxFiles > 1"
-      hidden
-      @change="onFilesSelected"
-    />
+    <input ref="fileInput" type="file" :accept="accept" :multiple="maxFiles > 1" hidden @change="onFilesSelected" />
 
     <div v-for="(file, index) in attachedFiles" :key="index" class="ui-chat-attachments__item">
       <div class="ui-chat-attachments__file">
@@ -88,18 +89,18 @@
           <button class="ui-chat-attachments__btn ui-chat-attachments__btn--show" @click="openGallery(index)">
             <UiIcon name="visibility" type="400" />
           </button>
-          <button class="ui-chat-attachments__btn ui-chat-attachments__btn--remove" @click="removeFile(index)">
+          <button
+            class="ui-chat-attachments__btn ui-chat-attachments__btn--remove"
+            :disabled="sendingLoading"
+            @click="removeFile(index)"
+          >
             <UiIcon name="close" type="400" />
           </button>
         </div>
       </div>
       <span class="ui-chat-attachments__description">{{ file.name }}</span>
     </div>
-    <UiGallery
-      v-model="galleryVisible"
-      :images="galleryImages"
-      :initial-index="galleryInitialIndex"
-    />
+    <UiGallery v-model="galleryVisible" :images="galleryImages" :initial-index="galleryInitialIndex" />
   </div>
 </template>
 
@@ -169,6 +170,11 @@
       }
       &:active {
         filter: brightness(0.8);
+      }
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        filter: none;
       }
       &--show {
         background: var(--color-text-positive, #22c55e);
