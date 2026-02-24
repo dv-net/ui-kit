@@ -5,9 +5,10 @@
   import { config } from "@/lib/config";
   import type { UiChatTicket, ChatAction, ChatActionOption } from "./types";
 
-  const { ticket, isEmpty } = defineProps<{
+  const { ticket, isEmpty, ticketLoading = false } = defineProps<{
     ticket: UiChatTicket | null | undefined;
     isEmpty: boolean;
+    ticketLoading: boolean;
   }>();
 
   const emit = defineEmits<{
@@ -55,7 +56,9 @@
           <span class="ui-chat__header-title">
             {{ ticket?.subject || config.uiChat.translations.newTicket }}
           </span>
-          <span v-if="ticket?.id" class="ui-chat__header-id"> {{ config.uiChat.translations.ticket }} #{{ ticket.id }} </span>
+          <span v-if="ticket?.id" class="ui-chat__header-id">
+            {{ config.uiChat.translations.ticket }} #{{ ticket.id }}
+          </span>
         </div>
         <div class="ui-chat__header-support">
           <span class="ui-chat__header-name">

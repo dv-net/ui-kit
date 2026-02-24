@@ -3,7 +3,7 @@
   import UiChatFooter from "./UiChatFooter.vue";
   import UiChatMessage from "./UiChatMessage.vue";
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
-  import { computed } from "vue";
+  import { computed, ref } from "vue";
   import dayjs from "dayjs";
   import { config } from "@/lib/config";
   import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction, UiChatSubmitPayload } from "./types";
@@ -25,6 +25,8 @@
     (e: "attach", files: File[]): void;
   }>();
 
+  const footerRef = ref<InstanceType<typeof UiChatFooter>>();
+
   const getDate = (datetime: string): string => datetime.split(" ")[0];
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
@@ -45,11 +47,22 @@
     }
     return groups;
   });
+
+  const clearInputAndFiles = () => {
+    footerRef.value?.clearInputAndFiles();
+  };
+
+  defineExpose({ clearInputAndFiles });
 </script>
 
 <template>
   <div class="ui-chat">
-    <UiChatHeader :ticket="ticket" :is-empty="isEmpty" @action-ticket="(v) => emit('action-ticket', v)" />
+    <UiChatHeader
+      :ticket="ticket"
+      :is-empty="isEmpty"
+      :ticket-loading="ticketLoading"
+      @action-ticket="(v) => emit('action-ticket', v)"
+    />
     <div class="ui-chat__body">
       <Transition name="alert" mode="out-in" appear>
         <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
@@ -62,7 +75,13 @@
         <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
       </div>
     </div>
-    <UiChatFooter :is-empty="isEmpty" @submit="(p) => emit('submit', p)" @attach="(f) => emit('attach', f)" />
+    <UiChatFooter
+      ref="footerRef"
+      :is-empty="isEmpty"
+      :sending-loading="sendingLoading"
+      @submit="(p) => emit('submit', p)"
+      @attach="(f) => emit('attach', f)"
+    />
   </div>
 </template>
 
