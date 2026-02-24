@@ -192,13 +192,28 @@
         </template>
 
         <template #action-row="{ disabled, selectDate }">
-          <UiButton :disabled="isDisabledBtn || disabled" mode="neutral" @click="selectDate">
-            {{ config.uiDatePicker.translations.applyButton }}
-          </UiButton>
+          <div class="ui-datepicker__actions">
+            <div v-if="$slots['action-row']" class="ui-datepicker__actions-slot">
+              <slot
+                name="action-row"
+                :disabled="disabled"
+                :select-date="selectDate"
+                :clear-date="clearDate"
+                :is-disabled-btn="isDisabledBtn"
+                :model-value="modelValue"
+                :clearable="clearable"
+              />
+            </div>
+            <div class="ui-datepicker__actions-btns">
+              <UiButton :disabled="isDisabledBtn || disabled" mode="neutral" @click="selectDate">
+                {{ config.uiDatePicker.translations.applyButton }}
+              </UiButton>
 
-          <UiButton v-if="modelValue.length && clearable" type="secondary" @click="clearDate">
-            {{ config.uiDatePicker.translations.clearButton }}
-          </UiButton>
+              <UiButton v-if="modelValue.length && clearable" type="secondary" @click="clearDate">
+                {{ config.uiDatePicker.translations.clearButton }}
+              </UiButton>
+            </div>
+          </div>
         </template>
       </VueDatePicker>
     </DatePickerSlider>
