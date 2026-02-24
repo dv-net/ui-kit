@@ -77,16 +77,17 @@
       @action-ticket="(v) => emit('action-ticket', v)"
     />
     <div class="ui-chat__body">
-      <Transition name="alert" mode="out-in" appear>
+      <Transition v-if="!ticketLoading" name="alert" mode="out-in" appear>
         <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
       </Transition>
-
-      <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
-        <div class="ui-chat__group-date">
-          <span>{{ date }}</span>
+      <template v-if="!ticketLoading">
+        <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
+          <div class="ui-chat__group-date">
+            <span>{{ date }}</span>
+          </div>
+          <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
         </div>
-        <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
-      </div>
+      </template>
     </div>
     <UiChatFooter
       ref="footerRef"
