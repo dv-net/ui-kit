@@ -17,6 +17,9 @@
   import { config } from "@/lib/config";
 
   const props = withDefaults(defineProps<UiDatepickerRangeProps>(), { size: "xs", enableTimePicker: false });
+  const emit = defineEmits<{
+    (e: "clear"): void;
+  }>();
 
   const modelValue = defineModel<string[]>({ default: [] });
   const { width } = useWindowSize();
@@ -96,6 +99,7 @@
     processingData.value = ["", ""];
     isDisabledBtn.value = true;
     pickerRef.value?.closeMenu();
+    emit("clear");
   };
 
   onMounted(() => {
