@@ -42,12 +42,16 @@
     <UiIcon v-show="!loading" :color="iconColor" :name="iconName" :type="iconType" :size="size" />
 
     <UiLoading :is-show="loading" :icon-size="size" :icon-color="iconColor" />
+    <div class="ui-icon-button__hover-effect" />
   </component>
 </template>
 
 <style lang="scss">
   .ui-icon-button {
     $root: &;
+
+    --ui-icon-button-effect-opacity: 0.06;
+    --ui-icon-button-effect-color: currentColor;
 
     position: relative;
     display: inline-flex;
@@ -57,27 +61,78 @@
     border: none;
     cursor: pointer;
     outline: none;
+    overflow: hidden;
     transition: var(--transition);
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        opacity: 0.8;
-      }
-    }
 
     .ui-icon {
       flex: 1 1 100%;
       transition: var(--transition);
     }
 
-    &:active,
-    &:focus-visible {
-      opacity: 0.6;
-    }
-
     &:disabled {
       cursor: not-allowed;
       opacity: 0.4;
+    }
+
+    &__hover-effect {
+      position: absolute;
+      z-index: 2;
+      border-radius: inherit;
+      pointer-events: none;
+      overflow: hidden;
+      inset: 0;
+      isolation: isolate;
+
+      &::after,
+      &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        aspect-ratio: 1/1;
+        inset-inline-start: 50%;
+        inset-block-start: 50%;
+        translate: -50% -50%;
+        z-index: -1;
+        background: var(--ui-icon-button-effect-color);
+        border-radius: 50%;
+        scale: 0 0;
+        opacity: var(--ui-icon-button-effect-opacity);
+      }
+
+      &::before {
+        transition-duration: 0.25s, 0.25s;
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not(:disabled):not(.is-loading) {
+        .ui-icon-button__hover-effect {
+          &::after {
+            transition:
+              scale 0.5s ease,
+              opacity 0.5s ease 0.25s;
+            scale: 1 1;
+            opacity: 0;
+          }
+        }
+      }
+    }
+
+    &:active:not(:disabled):not(.is-loading),
+    &:focus-visible:not(:disabled):not(.is-loading) {
+      .ui-icon-button__hover-effect {
+        &::before {
+          transition:
+            scale 0.5s ease,
+            opacity 0.5s ease 0.25s;
+          scale: 1 1;
+          opacity: 0;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
     }
 
     &.mode-circle {
@@ -142,41 +197,57 @@
     &.type-clear {
       background-color: transparent;
       color: var(--color-icon-primary);
+      --ui-icon-button-effect-opacity: 0.06;
+      --ui-icon-button-effect-color: currentColor;
     }
 
     &.type-contrast {
       background-color: var(--color-background-contrast);
       color: var(--color-white);
+      --ui-icon-button-effect-opacity: 0.1;
+      --ui-icon-button-effect-color: var(--color-white, #fff);
     }
 
     &.type-accent {
       background-color: var(--color-background-accent);
       color: var(--color-white);
+      --ui-icon-button-effect-opacity: 0.1;
+      --ui-icon-button-effect-color: var(--color-white, #fff);
     }
 
     &.type-tint {
       background-color: var(--color-background-info);
       color: var(--color-icon-accent);
+      --ui-icon-button-effect-opacity: 0.06;
+      --ui-icon-button-effect-color: var(--color-state-accent, currentColor);
     }
 
     &.type-positive {
       background-color: var(--color-status-positive);
       color: var(--color-white);
+      --ui-icon-button-effect-opacity: 0.1;
+      --ui-icon-button-effect-color: var(--color-white, #fff);
     }
 
     &.type-positive-tint {
       background-color: var(--color-background-positive);
       color: var(--color-icon-positive);
+      --ui-icon-button-effect-opacity: 0.06;
+      --ui-icon-button-effect-color: currentColor;
     }
 
     &.type-negative {
       background-color: var(--color-status-negative);
       color: var(--color-white);
+      --ui-icon-button-effect-opacity: 0.08;
+      --ui-icon-button-effect-color: var(--color-white, #fff);
     }
 
     &.type-negative-tint {
       background-color: var(--color-background-negative);
       color: var(--color-icon-negative);
+      --ui-icon-button-effect-opacity: 0.06;
+      --ui-icon-button-effect-color: currentColor;
     }
   }
 </style>

@@ -14,4 +14,5 @@ export interface UiTextareaProps {
   id?: string;
   readonly?: boolean;
   rows?: number;
+  submitOnEnter?: boolean;
 }

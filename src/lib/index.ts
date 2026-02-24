@@ -2,6 +2,7 @@ export { default as UiAnimation } from "@/lib/components/UiAnimation/UiAnimation
 export { default as UiAvatar } from "@/lib/components/UiAvatar/UiAvatar.vue";
 export { default as UiBlockTitle } from "@/lib/components/UiBlockTitle/UiBlockTitle.vue";
 export { default as UiButton } from "@/lib/components/UiButton/UiButton.vue";
+export { default as UiChat } from "@/lib/components/UiChat/UiChat.vue";
 export { default as UiCheckbox } from "@/lib/components/UiCheckbox/UiCheckbox.vue";
 export { default as UiCheckboxGroup } from "@/lib/components/UiCheckboxGroup/UiCheckboxGroup.vue";
 export { default as UiCollapse } from "@/lib/components/UiCollapse/UiCollapse.vue";
