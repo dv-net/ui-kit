@@ -134,6 +134,7 @@
         gap: 16px;
         min-width: 0;
         overflow: hidden;
+        flex-grow: 1;
       }
       &-icon {
         display: flex;
@@ -151,6 +152,7 @@
         flex-direction: column;
         min-width: 0;
         overflow: hidden;
+        flex-grow: 1;
       }
       &-info-skeleton {
         min-width: 300px;

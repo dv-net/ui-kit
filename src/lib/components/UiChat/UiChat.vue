@@ -37,12 +37,13 @@
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
   const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
-  const isClosedTicket = computed<boolean>(
-    () =>
-      !ticket ||
+  const isClosedTicket = computed<boolean>(() => {
+    if (!ticket) return false;
+    return (
       ticket.status.value === UiChatTicketStatusValue.MANAGER_CLOSED ||
       ticket.status.value === UiChatTicketStatusValue.USER_CLOSED
-  );
+    );
+  });
 
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
@@ -56,6 +57,9 @@
       const date = getDate(msg.created_at);
       if (!groups[date]) groups[date] = [];
       groups[date].push(msg);
+    }
+    for (const date in groups) {
+      groups[date].sort((a, b) => dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf());
     }
     return groups;
   });
@@ -115,7 +119,7 @@
       overflow-y: auto;
       overscroll-behavior: contain;
       padding: 24px;
-      gap: 16px;
+      gap: 0;
       height: 415px;
       &::-webkit-scrollbar {
         width: 6px;
@@ -154,6 +158,11 @@
           font-weight: 500;
         }
       }
+    }
+    &__alert-slot {
+      display: flex;
+      justify-content: center;
+      min-height: 0;
     }
   }
 </style>
