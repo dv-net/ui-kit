@@ -10,7 +10,11 @@
   import { ATTACH_MAX_FILES, ATTACH_FORMATS } from "@/utils/constants/chat";
   import type { UiChatSubmitPayload } from "./types";
 
-  const { sendingLoading = false } = defineProps<{ isEmpty: boolean; sendingLoading?: boolean }>();
+  const { sendingLoading = false, isClosedTicket } = defineProps<{
+    isEmpty: boolean;
+    isClosedTicket: boolean;
+    sendingLoading?: boolean;
+  }>();
 
   const emit = defineEmits<{
     (e: "submit", payload: UiChatSubmitPayload): void;
@@ -42,7 +46,7 @@
 </script>
 
 <template>
-  <div class="ui-chat__footer-wrapper">
+  <div v-if="!isClosedTicket" class="ui-chat__footer-wrapper">
     <div class="ui-chat__footer">
       <UiTooltip v-if="!isMaxFiles">
         <template #text>
@@ -75,7 +79,7 @@
           is-empty-value-null
         />
       </div>
-      <div style="margin-right: -16px; width: 48px; height: 48px;" @click="onSubmit">
+      <div style="margin-right: -16px; width: 48px; height: 48px" @click="onSubmit">
         <slot name="footer-right">
           <ui-icon-button
             icon-name="send"

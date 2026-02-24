@@ -5,10 +5,16 @@
   import { config } from "@/lib/config";
   import type { UiChatTicket, ChatAction, ChatActionOption } from "./types";
 
-  const { ticket, isEmpty, ticketLoading = false } = defineProps<{
+  const {
+    ticket,
+    isEmpty,
+    isClosedTicket,
+    ticketLoading = false
+  } = defineProps<{
     ticket: UiChatTicket | null | undefined;
     isEmpty: boolean;
-    ticketLoading: boolean;
+    isClosedTicket: boolean;
+    ticketLoading?: boolean;
   }>();
 
   const emit = defineEmits<{
@@ -35,7 +41,7 @@
     }
   ]);
 
-  const isShowActionSelect = computed<boolean>(() => !isEmpty && ticket?.status?.value !== 5);
+  const isShowActionSelect = computed<boolean>(() => !isEmpty && !isClosedTicket);
 
   const onActionChange = () => {
     if (actionsValue.value) {

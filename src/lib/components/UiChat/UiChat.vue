@@ -6,7 +6,13 @@
   import { computed, ref } from "vue";
   import dayjs from "dayjs";
   import { config } from "@/lib/config";
-  import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction, UiChatSubmitPayload } from "./types";
+  import {
+    UiChatMessage as UiChatMessageType,
+    UiChatProps,
+    ChatAction,
+    UiChatSubmitPayload,
+    UiChatTicketStatusValue
+  } from "./types";
   import { defaultChatMessage } from "@/utils/constants/chat";
 
   const {
@@ -16,7 +22,7 @@
     showManagerAlert = false,
     managerAlertSeconds,
     ticketLoading = false,
-    sendingLoading = false,
+    sendingLoading = false
   } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{
@@ -31,6 +37,12 @@
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
   const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
+  const isClosedTicket = computed<boolean>(
+    () =>
+      !ticket ||
+      ticket.status.value === UiChatTicketStatusValue.MANAGER_CLOSED ||
+      ticket.status.value === UiChatTicketStatusValue.USER_CLOSED
+  );
 
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
@@ -60,6 +72,7 @@
     <UiChatHeader
       :ticket="ticket"
       :is-empty="isEmpty"
+      :is-closed-ticket="isClosedTicket"
       :ticket-loading="ticketLoading"
       @action-ticket="(v) => emit('action-ticket', v)"
     />
@@ -78,6 +91,7 @@
     <UiChatFooter
       ref="footerRef"
       :is-empty="isEmpty"
+      :is-closed-ticket="isClosedTicket"
       :sending-loading="sendingLoading"
       @submit="(p) => emit('submit', p)"
       @attach="(f) => emit('attach', f)"
