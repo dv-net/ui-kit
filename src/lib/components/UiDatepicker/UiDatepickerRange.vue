@@ -16,11 +16,18 @@
   import { PresetModel, UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
   import { config } from "@/lib/config";
 
-  const props = withDefaults(defineProps<UiDatepickerRangeProps>(), { size: "xs" });
+  const props = withDefaults(defineProps<UiDatepickerRangeProps>(), { size: "xs", enableTimePicker: false });
+  const emit = defineEmits<{
+    (e: "clear"): void;
+  }>();
 
   const modelValue = defineModel<string[]>({ default: [] });
   const { width } = useWindowSize();
   const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } = useDatePicker(modelValue);
+
+  const effectiveFormat = computed(() =>
+    props.enableTimePicker ? `${modelValueFormat.value} HH:mm` : modelValueFormat.value
+  );
 
   const pickerRef = ref();
   const processingData = ref<string[]>(["", ""]);
@@ -58,14 +65,15 @@
   }
 
   function setModelValue(date: string[]) {
-    modelValue.value = [dayjs(date[0]).format(modelValueFormat.value), dayjs(date[1]).format(modelValueFormat.value)];
+    modelValue.value = [dayjs(date[0]).format(effectiveFormat.value), dayjs(date[1]).format(effectiveFormat.value)];
   }
 
   function updateModelValue(date: string | string[]) {
     const currentDate = Array.isArray(date) ? date : [date, date];
 
     if (startDate.value && endDate.value) {
-      const isSame = startDate.value.isSame(currentDate[0], "day") && endDate.value.isSame(currentDate[1], "day");
+      const unit = props.enableTimePicker ? "minute" : "day";
+      const isSame = startDate.value.isSame(currentDate[0], unit) && endDate.value.isSame(currentDate[1], unit);
       if (!isSame) {
         setModelValue(currentDate);
       }
@@ -91,6 +99,7 @@
     processingData.value = ["", ""];
     isDisabledBtn.value = true;
     pickerRef.value?.closeMenu();
+    emit("clear");
   };
 
   onMounted(() => {
@@ -115,7 +124,10 @@
         :locale="config.locale"
         ref="pickerRef"
         :model-value="single ? modelValue[0] : modelValue"
-        :enable-time-picker="false"
+        :enable-time-picker="enableTimePicker"
+        :time-picker-inline="enableTimePicker"
+        :hours-grid-increment="1"
+        :minutes-grid-increment="1"
         :range="!single"
         :multi-calendars="!single && width > 1000"
         month-name-format="long"
@@ -186,13 +198,28 @@
         </template>
 
         <template #action-row="{ disabled, selectDate }">
-          <UiButton :disabled="isDisabledBtn || disabled" mode="neutral" @click="selectDate">
-            {{ config.uiDatePicker.translations.applyButton }}
-          </UiButton>
+          <div class="ui-datepicker__actions">
+            <div v-if="$slots['action-row']" class="ui-datepicker__actions-slot">
+              <slot
+                name="action-row"
+                :disabled="disabled"
+                :select-date="selectDate"
+                :clear-date="clearDate"
+                :is-disabled-btn="isDisabledBtn"
+                :model-value="modelValue"
+                :clearable="clearable"
+              />
+            </div>
+            <div class="ui-datepicker__actions-btns">
+              <UiButton :disabled="isDisabledBtn || disabled" mode="neutral" @click="selectDate">
+                {{ config.uiDatePicker.translations.applyButton }}
+              </UiButton>
 
-          <UiButton v-if="modelValue.length && clearable" type="secondary" @click="clearDate">
-            {{ config.uiDatePicker.translations.clearButton }}
-          </UiButton>
+              <UiButton v-if="modelValue.length && clearable" type="secondary" @click="clearDate">
+                {{ config.uiDatePicker.translations.clearButton }}
+              </UiButton>
+            </div>
+          </div>
         </template>
       </VueDatePicker>
     </DatePickerSlider>

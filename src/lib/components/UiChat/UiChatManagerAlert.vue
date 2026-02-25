@@ -70,6 +70,10 @@
         translate 0.5s ease,
         scale 0.5s ease,
         opacity 0.25s ease;
+
+      .ui-chat-alert__inner {
+        transition: padding-block-start 0.5s ease;
+      }
     }
 
     &.alert-enter-active {
@@ -82,6 +86,10 @@
       opacity: 0;
       scale: 0 0;
       grid-template-rows: 0fr;
+
+      .ui-chat-alert__inner {
+        padding-block-start: 0;
+      }
     }
 
     &__inner {

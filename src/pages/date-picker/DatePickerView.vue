@@ -33,7 +33,7 @@
 
     <div class="grid">
       <div class="grid__header">32px(xs)</div>
-      <UiDatepickerRange v-model="date" clearable />
+      <UiDatepickerRange v-model="date" clearable enable-time-picker />
     </div>
 
     <div class="grid">

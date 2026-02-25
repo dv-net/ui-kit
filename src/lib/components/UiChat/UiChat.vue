@@ -3,10 +3,16 @@
   import UiChatFooter from "./UiChatFooter.vue";
   import UiChatMessage from "./UiChatMessage.vue";
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
-  import { computed } from "vue";
+  import { computed, ref } from "vue";
   import dayjs from "dayjs";
   import { config } from "@/lib/config";
-  import type { UiChatMessage as UiChatMessageType, UiChatProps, ChatAction, UiChatSubmitPayload } from "./types";
+  import {
+    UiChatMessage as UiChatMessageType,
+    UiChatProps,
+    ChatAction,
+    UiChatSubmitPayload,
+    UiChatTicketStatusValue
+  } from "./types";
   import { defaultChatMessage } from "@/utils/constants/chat";
 
   const {
@@ -15,6 +21,8 @@
     currentUserUuid,
     showManagerAlert = false,
     managerAlertSeconds,
+    ticketLoading = false,
+    sendingLoading = false
   } = defineProps<UiChatProps>();
 
   const emit = defineEmits<{
@@ -23,10 +31,19 @@
     (e: "attach", files: File[]): void;
   }>();
 
+  const footerRef = ref<InstanceType<typeof UiChatFooter>>();
+
   const getDate = (datetime: string): string => datetime.split(" ")[0];
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
   const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
+  const isClosedTicket = computed<boolean>(() => {
+    if (!ticket) return false;
+    return (
+      ticket.status.value === UiChatTicketStatusValue.MANAGER_CLOSED ||
+      ticket.status.value === UiChatTicketStatusValue.USER_CLOSED
+    );
+  });
 
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
@@ -41,26 +58,49 @@
       if (!groups[date]) groups[date] = [];
       groups[date].push(msg);
     }
+    for (const date in groups) {
+      groups[date].sort((a, b) => dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf());
+    }
     return groups;
   });
+
+  const clearInputAndFiles = () => {
+    footerRef.value?.clearInputAndFiles();
+  };
+
+  defineExpose({ clearInputAndFiles });
 </script>
 
 <template>
   <div class="ui-chat">
-    <UiChatHeader :ticket="ticket" :is-empty="isEmpty" @action-ticket="(v) => emit('action-ticket', v)" />
+    <UiChatHeader
+      :ticket="ticket"
+      :is-empty="isEmpty"
+      :is-closed-ticket="isClosedTicket"
+      :ticket-loading="ticketLoading"
+      @action-ticket="(v) => emit('action-ticket', v)"
+    />
     <div class="ui-chat__body">
-      <Transition name="alert" mode="out-in" appear>
+      <Transition v-if="!ticketLoading" name="alert" mode="out-in" appear>
         <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
       </Transition>
-
-      <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
-        <div class="ui-chat__group-date">
-          <span>{{ date }}</span>
+      <template v-if="!ticketLoading">
+        <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
+          <div class="ui-chat__group-date">
+            <span>{{ date }}</span>
+          </div>
+          <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
         </div>
-        <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
-      </div>
+      </template>
     </div>
-    <UiChatFooter :is-empty="isEmpty" @submit="(p) => emit('submit', p)" @attach="(f) => emit('attach', f)" />
+    <UiChatFooter
+      ref="footerRef"
+      :is-empty="isEmpty"
+      :is-closed-ticket="isClosedTicket"
+      :sending-loading="sendingLoading"
+      @submit="(p) => emit('submit', p)"
+      @attach="(f) => emit('attach', f)"
+    />
   </div>
 </template>
 
@@ -79,7 +119,7 @@
       overflow-y: auto;
       overscroll-behavior: contain;
       padding: 24px;
-      gap: 16px;
+      gap: 0;
       height: 415px;
       &::-webkit-scrollbar {
         width: 6px;
@@ -118,6 +158,11 @@
           font-weight: 500;
         }
       }
+    }
+    &__alert-slot {
+      display: flex;
+      justify-content: center;
+      min-height: 0;
     }
   }
 </style>

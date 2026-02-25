@@ -4,10 +4,18 @@
   import { computed, ref } from "vue";
   import { config } from "@/lib/config";
   import type { UiChatTicket, ChatAction, ChatActionOption } from "./types";
+  import { UiSkeleton } from "@/lib";
 
-  const { ticket, isEmpty } = defineProps<{
+  const {
+    ticket,
+    isEmpty,
+    isClosedTicket,
+    ticketLoading = false
+  } = defineProps<{
     ticket: UiChatTicket | null | undefined;
     isEmpty: boolean;
+    isClosedTicket: boolean;
+    ticketLoading?: boolean;
   }>();
 
   const emit = defineEmits<{
@@ -34,7 +42,7 @@
     }
   ]);
 
-  const isShowActionSelect = computed<boolean>(() => !isEmpty && ticket?.status?.value !== 5);
+  const isShowActionSelect = computed<boolean>(() => !isEmpty && !isClosedTicket);
 
   const onActionChange = () => {
     if (actionsValue.value) {
@@ -51,21 +59,43 @@
         <ui-icon name="support-agent  2" type="100" />
       </div>
       <div class="ui-chat__header-info">
-        <div class="ui-chat__header-ticket">
-          <span class="ui-chat__header-title">
-            {{ ticket?.subject || config.uiChat.translations.newTicket }}
-          </span>
-          <span v-if="ticket?.id" class="ui-chat__header-id"> {{ config.uiChat.translations.ticket }} #{{ ticket.id }} </span>
-        </div>
-        <div class="ui-chat__header-support">
-          <span class="ui-chat__header-name">
-            {{ ticket?.support_name || "Sofia" }}
-          </span>
-          <span class="ui-chat__header-status">Online</span>
-        </div>
+        <ui-skeleton
+          v-if="ticketLoading"
+          class="ui-chat__header-info-skeleton"
+          :row-height="36"
+          :rows="1"
+          :item-border-radius="6"
+          first-color="var(--color-background-tertiary)"
+          second-color="var(--color-background-primary)"
+        />
+        <template v-else>
+          <div class="ui-chat__header-ticket">
+            <span class="ui-chat__header-title">
+              {{ ticket?.subject || config.uiChat.translations.newTicket }}
+            </span>
+            <span v-if="ticket?.id" class="ui-chat__header-id">
+              {{ config.uiChat.translations.ticket }} #{{ ticket.id }}
+            </span>
+          </div>
+          <div class="ui-chat__header-support">
+            <span class="ui-chat__header-name">
+              {{ ticket?.support_name || "Sofia" }}
+            </span>
+            <span class="ui-chat__header-status">Online</span>
+          </div>
+        </template>
       </div>
     </div>
-    <div v-if="isShowActionSelect" class="ui-chat__actions">
+    <div v-if="ticketLoading" class="ui-chat__actions">
+      <ui-skeleton
+        :row-height="36"
+        :rows="1"
+        :item-border-radius="6"
+        first-color="var(--color-background-tertiary)"
+        second-color="var(--color-background-primary)"
+      />
+    </div>
+    <div v-else-if="isShowActionSelect" class="ui-chat__actions">
       <ui-select
         v-model="actionsValue"
         :options="actionsOptions"
@@ -102,6 +132,9 @@
         display: flex;
         align-items: center;
         gap: 16px;
+        min-width: 0;
+        overflow: hidden;
+        flex-grow: 1;
       }
       &-icon {
         display: flex;
@@ -117,6 +150,12 @@
       &-info {
         display: flex;
         flex-direction: column;
+        min-width: 0;
+        overflow: hidden;
+        flex-grow: 1;
+      }
+      &-info-skeleton {
+        min-width: 300px;
       }
       &-ticket {
         display: flex;
@@ -124,9 +163,14 @@
         gap: 0.45em;
       }
       &-title {
+        max-width: 50%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: 16px;
         font-weight: 500;
         line-height: 125%;
+        color: var(--color-text-primary);
       }
       &-id {
         color: var(--color-separator-border-contrast-secondary);
@@ -152,6 +196,8 @@
       }
     }
     &__actions {
+      flex-shrink: 0;
+      width: 110px;
       .ui-dropdown__content {
         min-width: 230px;
       }

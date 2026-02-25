@@ -13,6 +13,7 @@ export interface UiDatepickerRangeProps {
   timezone?: string;
   single?: boolean;
   hideSliderArrows?: boolean;
+  enableTimePicker?: boolean;
 }
 
 export type DatepickerSwapRange = "week" | "month" | "year";
