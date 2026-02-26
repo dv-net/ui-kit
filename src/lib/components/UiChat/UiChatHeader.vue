@@ -101,7 +101,7 @@
         :options="actionsOptions"
         size="sm"
         placement="bottom-end"
-        :fit-content-width="false"
+        :fit-content-width="true"
         :teleport="false"
         @change="onActionChange"
       >
@@ -197,11 +197,14 @@
     }
     &__actions {
       flex-shrink: 0;
-      width: 110px;
+      width: fit-content;
+      max-width: 100%;
+      min-width: 120px;
       .ui-dropdown__content {
         min-width: 230px;
       }
       &-selected {
+        white-space: nowrap;
         min-width: 80px;
       }
       &-item {
