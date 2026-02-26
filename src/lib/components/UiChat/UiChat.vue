@@ -27,6 +27,7 @@
     showManagerAlert = false,
     managerAlertSeconds,
     ticketLoading = false,
+    isCreateTicket = false,
     sendingLoading = false
   } = defineProps<UiChatProps>();
 
@@ -54,12 +55,22 @@
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
   const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
+  const hasTicketStatus = computed<boolean>(() => {
+    return typeof ticket?.status?.value !== "undefined";
+  });
+
   const isClosedTicket = computed<boolean>(() => {
-    if (!ticket) return false;
+    if (!hasTicketStatus.value) return false;
     return (
-      ticket.status.value === UiChatTicketStatusValue.MANAGER_CLOSED ||
-      ticket.status.value === UiChatTicketStatusValue.USER_CLOSED
+      ticket?.status?.value === UiChatTicketStatusValue.MANAGER_CLOSED ||
+      ticket?.status?.value === UiChatTicketStatusValue.USER_CLOSED
     );
+  });
+
+  const canShowFooter = computed<boolean>(() => {
+    if (!isCreateTicket && !hasTicketStatus.value) return false;
+    if (hasTicketStatus.value && isClosedTicket.value) return false;
+    return true;
   });
 
   const actualMessages = computed<UiChatMessageType[]>(() => {
@@ -113,9 +124,8 @@
       </template>
     </div>
     <UiChatFooter
+      v-if="canShowFooter"
       ref="footerRef"
-      :is-empty="isEmpty"
-      :is-closed-ticket="isClosedTicket"
       :sending-loading="sendingLoading"
       @submit="(p) => emit('submit', p)"
       @attach="(f) => emit('attach', f)"

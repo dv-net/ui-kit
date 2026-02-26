@@ -10,9 +10,7 @@
   import { ATTACH_MAX_FILES, ATTACH_FORMATS } from "@/utils/constants/chat";
   import type { UiChatSubmitPayload } from "./types";
 
-  const { sendingLoading = false, isClosedTicket } = defineProps<{
-    isEmpty: boolean;
-    isClosedTicket: boolean;
+  const { sendingLoading = false } = defineProps<{
     sendingLoading?: boolean;
   }>();
 
@@ -46,7 +44,7 @@
 </script>
 
 <template>
-  <div v-if="!isClosedTicket" class="ui-chat__footer-wrapper">
+  <div class="ui-chat__footer-wrapper">
     <div class="ui-chat__footer">
       <UiTooltip v-if="!isMaxFiles">
         <template #text>
