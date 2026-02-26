@@ -67,6 +67,9 @@
   width: 100%;
   max-width: unset;
   margin-top: 12px;
+  .dp__flex {
+    gap: 32px;
+  }
 }
 
 .dp__time_display {

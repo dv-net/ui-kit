@@ -26,7 +26,7 @@
   const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } = useDatePicker(modelValue);
 
   const effectiveFormat = computed(() =>
-    props.enableTimePicker ? `${modelValueFormat.value} HH:mm` : modelValueFormat.value
+    props.enableTimePicker ? config.uiDatePicker.modelValueFormatTime : modelValueFormat.value
   );
 
   const pickerRef = ref();
@@ -45,7 +45,8 @@
     startDate,
     endDate,
     minDate: currentMinDate,
-    maxDate: currentMaxDate
+    maxDate: currentMaxDate,
+    enableTimePicker: computed(() => props.enableTimePicker)
   });
 
   function updatePresetHandler(preset: PresetModel) {
@@ -85,7 +86,7 @@
   function changeInputsHandler() {
     const currentData = !props.single
       ? processingData.value
-      : dayjs(processingData.value[0], config.uiDatePicker.modelValueFormat).toDate();
+      : dayjs(processingData.value[0], effectiveFormat.value).toDate();
 
     pickerRef.value?.updateInternalModelValue(currentData);
     pickerRef.value?.setMonthYear({
@@ -116,6 +117,7 @@
       v-model="modelValue"
       :selected-range="selectedRange"
       :is-show="!hideSliderArrows"
+      :enable-time-picker="enableTimePicker"
       :min-date="currentMinDate"
       :max-date="currentMaxDate"
     >
@@ -126,8 +128,6 @@
         :model-value="single ? modelValue[0] : modelValue"
         :enable-time-picker="enableTimePicker"
         :time-picker-inline="enableTimePicker"
-        :hours-grid-increment="1"
-        :minutes-grid-increment="1"
         :range="!single"
         :multi-calendars="!single && width > 1000"
         month-name-format="long"

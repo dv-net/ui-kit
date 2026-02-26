@@ -15,8 +15,10 @@ export function useDatePickerSelected(params: {
   endDate: ComputedRef<Dayjs | null>;
   minDate: ComputedRef<string | undefined>;
   maxDate: ComputedRef<string | undefined>;
+  enableTimePicker?: ComputedRef<boolean>;
 }) {
   const { checkIsValidDate } = useDatePicker();
+  const isTimePickerEnabled = computed(() => params.enableTimePicker?.value ?? false);
 
   const selectedPreset = computed(() => {
     if (!params.startDate || !params.endDate) return;
@@ -78,8 +80,15 @@ export function useDatePickerSelected(params: {
       return [];
     }
 
+    const modelValueFormat = isTimePickerEnabled.value
+      ? config.uiDatePicker.modelValueFormatTime
+      : config.uiDatePicker.modelValueFormat;
+    const inputFormat = isTimePickerEnabled.value
+      ? config.uiDatePicker.inputFormatTime
+      : config.uiDatePicker.inputFormat;
+
     return [params.startDate.value, params.endDate.value].map((date) =>
-      dayjs(date, config.uiDatePicker.modelValueFormat).format(config.uiDatePicker.inputFormat)
+      dayjs(date, modelValueFormat).format(inputFormat)
     );
   });
 
@@ -102,8 +111,13 @@ export function useDatePickerSelected(params: {
     const dateFrom = params.startDate.value.locale(config.locale);
     const dateTo = params.endDate.value.locale(config.locale);
 
-    if (selectedPreset.value) {
+    if (selectedPreset.value && !isTimePickerEnabled.value) {
       return selectedPreset.value.label;
+    }
+
+    if (isTimePickerEnabled.value) {
+      const timeFormat = config.uiDatePicker.inputFormatTime;
+      return `${dateFrom.format(timeFormat)} - ${dateTo.format(timeFormat)}`;
     }
 
     if (selectedRange.value === "year") {

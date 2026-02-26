@@ -6,6 +6,7 @@
 
   import { ref } from "vue";
 
+  const dateTime = ref([]);
   const date = ref([]);
 
   const minDate = ref(dayjs().add(-3, "days").toString());
@@ -20,13 +21,15 @@
     <h1 class="global-title">Date Picker</h1>
 
     <div class="grid">
-      <div class="grid__header">Selected</div>
-      <div>{{ date }}</div>
+      <div class="grid__header-row">
+        <div class="grid__header">DateTime (with time)</div>
+      </div>
+      <UiDatepickerRange v-model="dateTime" clearable enable-time-picker />
     </div>
 
     <div class="grid">
       <div class="grid__header">32px(xs)</div>
-      <UiDatepickerRange v-model="date" clearable enable-time-picker />
+      <UiDatepickerRange v-model="date" clearable />
     </div>
 
     <div class="grid">

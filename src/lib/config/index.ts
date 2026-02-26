@@ -5,7 +5,9 @@ export interface UiKitConfig {
   uiDatePicker: {
     beginDate: string;
     modelValueFormat: string;
+    modelValueFormatTime: string;
     inputFormat: string;
+    inputFormatTime: string;
     translations: {
       invalidDate: string;
       yesterdayPlaceholder: string;
@@ -91,7 +93,9 @@ export const config = reactive<UiKitConfig>({
   uiDatePicker: {
     beginDate: "2022-01-01",
     modelValueFormat: "YYYY-MM-DD",
+    modelValueFormatTime: "YYYY-MM-DD[T]HH:mm:ss",
     inputFormat: "DD.MM.YYYY",
+    inputFormatTime: "DD.MM.YYYY HH:mm",
     translations: {
       invalidDate: "The date is incorrect",
       yesterdayPlaceholder: "Yesterday",
