@@ -5,6 +5,7 @@
   import { computed } from "vue";
 
   import { useDatePicker } from "../composables/useDatePicker";
+import { config } from "@/lib/config";
 
   import { UiIcon } from "@/lib";
   interface DatePickerSliderProps {
@@ -13,13 +14,17 @@
     selectedRange?: DatepickerSwapRange;
     minDate?: string;
     maxDate: string;
+    enableTimePicker?: boolean;
   }
 
-  const { minDate, maxDate, isShow = true, selectedRange } = defineProps<DatePickerSliderProps>();
+  const { minDate, maxDate, isShow = true, selectedRange, enableTimePicker = false } = defineProps<DatePickerSliderProps>();
 
   const modelValue = defineModel<string[]>({ default: [] });
 
   const { dayjs, modelValueFormat } = useDatePicker(modelValue);
+  const effectiveFormat = computed(() =>
+    enableTimePicker ? config.uiDatePicker.modelValueFormatTime : modelValueFormat.value
+  );
 
   const availableDates = computed(() => {
     return {
@@ -89,7 +94,7 @@
       dateTo = availableDates.value.max;
     }
 
-    modelValue.value = [dateFrom?.format(modelValueFormat.value) || "", dateTo?.format(modelValueFormat.value) || ""];
+    modelValue.value = [dateFrom?.format(effectiveFormat.value) || "", dateTo?.format(effectiveFormat.value) || ""];
   }
 </script>
 

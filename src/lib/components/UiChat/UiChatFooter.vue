@@ -9,10 +9,9 @@
   import { config } from "@/lib/config";
   import { ATTACH_MAX_FILES, ATTACH_FORMATS } from "@/utils/constants/chat";
   import type { UiChatSubmitPayload } from "./types";
+  import { useBreakpoints } from "@/lib/composables/useBreakpoints.ts";
 
-  const { sendingLoading = false, isClosedTicket } = defineProps<{
-    isEmpty: boolean;
-    isClosedTicket: boolean;
+  const { sendingLoading = false } = defineProps<{
     sendingLoading?: boolean;
   }>();
 
@@ -20,6 +19,8 @@
     (e: "submit", payload: UiChatSubmitPayload): void;
     (e: "attach", files: File[]): void;
   }>();
+
+  const { isDesktop } = useBreakpoints();
 
   const message = ref<string | null>(null);
   const files = ref<File[]>([]);
@@ -46,8 +47,8 @@
 </script>
 
 <template>
-  <div v-if="!isClosedTicket" class="ui-chat__footer-wrapper">
-    <div class="ui-chat__footer">
+  <div class="ui-chat__footer-wrapper">
+    <div class="ui-chat__footer" :class="{ 'mobile-layout': isDesktop }">
       <UiTooltip v-if="!isMaxFiles">
         <template #text>
           <p class="ui-chat__footer-tooltip">
@@ -55,14 +56,16 @@
             <span>{{ config.uiChat.translations.supportsFormats }}: {{ ATTACH_FORMATS }}</span>
           </p>
         </template>
-        <div style="margin-left: -16px" @click="attachmentsRef?.openFileDialog()">
+        <div class="ui-chat__footer-control" @click="attachmentsRef?.openFileDialog()">
           <slot name="footer-left">
             <ui-icon-button
+              class="ui-chat__footer-icon-button"
               icon-name="attach-file_add"
               type="clear"
               icon-type="100"
               icon-color="#1968e5"
               size="xl"
+              container-small
               :disabled="sendingLoading"
             />
           </slot>
@@ -79,14 +82,16 @@
           is-empty-value-null
         />
       </div>
-      <div style="margin-right: -16px; width: 48px; height: 48px" @click="onSubmit">
+      <div class="ui-chat__footer-control" @click="onSubmit">
         <slot name="footer-right">
           <ui-icon-button
+            class="ui-chat__footer-icon-button"
             icon-name="send"
             type="clear"
             icon-type="400"
             icon-color="#1968e5"
             size="xl"
+            container-small
             :loading="sendingLoading"
             :disabled="!message"
           />
@@ -114,10 +119,29 @@
       background: var(--color-background-secondary);
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 16px;
       padding: 12px 24px;
+      &.mobile-layout {
+        padding: 8px 16px;
+      }
       &-input {
         flex-grow: 1;
+      }
+      &-control {
+        display: flex;
+        width: 36px;
+        height: 36px;
+        align-items: center;
+        justify-content: center;
+        margin: -4px -9px;
+      }
+      &-icon-button {
+        min-width: 36px;
+        max-width: 36px;
+        width: 36px;
+        min-height: 36px;
+        max-height: 36px;
+        height: 36px;
       }
       &-tooltip {
         font-size: 12px;

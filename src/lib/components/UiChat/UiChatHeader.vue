@@ -5,6 +5,7 @@
   import { config } from "@/lib/config";
   import type { UiChatTicket, ChatAction, ChatActionOption } from "./types";
   import { UiSkeleton } from "@/lib";
+  import { useBreakpoints } from "@/lib/composables/useBreakpoints";
 
   const {
     ticket,
@@ -21,6 +22,8 @@
   const emit = defineEmits<{
     (e: "action-ticket", value: ChatAction): void;
   }>();
+
+  const { isDesktop } = useBreakpoints();
 
   const actionsValue = ref<ChatAction | null>(null);
   const actionsOptions = computed<ChatActionOption[]>(() => [
@@ -53,7 +56,7 @@
 </script>
 
 <template>
-  <div class="ui-chat__header">
+  <div class="ui-chat__header" :class="{ 'mobile-layout': isDesktop }">
     <div class="ui-chat__header-content">
       <div class="ui-chat__header-icon">
         <ui-icon name="support-agent  2" type="100" />
@@ -69,7 +72,7 @@
           second-color="var(--color-background-primary)"
         />
         <template v-else>
-          <div class="ui-chat__header-ticket">
+          <div v-if="!isDesktop" class="ui-chat__header-ticket">
             <span class="ui-chat__header-title">
               {{ ticket?.subject || config.uiChat.translations.newTicket }}
             </span>
@@ -77,7 +80,7 @@
               {{ config.uiChat.translations.ticket }} #{{ ticket.id }}
             </span>
           </div>
-          <div class="ui-chat__header-support">
+          <div class="ui-chat__header-support" :class="{ 'mobile-layout': isDesktop }">
             <span class="ui-chat__header-name">
               {{ ticket?.support_name || "Sofia" }}
             </span>
@@ -101,7 +104,7 @@
         :options="actionsOptions"
         size="sm"
         placement="bottom-end"
-        :fit-content-width="false"
+        :fit-content-width="true"
         :teleport="false"
         @change="onActionChange"
       >
@@ -128,6 +131,9 @@
       gap: 16px;
       padding: 24px;
       background: var(--color-background-secondary);
+      &.mobile-layout {
+        padding: 16px;
+      }
       &-content {
         display: flex;
         align-items: center;
@@ -183,6 +189,19 @@
         align-items: center;
         gap: 0.45em;
         line-height: 125%;
+        &.mobile-layout {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+          .ui-chat__header-name {
+            color: var(--color-text-primary);
+            font-size: 14px;
+            font-weight: 400;
+          }
+          .ui-chat__header-status {
+            font-size: 10px;
+          }
+        }
       }
       &-name {
         color: var(--color-text-secondary);
@@ -197,11 +216,17 @@
     }
     &__actions {
       flex-shrink: 0;
-      width: 110px;
+      width: fit-content;
+      max-width: 100%;
+      min-width: 120px;
       .ui-dropdown__content {
         min-width: 230px;
       }
+      .ui-select {
+        height: 32px;
+      }
       &-selected {
+        white-space: nowrap;
         min-width: 80px;
       }
       &-item {
