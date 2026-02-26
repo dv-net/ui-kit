@@ -16,6 +16,7 @@
     UiChatTicketStatusValue
   } from "./types";
   import { defaultChatMessage } from "@/utils/constants/chat";
+  import { useBreakpoints } from "@/lib/composables/useBreakpoints.ts";
 
   dayjs.extend(utc);
   dayjs.extend(timezonePlugin);
@@ -36,6 +37,8 @@
     (e: "submit", payload: UiChatSubmitPayload): void;
     (e: "attach", files: File[]): void;
   }>();
+
+  const { isDesktop } = useBreakpoints();
 
   const footerRef = ref<InstanceType<typeof UiChatFooter>>();
   const canShowDefaultMessage = ref(!isCreateTicket);
@@ -103,7 +106,9 @@
     footerRef.value?.clearInputAndFiles();
   };
 
-  watch(shouldDelayDefaultMessage, (shouldDelay) => {
+  watch(
+    shouldDelayDefaultMessage,
+    (shouldDelay) => {
       if (defaultMessageTimer) {
         clearTimeout(defaultMessageTimer);
         defaultMessageTimer = null;
@@ -132,33 +137,41 @@
 
 <template>
   <div class="ui-chat">
-    <UiChatHeader
-      :ticket="ticket"
-      :is-empty="isEmpty"
-      :is-closed-ticket="isClosedTicket"
-      :ticket-loading="ticketLoading"
-      @action-ticket="(v) => emit('action-ticket', v)"
-    />
-    <div class="ui-chat__body">
-      <Transition v-if="!ticketLoading" name="alert" mode="out-in" appear>
-        <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
-      </Transition>
-      <template v-if="!ticketLoading">
-        <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
-          <div class="ui-chat__group-date">
-            <span>{{ date }}</span>
-          </div>
-          <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
-        </div>
-      </template>
+    <div class="ui-chat__top" v-if="isDesktop">
+      <span class="ui-chat__top-title">
+        {{ ticket?.subject || config.uiChat.translations.newTicket }}
+      </span>
+      <span v-if="ticket?.id" class="ui-chat__top-id"> {{ config.uiChat.translations.ticket }} #{{ ticket.id }} </span>
     </div>
-    <UiChatFooter
-      v-if="canShowFooter"
-      ref="footerRef"
-      :sending-loading="sendingLoading"
-      @submit="(p) => emit('submit', p)"
-      @attach="(f) => emit('attach', f)"
-    />
+    <div class="ui-chat__wrapper">
+      <UiChatHeader
+        :ticket="ticket"
+        :is-empty="isEmpty"
+        :is-closed-ticket="isClosedTicket"
+        :ticket-loading="ticketLoading"
+        @action-ticket="(v) => emit('action-ticket', v)"
+      />
+      <div class="ui-chat__body" :class="{ 'mobile-layout': isDesktop }">
+        <Transition v-if="!ticketLoading" name="alert" mode="out-in" appear>
+          <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
+        </Transition>
+        <template v-if="!ticketLoading">
+          <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
+            <div class="ui-chat__group-date">
+              <span>{{ date }}</span>
+            </div>
+            <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
+          </div>
+        </template>
+      </div>
+      <UiChatFooter
+        v-if="canShowFooter"
+        ref="footerRef"
+        :sending-loading="sendingLoading"
+        @submit="(p) => emit('submit', p)"
+        @attach="(f) => emit('attach', f)"
+      />
+    </div>
   </div>
 </template>
 
@@ -166,10 +179,35 @@
   .ui-chat {
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--color-separator-border-primary);
-    border-radius: 16px;
-    background: var(--color-background-primary);
-    overflow: hidden;
+    gap: 32px;
+    &__top {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      &-title {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 20px;
+        font-weight: 700;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: var(--color-text-primary);
+      }
+      &-id {
+        font-size: 14px;
+        font-weight: 400;
+        color: #686c77;
+      }
+    }
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--color-separator-border-primary);
+      border-radius: 16px;
+      background: var(--color-background-primary);
+      overflow: hidden;
+    }
     &__body {
       display: flex;
       flex-direction: column-reverse;
@@ -179,6 +217,9 @@
       padding: 24px;
       gap: 0;
       height: 415px;
+      &.mobile-layout {
+        padding: 16px;
+      }
       &::-webkit-scrollbar {
         width: 6px;
         height: 6px;

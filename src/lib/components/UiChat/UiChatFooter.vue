@@ -9,6 +9,7 @@
   import { config } from "@/lib/config";
   import { ATTACH_MAX_FILES, ATTACH_FORMATS } from "@/utils/constants/chat";
   import type { UiChatSubmitPayload } from "./types";
+  import { useBreakpoints } from "@/lib/composables/useBreakpoints.ts";
 
   const { sendingLoading = false } = defineProps<{
     sendingLoading?: boolean;
@@ -18,6 +19,8 @@
     (e: "submit", payload: UiChatSubmitPayload): void;
     (e: "attach", files: File[]): void;
   }>();
+
+  const { isDesktop } = useBreakpoints();
 
   const message = ref<string | null>(null);
   const files = ref<File[]>([]);
@@ -45,7 +48,7 @@
 
 <template>
   <div class="ui-chat__footer-wrapper">
-    <div class="ui-chat__footer">
+    <div class="ui-chat__footer" :class="{ 'mobile-layout': isDesktop }">
       <UiTooltip v-if="!isMaxFiles">
         <template #text>
           <p class="ui-chat__footer-tooltip">
@@ -118,6 +121,9 @@
       align-items: center;
       gap: 16px;
       padding: 12px 24px;
+      &.mobile-layout {
+        padding: 8px 16px;
+      }
       &-input {
         flex-grow: 1;
       }
