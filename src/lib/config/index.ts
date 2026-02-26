@@ -72,6 +72,9 @@ export interface UiKitConfig {
     };
   };
   uiChat: {
+    dateFormat: string;
+    dateTimeFormat: string;
+    timezone?: string;
     translations: {
       newTicket: string;
       ticket: string;
@@ -160,6 +163,8 @@ export const config = reactive<UiKitConfig>({
     }
   },
   uiChat: {
+    dateFormat: "DD.MM.YYYY",
+    dateTimeFormat: "DD.MM.YYYY HH:mm",
     translations: {
       newTicket: "New ticket",
       ticket: "Ticket",

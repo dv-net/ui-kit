@@ -5,6 +5,8 @@
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
   import { computed, ref } from "vue";
   import dayjs from "dayjs";
+  import timezonePlugin from "dayjs/plugin/timezone";
+  import utc from "dayjs/plugin/utc";
   import { config } from "@/lib/config";
   import {
     UiChatMessage as UiChatMessageType,
@@ -14,6 +16,9 @@
     UiChatTicketStatusValue
   } from "./types";
   import { defaultChatMessage } from "@/utils/constants/chat";
+
+  dayjs.extend(utc);
+  dayjs.extend(timezonePlugin);
 
   const {
     ticket,
@@ -33,7 +38,19 @@
 
   const footerRef = ref<InstanceType<typeof UiChatFooter>>();
 
-  const getDate = (datetime: string): string => datetime.split(" ")[0];
+  const resolvedTimezone = computed<string>(() => {
+    return config.uiChat.timezone || dayjs.tz.guess();
+  });
+
+  const parseByTimezone = (datetime: string) => {
+    const parsed = dayjs(datetime);
+    return parsed.isValid() ? parsed.tz(resolvedTimezone.value) : null;
+  };
+
+  const getDate = (datetime: string): string => {
+    const parsed = parseByTimezone(datetime);
+    return parsed?.isValid() ? parsed.format(config.uiChat.dateFormat) : datetime.split(/[T\s]/)[0] || datetime;
+  };
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
   const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
@@ -47,7 +64,7 @@
 
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
-    const now = dayjs().format("DD.MM.YYYY HH:mm");
+    const now = dayjs().tz(resolvedTimezone.value).format(config.uiChat.dateTimeFormat);
     return [defaultChatMessage(config.uiChat.translations.defaultMessage, now)];
   });
 
@@ -59,7 +76,9 @@
       groups[date].push(msg);
     }
     for (const date in groups) {
-      groups[date].sort((a, b) => dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf());
+      groups[date].sort((a, b) => {
+        return (parseByTimezone(a.created_at)?.valueOf() ?? 0) - (parseByTimezone(b.created_at)?.valueOf() ?? 0);
+      });
     }
     return groups;
   });
