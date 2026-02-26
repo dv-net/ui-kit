@@ -3,7 +3,7 @@
   import UiChatFooter from "./UiChatFooter.vue";
   import UiChatMessage from "./UiChatMessage.vue";
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
-  import { computed, ref } from "vue";
+  import { computed, onUnmounted, ref, watch } from "vue";
   import dayjs from "dayjs";
   import timezonePlugin from "dayjs/plugin/timezone";
   import utc from "dayjs/plugin/utc";
@@ -38,6 +38,8 @@
   }>();
 
   const footerRef = ref<InstanceType<typeof UiChatFooter>>();
+  const canShowDefaultMessage = ref(!isCreateTicket);
+  let defaultMessageTimer: ReturnType<typeof setTimeout> | null = null;
 
   const resolvedTimezone = computed<string>(() => {
     return config.uiChat.timezone || dayjs.tz.guess();
@@ -73,8 +75,11 @@
     return true;
   });
 
+  const shouldDelayDefaultMessage = computed(() => isCreateTicket && isEmpty.value && !ticketLoading);
+
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
+    if (!canShowDefaultMessage.value) return [];
     const now = dayjs().tz(resolvedTimezone.value).format(config.uiChat.dateTimeFormat);
     return [defaultChatMessage(config.uiChat.translations.defaultMessage, now)];
   });
@@ -97,6 +102,30 @@
   const clearInputAndFiles = () => {
     footerRef.value?.clearInputAndFiles();
   };
+
+  watch(shouldDelayDefaultMessage, (shouldDelay) => {
+      if (defaultMessageTimer) {
+        clearTimeout(defaultMessageTimer);
+        defaultMessageTimer = null;
+      }
+      if (!shouldDelay) {
+        canShowDefaultMessage.value = true;
+        return;
+      }
+      canShowDefaultMessage.value = false;
+      defaultMessageTimer = setTimeout(() => {
+        canShowDefaultMessage.value = true;
+      }, 1000);
+    },
+    { immediate: true }
+  );
+
+  onUnmounted(() => {
+    if (defaultMessageTimer) {
+      clearTimeout(defaultMessageTimer);
+      defaultMessageTimer = null;
+    }
+  });
 
   defineExpose({ clearInputAndFiles });
 </script>
