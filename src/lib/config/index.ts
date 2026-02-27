@@ -82,6 +82,7 @@ export interface UiKitConfig {
       remindAboutTicket: string;
       changeOperator: string;
       closeTicket: string;
+      reopenTicket: string;
       defaultMessage: string;
       messagePlaceholder: string;
       maxFiles: string;
@@ -172,6 +173,7 @@ export const config = reactive<UiKitConfig>({
       remindAboutTicket: "Remind about ticket",
       changeOperator: "Change operator",
       closeTicket: "Close ticket",
+      reopenTicket: "Reopen ticket",
       defaultMessage: "Hello. How can I help you?",
       messagePlaceholder: "Your message",
       maxFiles: "Maximum files",

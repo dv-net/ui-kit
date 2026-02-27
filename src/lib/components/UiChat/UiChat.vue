@@ -29,6 +29,7 @@
     managerAlertSeconds,
     ticketLoading = false,
     isCreateTicket = false,
+    enableReopenTicket = false,
     sendingLoading = false
   } = defineProps<UiChatProps>();
 
@@ -149,6 +150,7 @@
         :is-empty="isEmpty"
         :is-closed-ticket="isClosedTicket"
         :ticket-loading="ticketLoading"
+        :enable-reopen-ticket="enableReopenTicket"
         @action-ticket="(v) => emit('action-ticket', v)"
       />
       <div class="ui-chat__body" :class="{ 'mobile-layout': isDesktop }">

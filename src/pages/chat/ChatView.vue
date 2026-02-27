@@ -214,6 +214,7 @@
       :manager-alert-seconds="alertSeconds"
       :sending-loading="isLoadingSend"
       :is-create-ticket="!TICKET_UUID"
+      enable-reopen-ticket
       @submit="onSubmit"
     />
   </div>

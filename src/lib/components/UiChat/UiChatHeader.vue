@@ -11,12 +11,14 @@
     ticket,
     isEmpty,
     isClosedTicket,
-    ticketLoading = false
+    ticketLoading = false,
+    enableReopenTicket = false
   } = defineProps<{
     ticket: UiChatTicket | null | undefined;
     isEmpty: boolean;
     isClosedTicket: boolean;
     ticketLoading?: boolean;
+    enableReopenTicket?: boolean;
   }>();
 
   const emit = defineEmits<{
@@ -26,26 +28,43 @@
   const { isDesktop } = useBreakpoints();
 
   const actionsValue = ref<ChatAction | null>(null);
-  const actionsOptions = computed<ChatActionOption[]>(() => [
-    {
-      value: "remind-ticket",
-      label: config.uiChat.translations.remindAboutTicket,
-      icon: "notifications-active"
-    },
-    {
-      value: "change-operator",
-      label: config.uiChat.translations.changeOperator,
-      icon: "sync-alt"
-    },
-    {
-      value: "close-ticket",
-      label: config.uiChat.translations.closeTicket,
-      icon: "delete",
-      color: "var(--color-text-negative)"
-    }
-  ]);
+  const actionsOptions = computed<ChatActionOption[]>(() => {
+    const result: ChatActionOption[] = [
+      {
+        value: "remind-ticket",
+        label: config.uiChat.translations.remindAboutTicket,
+        icon: "notifications-active",
+        disabled: isClosedTicket
+      },
+      {
+        value: "change-operator",
+        label: config.uiChat.translations.changeOperator,
+        icon: "sync-alt",
+        disabled: isClosedTicket
+      }
+    ];
 
-  const isShowActionSelect = computed<boolean>(() => !isEmpty && !isClosedTicket);
+    if (enableReopenTicket && isClosedTicket) {
+      result.unshift({
+        value: "reopen-ticket",
+        label: config.uiChat.translations.reopenTicket,
+        icon: "revert",
+        disabled: !isClosedTicket
+      });
+    } else {
+      result.push({
+        value: "close-ticket",
+        label: config.uiChat.translations.closeTicket,
+        icon: "delete",
+        color: "var(--color-text-negative)",
+        disabled: isClosedTicket
+      });
+    }
+
+    return result;
+  });
+
+  const isShowActionSelect = computed<boolean>(() => !isEmpty && (enableReopenTicket || !isClosedTicket));
 
   const onActionChange = () => {
     if (actionsValue.value) {
@@ -59,7 +78,7 @@
   <div class="ui-chat__header" :class="{ 'mobile-layout': isDesktop }">
     <div class="ui-chat__header-content">
       <div class="ui-chat__header-icon">
-        <ui-icon name="support-agent  2" type="100" />
+        <ui-icon name="support-agent  2" type="100" size="lg" />
       </div>
       <div class="ui-chat__header-info">
         <ui-skeleton
@@ -113,7 +132,12 @@
         </template>
         <template #default="{ option }">
           <span class="ui-chat__actions-item" :style="option.color && { color: option.color }">
-            <UiIcon :name="option.icon" type="400" size="sm" />
+            <UiIcon
+              :name="option.icon"
+              :class="[option.value === 'reopen-ticket' ? 'no-fill' : '']"
+              type="400"
+              size="sm"
+            />
             <span>{{ option.label }}</span>
           </span>
         </template>
@@ -236,6 +260,12 @@
         font-weight: 400;
         gap: 8px;
         min-width: 200px;
+
+        .no-fill {
+          path {
+            fill: none;
+          }
+        }
       }
     }
   }

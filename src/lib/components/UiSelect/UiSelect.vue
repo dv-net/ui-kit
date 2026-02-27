@@ -92,6 +92,8 @@
   const { setModelValueItem } = useMultiple(modelValue as Ref<string[]>);
 
   function checkOption(option: unknown) {
+    if ((option as { disabled: boolean }).disabled) return;
+
     if (props.multiple && Array.isArray(modelValue.value)) {
       setModelValueItem(optionToVal(option));
     } else {
@@ -107,6 +109,10 @@
     } else {
       return modelValue.value === optionToVal(option);
     }
+  }
+
+  function isOptionDisabled(option: unknown) {
+    return (option as { disabled: boolean }).disabled;
   }
 
   function optionToVal(option: unknown) {
@@ -271,6 +277,7 @@
                 :size="itemSize"
                 :is-navigated="navigatedIndex === item.index"
                 :is-checked="isOptionChecked(item.option)"
+                :is-disabled="isOptionDisabled(item.option)"
                 @click.prevent="checkOption(item.option)"
                 @mouseenter="onOptionMouseOver(item.index)"
                 @mouseleave="onOptionMouseOut"
@@ -301,6 +308,7 @@
                 :size="itemSize"
                 :is-navigated="navigatedIndex === index"
                 :is-checked="isOptionChecked(data)"
+                :is-disabled="isOptionDisabled(data)"
                 @click.prevent="checkOption(data)"
                 @mouseenter="onOptionMouseOver(index)"
                 @mouseleave="onOptionMouseOut"
