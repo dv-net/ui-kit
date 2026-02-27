@@ -153,8 +153,6 @@
             @submit="pickerRef.selectDate()"
             v-model="processingData"
             :single="single"
-            :min-date="currentMinDate"
-            :max-date="currentMaxDate"
           />
         </template>
 
