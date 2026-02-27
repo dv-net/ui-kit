@@ -4,6 +4,7 @@
   import type { UiChatMessage, UiChatTicket } from "@/lib/components/UiChat/types";
 
   const MY_UUID = "user-001";
+  const TICKET_UUID = "uuid";
   const SUPPORT_UUID = "support-001";
   const emptyUser = (uuid: string) => ({ uuid, avatar: null, telegram: null, email: "", name: null });
   const mockMessages: UiChatMessage[] = [
@@ -177,7 +178,7 @@
   const onSubmit = async () => {
     try {
       isLoadingSend.value = true;
-      await new Promise((res) => setTimeout(res, 3000))
+      await new Promise((res) => setTimeout(res, 3000));
       uiChatRef.value?.clearInputAndFiles();
     } catch (e) {
       console.log(e);
@@ -212,6 +213,7 @@
       :show-manager-alert="showAlert"
       :manager-alert-seconds="alertSeconds"
       :sending-loading="isLoadingSend"
+      :is-create-ticket="!TICKET_UUID"
       @submit="onSubmit"
     />
   </div>

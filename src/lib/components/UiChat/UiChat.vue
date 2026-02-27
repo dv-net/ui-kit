@@ -3,8 +3,10 @@
   import UiChatFooter from "./UiChatFooter.vue";
   import UiChatMessage from "./UiChatMessage.vue";
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
-  import { computed, ref } from "vue";
+  import { computed, onUnmounted, ref, watch } from "vue";
   import dayjs from "dayjs";
+  import timezonePlugin from "dayjs/plugin/timezone";
+  import utc from "dayjs/plugin/utc";
   import { config } from "@/lib/config";
   import {
     UiChatMessage as UiChatMessageType,
@@ -14,6 +16,10 @@
     UiChatTicketStatusValue
   } from "./types";
   import { defaultChatMessage } from "@/utils/constants/chat";
+  import { useBreakpoints } from "@/lib/composables/useBreakpoints.ts";
+
+  dayjs.extend(utc);
+  dayjs.extend(timezonePlugin);
 
   const {
     ticket,
@@ -22,6 +28,7 @@
     showManagerAlert = false,
     managerAlertSeconds,
     ticketLoading = false,
+    isCreateTicket = false,
     sendingLoading = false
   } = defineProps<UiChatProps>();
 
@@ -31,23 +38,52 @@
     (e: "attach", files: File[]): void;
   }>();
 
-  const footerRef = ref<InstanceType<typeof UiChatFooter>>();
+  const { isDesktop } = useBreakpoints();
 
-  const getDate = (datetime: string): string => datetime.split(" ")[0];
+  const footerRef = ref<InstanceType<typeof UiChatFooter>>();
+  const canShowDefaultMessage = ref(!isCreateTicket);
+  let defaultMessageTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const resolvedTimezone = computed<string>(() => {
+    return config.uiChat.timezone || dayjs.tz.guess();
+  });
+
+  const parseByTimezone = (datetime: string) => {
+    const parsed = dayjs(datetime);
+    return parsed.isValid() ? parsed.tz(resolvedTimezone.value) : null;
+  };
+
+  const getDate = (datetime: string): string => {
+    const parsed = parseByTimezone(datetime);
+    return parsed?.isValid() ? parsed.format(config.uiChat.dateFormat) : datetime.split(/[T\s]/)[0] || datetime;
+  };
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
   const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
+  const hasTicketStatus = computed<boolean>(() => {
+    return typeof ticket?.status?.value !== "undefined";
+  });
+
   const isClosedTicket = computed<boolean>(() => {
-    if (!ticket) return false;
+    if (!hasTicketStatus.value) return false;
     return (
-      ticket.status.value === UiChatTicketStatusValue.MANAGER_CLOSED ||
-      ticket.status.value === UiChatTicketStatusValue.USER_CLOSED
+      ticket?.status?.value === UiChatTicketStatusValue.MANAGER_CLOSED ||
+      ticket?.status?.value === UiChatTicketStatusValue.USER_CLOSED
     );
   });
 
+  const canShowFooter = computed<boolean>(() => {
+    if (!isCreateTicket && !hasTicketStatus.value) return false;
+    if (hasTicketStatus.value && isClosedTicket.value) return false;
+    return true;
+  });
+
+  const shouldDelayDefaultMessage = computed(() => isCreateTicket && isEmpty.value && !ticketLoading);
+
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
-    const now = dayjs().format("DD.MM.YYYY HH:mm");
+    if (!canShowDefaultMessage.value) return [];
+    const now = dayjs().tz(resolvedTimezone.value).format(config.uiChat.dateTimeFormat);
     return [defaultChatMessage(config.uiChat.translations.defaultMessage, now)];
   });
 
@@ -59,7 +95,9 @@
       groups[date].push(msg);
     }
     for (const date in groups) {
-      groups[date].sort((a, b) => dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf());
+      groups[date].sort((a, b) => {
+        return (parseByTimezone(a.created_at)?.valueOf() ?? 0) - (parseByTimezone(b.created_at)?.valueOf() ?? 0);
+      });
     }
     return groups;
   });
@@ -68,39 +106,72 @@
     footerRef.value?.clearInputAndFiles();
   };
 
+  watch(
+    shouldDelayDefaultMessage,
+    (shouldDelay) => {
+      if (defaultMessageTimer) {
+        clearTimeout(defaultMessageTimer);
+        defaultMessageTimer = null;
+      }
+      if (!shouldDelay) {
+        canShowDefaultMessage.value = true;
+        return;
+      }
+      canShowDefaultMessage.value = false;
+      defaultMessageTimer = setTimeout(() => {
+        canShowDefaultMessage.value = true;
+      }, 1000);
+    },
+    { immediate: true }
+  );
+
+  onUnmounted(() => {
+    if (defaultMessageTimer) {
+      clearTimeout(defaultMessageTimer);
+      defaultMessageTimer = null;
+    }
+  });
+
   defineExpose({ clearInputAndFiles });
 </script>
 
 <template>
   <div class="ui-chat">
-    <UiChatHeader
-      :ticket="ticket"
-      :is-empty="isEmpty"
-      :is-closed-ticket="isClosedTicket"
-      :ticket-loading="ticketLoading"
-      @action-ticket="(v) => emit('action-ticket', v)"
-    />
-    <div class="ui-chat__body">
-      <Transition v-if="!ticketLoading" name="alert" mode="out-in" appear>
-        <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
-      </Transition>
-      <template v-if="!ticketLoading">
-        <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
-          <div class="ui-chat__group-date">
-            <span>{{ date }}</span>
-          </div>
-          <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
-        </div>
-      </template>
+    <div class="ui-chat__top" v-if="isDesktop">
+      <span class="ui-chat__top-title">
+        {{ ticket?.subject || config.uiChat.translations.newTicket }}
+      </span>
+      <span v-if="ticket?.id" class="ui-chat__top-id"> {{ config.uiChat.translations.ticket }} #{{ ticket.id }} </span>
     </div>
-    <UiChatFooter
-      ref="footerRef"
-      :is-empty="isEmpty"
-      :is-closed-ticket="isClosedTicket"
-      :sending-loading="sendingLoading"
-      @submit="(p) => emit('submit', p)"
-      @attach="(f) => emit('attach', f)"
-    />
+    <div class="ui-chat__wrapper">
+      <UiChatHeader
+        :ticket="ticket"
+        :is-empty="isEmpty"
+        :is-closed-ticket="isClosedTicket"
+        :ticket-loading="ticketLoading"
+        @action-ticket="(v) => emit('action-ticket', v)"
+      />
+      <div class="ui-chat__body" :class="{ 'mobile-layout': isDesktop }">
+        <Transition v-if="!ticketLoading" name="alert" mode="out-in" appear>
+          <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
+        </Transition>
+        <template v-if="!ticketLoading">
+          <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
+            <div class="ui-chat__group-date">
+              <span>{{ date }}</span>
+            </div>
+            <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
+          </div>
+        </template>
+      </div>
+      <UiChatFooter
+        v-if="canShowFooter"
+        ref="footerRef"
+        :sending-loading="sendingLoading"
+        @submit="(p) => emit('submit', p)"
+        @attach="(f) => emit('attach', f)"
+      />
+    </div>
   </div>
 </template>
 
@@ -108,10 +179,35 @@
   .ui-chat {
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--color-separator-border-primary);
-    border-radius: 16px;
-    background: var(--color-background-primary);
-    overflow: hidden;
+    gap: 32px;
+    &__top {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      &-title {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 20px;
+        font-weight: 700;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: var(--color-text-primary);
+      }
+      &-id {
+        font-size: 14px;
+        font-weight: 400;
+        color: #686c77;
+      }
+    }
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--color-separator-border-primary);
+      border-radius: 16px;
+      background: var(--color-background-primary);
+      overflow: hidden;
+    }
     &__body {
       display: flex;
       flex-direction: column-reverse;
@@ -121,6 +217,9 @@
       padding: 24px;
       gap: 0;
       height: 415px;
+      &.mobile-layout {
+        padding: 16px;
+      }
       &::-webkit-scrollbar {
         width: 6px;
         height: 6px;

@@ -71,5 +71,6 @@ export interface UiChatProps {
   showManagerAlert?: boolean;
   managerAlertSeconds?: number;
   ticketLoading?: boolean;
+  isCreateTicket?: boolean;
   sendingLoading?: boolean;
 }
