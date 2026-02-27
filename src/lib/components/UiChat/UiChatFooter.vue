@@ -73,6 +73,7 @@
       </UiTooltip>
       <div class="ui-chat__footer-input">
         <UiTextarea
+          class="ui-chat__footer-input-el"
           v-model="message"
           size="auto"
           :placeholder="config.uiChat.translations.messagePlaceholder"
@@ -126,6 +127,12 @@
       }
       &-input {
         flex-grow: 1;
+
+        &-el {
+          .ui-textarea__textarea {
+            max-height: 180px;
+          }
+        }
       }
       &-control {
         display: flex;
