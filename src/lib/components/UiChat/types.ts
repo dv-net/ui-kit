@@ -50,13 +50,14 @@ export interface UiChatTicket {
   support_name: string;
 }
 
-export type ChatAction = "remind-ticket" | "change-operator" | "close-ticket";
+export type ChatAction = "remind-ticket" | "change-operator" | "close-ticket" | "reopen-ticket";
 
 export interface ChatActionOption {
   value: ChatAction;
   label: string;
   icon: string;
   color?: string;
+  disabled?: boolean;
 }
 
 export interface UiChatSubmitPayload {
@@ -73,4 +74,5 @@ export interface UiChatProps {
   ticketLoading?: boolean;
   isCreateTicket?: boolean;
   sendingLoading?: boolean;
+  enableReopenTicket?: boolean;
 }

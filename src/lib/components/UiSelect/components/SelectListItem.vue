@@ -4,6 +4,7 @@
   import { SelectListItemSize, SelectListItemSizeKeys } from "../types";
 
   interface UiSelectListItemProps {
+    isDisabled: boolean;
     isChecked: boolean;
     isNavigated: boolean;
     size?: SelectListItemSizeKeys;
@@ -18,7 +19,12 @@
 <template>
   <button
     class="ui-select__option"
-    :class="[{ 'is-checked': isChecked }, { 'is-navigated': isNavigated }, `size-${size}`]"
+    :class="[
+      { 'is-checked': isChecked },
+      { 'is-navigated': isNavigated },
+      { 'is-disabled': isDisabled },
+      `size-${size}`
+    ]"
   >
     <slot />
   </button>
@@ -49,6 +55,11 @@
     text-overflow: ellipsis;
     transition: var(--transition);
     white-space: nowrap;
+
+    &.is-disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
 
     & > span {
       overflow: hidden;
