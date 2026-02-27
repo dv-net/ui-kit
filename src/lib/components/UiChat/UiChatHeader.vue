@@ -252,6 +252,8 @@
       &-selected {
         white-space: nowrap;
         min-width: 80px;
+        font-size: 14px;
+        font-weight: 500;
       }
       &-item {
         display: flex;
@@ -263,7 +265,7 @@
 
         .no-fill {
           path {
-            fill: none;
+            fill: none !important;
           }
         }
       }
