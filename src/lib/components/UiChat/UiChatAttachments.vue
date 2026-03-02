@@ -27,17 +27,24 @@
     fileInput.value?.click();
   };
 
+  const appendFiles = (newFiles: File[]) => {
+    if (!newFiles.length || sendingLoading) return;
+    const remaining = maxFiles - attachedFiles.value.length;
+    if (remaining <= 0) return;
+    attachedFiles.value.push(...newFiles.slice(0, remaining));
+    emit("change", attachedFiles.value);
+  };
+
   const onFilesSelected = (event: Event) => {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
-
-    const remaining = maxFiles - attachedFiles.value.length;
-    const newFiles = Array.from(input.files).slice(0, remaining);
-
-    attachedFiles.value.push(...newFiles);
-    emit("change", attachedFiles.value);
+    appendFiles(Array.from(input.files));
 
     input.value = "";
+  };
+
+  const addFiles = (newFiles: File[]) => {
+    appendFiles(newFiles.filter((file) => file.type.startsWith("image/")));
   };
 
   const removeFile = (index: number) => {
@@ -75,7 +82,7 @@
     emit("change", []);
   };
 
-  defineExpose({ openFileDialog, clearFiles });
+  defineExpose({ openFileDialog, clearFiles, addFiles });
 </script>
 
 <template>

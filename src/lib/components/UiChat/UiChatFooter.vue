@@ -33,6 +33,19 @@
     emit("submit", { message: message.value, files: files.value });
   };
 
+  const onTextareaPaste = (e: ClipboardEvent) => {
+    if (sendingLoading) return;
+    const items = Array.from(e.clipboardData?.items || []);
+    const pastedImages = items
+      .filter((item) => item.kind === "file" && item.type.startsWith("image/"))
+      .map((item) => item.getAsFile())
+      .filter((file): file is File => !!file);
+
+    if (!pastedImages.length) return;
+    e.preventDefault();
+    attachmentsRef.value?.addFiles?.(pastedImages);
+  };
+
   const clearInputAndFiles = () => {
     message.value = null;
     if (attachmentsRef.value?.clearFiles) {
@@ -79,6 +92,7 @@
           :placeholder="config.uiChat.translations.messagePlaceholder"
           submitOnEnter
           :disabled="sendingLoading"
+          @paste="onTextareaPaste"
           @submit="onSubmit"
           is-empty-value-null
         />
