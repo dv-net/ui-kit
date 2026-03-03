@@ -15,7 +15,7 @@
     copy: false,
     rows: 1
   });
-  const emits = defineEmits(["input", "blur", "focus", "change", "submit"]);
+  const emits = defineEmits(["input", "blur", "focus", "change", "submit", "paste"]);
   const modelValue = defineModel<string | null>({ default: null });
   const isFocus = ref(false);
   const textareaRef = ref();
@@ -62,6 +62,10 @@
     resize();
   }
 
+  function onPaste(e: ClipboardEvent) {
+    emits("paste", e);
+  }
+
   function onChange() {
     emits("change");
   }
@@ -99,6 +103,7 @@
       @focus="onFocus"
       @input="onInput"
       @change="onChange"
+      @paste="onPaste"
       @keyup="onKeyup"
       @keydown="onKeydown"
       :rows="rows"
