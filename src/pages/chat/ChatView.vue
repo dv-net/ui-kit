@@ -187,6 +187,10 @@
     }
   };
 
+  const onRead = async ({ ticketId }: { ticketId: number }) => {
+    console.log("read payload", { ticketId });
+  };
+
   onMounted(() => {
     void loadMessages();
     timer = setInterval(() => {
@@ -216,6 +220,7 @@
       :is-create-ticket="!TICKET_UUID"
       enable-reopen-ticket
       @submit="onSubmit"
+      @read="onRead"
     />
   </div>
 </template>

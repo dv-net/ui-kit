@@ -3,7 +3,7 @@
   import UiChatFooter from "./UiChatFooter.vue";
   import UiChatMessage from "./UiChatMessage.vue";
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
-  import { computed, onUnmounted, ref, watch } from "vue";
+  import { computed, nextTick, onUnmounted, ref, watch } from "vue";
   import dayjs from "dayjs";
   import timezonePlugin from "dayjs/plugin/timezone";
   import utc from "dayjs/plugin/utc";
@@ -37,13 +37,18 @@
     (e: "action-ticket", value: ChatAction): void;
     (e: "submit", payload: UiChatSubmitPayload): void;
     (e: "attach", files: File[]): void;
+    (e: "read", payload: { ticketId: number }): void;
   }>();
 
   const { isDesktop } = useBreakpoints();
 
   const footerRef = ref<InstanceType<typeof UiChatFooter>>();
+  const chatBodyRef = ref<HTMLDivElement>();
   const canShowDefaultMessage = ref(!isCreateTicket);
   let defaultMessageTimer: ReturnType<typeof setTimeout> | null = null;
+  let readDelay: ReturnType<typeof setTimeout> | null = null;
+  let observerMessageMap = new WeakMap<Element, UiChatMessageType>();
+  let readObserver: IntersectionObserver | null = null;
 
   const resolvedTimezone = computed<string>(() => {
     return config.uiChat.timezone || dayjs.tz.guess();
@@ -103,6 +108,53 @@
     return groups;
   });
 
+  const messageById = computed(() => {
+    const map = new Map<number, UiChatMessageType>();
+    for (const msg of actualMessages.value) {
+      map.set(msg.id, msg);
+    }
+    return map;
+  });
+
+  const onIntersectionObserverRead: IntersectionObserverCallback = (entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const message = observerMessageMap.get(entry.target);
+      if (!message) continue;
+      const isSupportMessage = !!currentUserUuid && !isOwnMessage(message);
+      if (!message.ticket_id || message.id <= 0 || !isSupportMessage || message.updated_at !== message.created_at) {
+        continue
+      }
+      if (readDelay) {
+        clearTimeout(readDelay);
+      }
+      readDelay = setTimeout(() => {
+        emit("read", { ticketId: message.ticket_id });
+      }, 3000);
+      break;
+    }
+  };
+
+  const reconnectReadObserver = async () => {
+    await nextTick();
+    readObserver?.disconnect();
+    observerMessageMap = new WeakMap<Element, UiChatMessageType>();
+    if (!chatBodyRef.value || ticketLoading) return;
+    readObserver = new IntersectionObserver(onIntersectionObserverRead, {
+      root: chatBodyRef.value,
+      rootMargin: "0px",
+      threshold: 0.6
+    });
+    const messageNodes = chatBodyRef.value.querySelectorAll<HTMLElement>("[data-chat-message-id]");
+    messageNodes.forEach((node) => {
+      const id = Number(node.dataset.chatMessageId);
+      const message = messageById.value.get(id);
+      if (!message) return;
+      observerMessageMap.set(node, message);
+      readObserver?.observe(node);
+    });
+  };
+
   const clearInputAndFiles = () => {
     footerRef.value?.clearInputAndFiles();
   };
@@ -126,11 +178,23 @@
     { immediate: true }
   );
 
+  watch(groupedMessages, () => {
+      void reconnectReadObserver();
+    },
+    { immediate: true }
+  );
+
   onUnmounted(() => {
     if (defaultMessageTimer) {
       clearTimeout(defaultMessageTimer);
       defaultMessageTimer = null;
     }
+    if (readDelay) {
+      clearTimeout(readDelay);
+      readDelay = null;
+    }
+    readObserver?.disconnect();
+    readObserver = null;
   });
 
   defineExpose({ clearInputAndFiles });
@@ -153,7 +217,7 @@
         :enable-reopen-ticket="enableReopenTicket"
         @action-ticket="(v) => emit('action-ticket', v)"
       />
-      <div class="ui-chat__body" :class="{ 'mobile-layout': isDesktop }">
+      <div ref="chatBodyRef" class="ui-chat__body" :class="{ 'mobile-layout': isDesktop }">
         <Transition v-if="!ticketLoading" name="alert" mode="out-in" appear>
           <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
         </Transition>
@@ -162,7 +226,9 @@
             <div class="ui-chat__group-date">
               <span>{{ date }}</span>
             </div>
-            <UiChatMessage v-for="msg in groupMessages" :key="msg.id" :message="msg" :is-own="isOwnMessage(msg)" />
+            <div v-for="msg in groupMessages" :key="msg.id" class="ui-chat__message-observer" :data-chat-message-id="msg.id">
+              <UiChatMessage :message="msg" :is-own="isOwnMessage(msg)" />
+            </div>
           </div>
         </template>
       </div>
