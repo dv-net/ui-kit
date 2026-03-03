@@ -326,6 +326,11 @@
         }
       }
     }
+    &__message-observer {
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
     &__alert-slot {
       display: flex;
       justify-content: center;
