@@ -3,15 +3,27 @@ import { ref } from "vue";
 import type { RouteItem } from "@/lib/components/UiLayoutMenu/types";
 import { ProfileMenuItem } from "@/lib/components/UiProfileMenu/types";
 import {
+  addCircleAnimation,
   dashboardAnimation,
+  documentAnimation,
+  documentationAnimation,
+  gridAnimation,
+  gridOutlineAnimation,
+  input1Animation,
   kycAnimation,
   languageAnimation,
   loginAnimation,
+  menuInAnimation,
+  newWindowsAnimation,
   notificationsAnimation,
   securityAnimation,
   settingsAnimation,
+  sidebarAnimation,
+  sortAnimation,
+  support2Animation,
   telegramAnimation,
   toolsAnimation,
+  twoArrowOutlineAnimation,
 } from "@/lib/helpers/animations-list.ts";
 
 export const menu = ref<RouteItem[]>([
@@ -26,168 +38,147 @@ export const menu = ref<RouteItem[]>([
     path: "/icons",
     meta: {
       title: "Icons",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: gridOutlineAnimation
     }
   },
   {
     path: "/icon-buttons",
     meta: {
       title: "IconButtons",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: addCircleAnimation
     }
   },
   {
     path: "/tags",
     meta: {
       title: "Tags",
-      icon: "home",
-      iconActive: "home",
+      animationIcon: documentAnimation,
     }
   },
   {
     path: "/form",
     meta: {
       title: "Form",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: documentationAnimation
     }
   },
   {
     path: "/date-picker",
     meta: {
       title: "Date Picker",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: settingsAnimation
     }
   },
   {
     path: "/table",
     meta: {
       title: "Table",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: gridAnimation
     }
   },
   {
     path: "/tabs",
     meta: {
       title: "Tabs",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: sidebarAnimation
     }
   },
   {
     path: "/inputs-default",
     meta: {
       title: "Inputs",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: input1Animation
     }
   },
   {
     path: "/inputs-inside",
     meta: {
       title: "Inputs (inside)",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: input1Animation
     }
   },
   {
     path: "/selects-default",
     meta: {
       title: "Select",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: sortAnimation
     }
   },
   {
     path: "/skeleton",
     meta: {
       title: "Skeleton",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: gridOutlineAnimation
     }
   },
   {
     path: "/textarea",
     meta: {
       title: "Textarea",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: documentAnimation
     }
   },
   {
     path: "/links",
     meta: {
       title: "UILink",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: twoArrowOutlineAnimation
     }
   },
   {
     path: "/checkbox",
     meta: {
       title: "Checkbox",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: addCircleAnimation
     }
   },
   {
     path: "/radio",
     meta: {
       title: "Radio",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: settingsAnimation
     }
   },
   {
     path: "/languages",
     meta: {
       title: "Languages",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: languageAnimation
     }
   },
   {
     path: "/collapse",
     meta: {
       title: "Collapse",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: menuInAnimation
     }
   },
   {
     path: "/block-title",
     meta: {
       title: "Block title",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: documentationAnimation
     }
   },
   {
     path: "/drag-and-drop",
     meta: {
       title: "Drag & Drop",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: newWindowsAnimation
     }
   },
   {
     path: "/chat",
     meta: {
       title: "Chat",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: support2Animation
     }
   },
   {
     path: "/gallery",
     meta: {
       title: "Gallery",
-      icon: "home",
-      iconActive: "home"
+      animationIcon: gridAnimation
     }
   },
   {

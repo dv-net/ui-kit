@@ -29,4 +29,5 @@ export interface UiLayoutMenuItemProps {
   collapsed: boolean;
   parrentRoutes: string[] | null;
   routeItems: RouteItem[];
+  activeMenuPath: string | null;
 }
