@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.5.10] - 2026-03-16
+
+- fix: uiLayoutMenuItem
+
 ## [7.5.9] - 2026-03-03
 
 - fix: uiChat

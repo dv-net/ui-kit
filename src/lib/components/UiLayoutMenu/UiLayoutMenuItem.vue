@@ -3,7 +3,6 @@
 
   import { watchOnce } from "@vueuse/core";
   import { computed, inject, ref } from "vue";
-  import { useRoute } from "vue-router";
 
   import type { UiLayoutMenuItemProps } from "./types";
 
@@ -14,27 +13,26 @@
 
   const props = defineProps<UiLayoutMenuItemProps>();
   const { onMenuItemSelect } = inject<menuProvide>("menu") || menuProvideDefault;
-  const route = useRoute();
 
   const isOpen = ref(props.parrentRoutes?.includes(props.routeItem?.path));
 
   const isButton = computed(() => props.routeItem?.meta?.isButton);
 
   const stateRoute = computed<{ isSelected: boolean; isChildren: boolean }>(() => {
-    const { path, meta, children } = props.routeItem;
+    const { path, meta } = props.routeItem;
     const isChildren = !!meta?.isChildren;
-    const currentPath = path?.toLowerCase();
-    const matchedPaths = route?.matched.map((item) => item.path?.toLowerCase());
-    if (children?.length) {
-      return {
-        isSelected: matchedPaths.includes(currentPath),
-        isChildren
-      };
-    }
-    const routeSegments = route?.path.split("/").map((seg) => seg.toLowerCase());
-    const firstSegment = currentPath.split("/")[1];
+    const normalizePath = (value: string) => (value.length > 1 ? value.replace(/\/+$/, "") : value).toLowerCase();
+    const currentPath = normalizePath(path);
+    const matchedMenuPath = props.activeMenuPath ? normalizePath(props.activeMenuPath) : null;
+    const isBestMatchedRoute = matchedMenuPath === currentPath;
+    const isParentForActiveRoute = !!props.parrentRoutes?.some(
+      (parentPath) => normalizePath(parentPath) === currentPath
+    );
+
     return {
-      isSelected: isChildren ? path === route?.path : routeSegments.some((seg) => seg === firstSegment),
+      // Parent items are active only when the current route belongs to their declared children tree.
+      // Leaf items are active only on exact path match.
+      isSelected: isBestMatchedRoute || isParentForActiveRoute,
       isChildren
     };
   });
@@ -122,6 +120,7 @@
         :route-item="children"
         :collapsed="collapsed"
         :parrentRoutes="parrentRoutes"
+        :active-menu-path="activeMenuPath"
         @selected="$emit('selected', $event)"
       >
       </UiLayoutMenuItem>

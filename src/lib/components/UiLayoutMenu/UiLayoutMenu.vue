@@ -10,6 +10,7 @@
   });
   const route = useRoute();
   defineEmits(["selected"]);
+  const normalizePath = (value: string) => (value.length > 1 ? value.replace(/\/+$/, "") : value).toLowerCase();
   const routesForCollapse = computed(() => {
     const flattenRoutes = (routes: RouteItem[]) => {
       let routesArray: RouteItem[] = [];
@@ -43,6 +44,27 @@
     }
     return findParentPaths(route?.path, props.routeItems);
   });
+  const activeMenuPath = computed<string | null>(() => {
+    const currentPath = normalizePath(route.path);
+    let bestMatchedPath: string | null = null;
+    const findBestMatchedPath = (routes: RouteItem[]) => {
+      routes.forEach((routeItem) => {
+        const menuPath = normalizePath(routeItem.path);
+        const isExactMatch = menuPath === currentPath;
+        const isSubPathMatch = menuPath !== "/" && currentPath.startsWith(`${menuPath}/`);
+        if (isExactMatch || isSubPathMatch) {
+          if (!bestMatchedPath || menuPath.length > bestMatchedPath.length) {
+            bestMatchedPath = menuPath;
+          }
+        }
+        if (routeItem.children?.length) {
+          findBestMatchedPath(routeItem.children);
+        }
+      });
+    };
+    findBestMatchedPath(props.routeItems);
+    return bestMatchedPath;
+  });
 </script>
 
 <template>
@@ -54,6 +76,7 @@
           :collapsed="collapsed"
           :route-items="routeItems"
           :parrentRoutes="parrentRoutes"
+          :active-menu-path="activeMenuPath"
           @selected="$emit('selected', $event)"
         >
         </UiLayoutMenuItem>
@@ -67,6 +90,7 @@
           :collapsed="collapsed"
           :route-items="routeItems"
           :parrentRoutes="parrentRoutes"
+          :active-menu-path="activeMenuPath"
           @selected="$emit('selected', $event)"
         >
         </UiLayoutMenuItem>
