@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
       : {
           copyPublicDir: false,
           rollupOptions: {
-            external: ["vue", "vue-router"],
+            external: ["vue", "vue-router", "vue3-lottie", "lottie-web"],
             input: Object.fromEntries(
               glob
                 .sync("./src/lib/**/*.{ts,vue}", { ignore: ["./src/lib/**/*.d.ts"] })
