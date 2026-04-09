@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref } from "vue";
+
   import { UiGallery } from "@/lib";
   import type { UiGalleryImage } from "@/lib/components/UiGallery/types";
 
@@ -45,16 +46,16 @@
 
   .gallery-grid {
     display: flex;
-    gap: 12px;
     flex-wrap: wrap;
+    gap: 12px;
 
     &__item {
-      border: none;
-      background: none;
-      padding: 0;
-      cursor: pointer;
-      border-radius: 8px;
       overflow: hidden;
+      padding: 0;
+      border: none;
+      border-radius: 8px;
+      background: none;
+      cursor: pointer;
       transition: opacity 0.2s;
 
       &:hover {
@@ -66,8 +67,8 @@
       display: block;
       width: 200px;
       height: 200px;
-      object-fit: cover;
       border-radius: 8px;
+      object-fit: cover;
     }
   }
 </style>

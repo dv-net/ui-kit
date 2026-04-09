@@ -51,17 +51,17 @@
     $root: &;
 
     --ui-icon-button-effect-opacity: 0.06;
-    --ui-icon-button-effect-color: currentColor;
+    --ui-icon-button-effect-color: currentcolor;
 
     position: relative;
     display: inline-flex;
+    overflow: hidden;
     align-items: center;
     justify-content: center;
     padding: 0;
     border: none;
     cursor: pointer;
     outline: none;
-    overflow: hidden;
     transition: var(--transition);
 
     .ui-icon {
@@ -77,26 +77,26 @@
     &__hover-effect {
       position: absolute;
       z-index: 2;
-      border-radius: inherit;
-      pointer-events: none;
       overflow: hidden;
+      border-radius: inherit;
       inset: 0;
       isolation: isolate;
+      pointer-events: none;
 
       &::after,
       &::before {
-        content: '';
         position: absolute;
-        width: 100%;
-        aspect-ratio: 1/1;
-        inset-inline-start: 50%;
-        inset-block-start: 50%;
-        translate: -50% -50%;
         z-index: -1;
-        background: var(--ui-icon-button-effect-color);
+        width: 100%;
         border-radius: 50%;
-        scale: 0 0;
+        aspect-ratio: 1/1;
+        background: var(--ui-icon-button-effect-color);
+        content: '';
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
         opacity: var(--ui-icon-button-effect-opacity);
+        scale: 0 0;
+        translate: -50% -50%;
       }
 
       &::before {
@@ -105,28 +105,28 @@
     }
 
     @media (hover: hover) and (pointer: fine) {
-      &:hover:not(:disabled):not(.is-loading) {
+      &:hover:not(:disabled, .is-loading) {
         .ui-icon-button__hover-effect {
           &::after {
+            opacity: 0;
+            scale: 1 1;
             transition:
               scale 0.5s ease,
               opacity 0.5s ease 0.25s;
-            scale: 1 1;
-            opacity: 0;
           }
         }
       }
     }
 
-    &:active:not(:disabled):not(.is-loading),
-    &:focus-visible:not(:disabled):not(.is-loading) {
+    &:active:not(:disabled, .is-loading),
+    &:focus-visible:not(:disabled, .is-loading) {
       .ui-icon-button__hover-effect {
         &::before {
+          opacity: 0;
+          scale: 1 1;
           transition:
             scale 0.5s ease,
             opacity 0.5s ease 0.25s;
-          scale: 1 1;
-          opacity: 0;
         }
 
         &::after {
@@ -197,13 +197,15 @@
     &.type-clear {
       background-color: transparent;
       color: var(--color-icon-primary);
+
       --ui-icon-button-effect-opacity: 0.06;
-      --ui-icon-button-effect-color: currentColor;
+      --ui-icon-button-effect-color: currentcolor;
     }
 
     &.type-contrast {
       background-color: var(--color-background-contrast);
       color: var(--color-white);
+
       --ui-icon-button-effect-opacity: 0.1;
       --ui-icon-button-effect-color: var(--color-white, #fff);
     }
@@ -211,6 +213,7 @@
     &.type-accent {
       background-color: var(--color-background-accent);
       color: var(--color-white);
+
       --ui-icon-button-effect-opacity: 0.1;
       --ui-icon-button-effect-color: var(--color-white, #fff);
     }
@@ -218,6 +221,7 @@
     &.type-tint {
       background-color: var(--color-background-info);
       color: var(--color-icon-accent);
+
       --ui-icon-button-effect-opacity: 0.06;
       --ui-icon-button-effect-color: var(--color-state-accent, currentColor);
     }
@@ -225,6 +229,7 @@
     &.type-positive {
       background-color: var(--color-status-positive);
       color: var(--color-white);
+
       --ui-icon-button-effect-opacity: 0.1;
       --ui-icon-button-effect-color: var(--color-white, #fff);
     }
@@ -232,13 +237,15 @@
     &.type-positive-tint {
       background-color: var(--color-background-positive);
       color: var(--color-icon-positive);
+
       --ui-icon-button-effect-opacity: 0.06;
-      --ui-icon-button-effect-color: currentColor;
+      --ui-icon-button-effect-color: currentcolor;
     }
 
     &.type-negative {
       background-color: var(--color-status-negative);
       color: var(--color-white);
+
       --ui-icon-button-effect-opacity: 0.08;
       --ui-icon-button-effect-color: var(--color-white, #fff);
     }
@@ -246,8 +253,9 @@
     &.type-negative-tint {
       background-color: var(--color-background-negative);
       color: var(--color-icon-negative);
+
       --ui-icon-button-effect-opacity: 0.06;
-      --ui-icon-button-effect-color: currentColor;
+      --ui-icon-button-effect-color: currentcolor;
     }
   }
 </style>

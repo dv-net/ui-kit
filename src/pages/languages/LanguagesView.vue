@@ -34,11 +34,13 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+
     .grid {
       display: grid;
       align-items: center;
       gap: 12px;
       grid-template-columns: 1fr;
+
       &__header {
         width: max-content;
         border-bottom: 1px solid;
@@ -46,6 +48,7 @@
         font-size: 18px;
         font-weight: bold;
       }
+
       &__languages {
         width: max-content;
       }

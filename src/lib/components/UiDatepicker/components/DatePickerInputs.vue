@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import { UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
-
   import DatePickerInput from "./DatePickerInput.vue";
 
   import { useWindowSize } from "@vueuse/core";
@@ -8,6 +6,7 @@
 
   import { useDatePicker } from "../composables/useDatePicker";
 
+  import { UiDatepickerRangeProps } from "@/lib/components/UiDatepicker/types";
   import { config } from "@/lib/config";
   const emits = defineEmits(["submit", "change"]);
   const { single } = defineProps<Pick<UiDatepickerRangeProps, "single">>();

@@ -1,12 +1,10 @@
-import { PresetModel } from "../types";
-import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
-
 import dayjs, { type Dayjs } from "dayjs";
-
 import { computed, type ComputedRef } from "vue";
 
 import { useDatePicker } from "../composables/useDatePicker";
+import { PresetModel } from "../types";
 
+import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
 import { config } from "@/lib/config";
 
 export function useDatePickerSelected(params: {
@@ -15,6 +13,7 @@ export function useDatePickerSelected(params: {
   endDate: ComputedRef<Dayjs | null>;
   minDate: ComputedRef<string | undefined>;
   maxDate: ComputedRef<string | undefined>;
+  locale?: ComputedRef<string>;
   enableTimePicker?: ComputedRef<boolean>;
 }) {
   const { checkIsValidDate } = useDatePicker();
@@ -36,7 +35,7 @@ export function useDatePickerSelected(params: {
   const isYearSelected = computed(() => selectedPreset.value?.id === "year");
 
   const selectedRange = computed((): DatepickerSwapRange | undefined => {
-    if (!params.startDate.value || !params.endDate.value) return;
+    if (!params.startDate.value || !params.endDate.value) return undefined;
 
     const isSameMonth = params.startDate.value.isSame(params.endDate.value, "month");
     const isSameYear = params.startDate.value.isSame(params.endDate.value, "year");
@@ -73,6 +72,8 @@ export function useDatePickerSelected(params: {
     if (isYear) {
       return "year";
     }
+
+    return undefined;
   });
 
   const formattedSelectedDate = computed(() => {
@@ -108,8 +109,9 @@ export function useDatePickerSelected(params: {
     const isSameMonth = params.startDate.value.isSame(params.endDate.value, "month");
     const isSameYear = params.startDate.value.isSame(params.endDate.value, "year");
 
-    const dateFrom = params.startDate.value.locale(config.locale);
-    const dateTo = params.endDate.value.locale(config.locale);
+    const locale = params.locale?.value || config.locale;
+    const dateFrom = params.startDate.value.locale(locale);
+    const dateTo = params.endDate.value.locale(locale);
 
     if (selectedPreset.value && !isTimePickerEnabled.value) {
       return selectedPreset.value.label;

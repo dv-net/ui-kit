@@ -8,8 +8,8 @@ export interface UItableMeta {
   nextPageExists?: boolean;
 }
 export interface SummarySlotData {
-  key: number;
-  summary: number | "N/A";
+  key?: number;
+  summary: number | string;
 }
 export interface UiTableSortObject {
   name: string | null;

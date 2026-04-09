@@ -1,7 +1,10 @@
 <script setup lang="ts">
-  import { computed } from "vue";
   import UiChatMessageAttachments from "./UiChatMessageAttachments.vue";
+
+  import { computed } from "vue";
+
   import type { UiChatMessage } from "./types";
+
   import { HTTP_URL_REGEX } from "@/utils/constants/general";
 
   const { message, isOwn = false } = defineProps<{
@@ -43,70 +46,81 @@
 <style lang="scss">
   .ui-chat {
     &__message {
+      position: relative;
       display: flex;
       justify-content: flex-start;
-      position: relative;
+
       &:not(:last-child) {
         margin-bottom: 20px;
       }
+
       &--own {
         justify-content: flex-end;
+
         .ui-chat__message-bubble {
-          background: var(--color-advertisement-info);
           border-radius: 12px 0 12px 12px;
+          background: var(--color-advertisement-info);
         }
+
         .ui-chat__message-tail {
-          color: var(--color-advertisement-info);
           right: auto;
           left: 100%;
+          color: var(--color-advertisement-info);
           transform: scaleX(-1);
         }
       }
+
       &-tail {
         position: absolute;
         top: 0;
         right: 100%;
         color: var(--color-background-secondary);
       }
+
       &-bubble {
-        padding: 8px 12px;
-        max-width: 80%;
-        width: fit-content;
-        background: var(--color-background-secondary);
-        border-radius: 0 12px 12px 12px;
-        word-break: break-word;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
         position: relative;
+        display: flex;
+        width: fit-content;
+        max-width: 80%;
+        flex-direction: column;
+        padding: 8px 12px;
+        border-radius: 0 12px 12px;
+        background: var(--color-background-secondary);
+        gap: 8px;
+        overflow-wrap: anywhere;
       }
+
       &-info {
         display: flex;
         width: 100%;
         gap: 12px;
       }
+
       &-text {
-        font-size: 14px;
-        color: var(--color-text-primary);
-        line-height: 125%;
         margin: 0;
+        color: var(--color-text-primary);
+        font-size: 14px;
+        line-height: 125%;
         white-space: pre-line;
+
         a {
           color: var(--color-text-link, #2563eb);
           text-decoration: underline;
           text-underline-offset: 2px;
+
           &:hover {
             text-decoration: none;
           }
         }
       }
+
       &-time {
         align-self: flex-end;
+        margin-left: auto;
+        color: var(--color-text-secondary);
         font-size: 10px;
         line-height: 125%;
         white-space: nowrap;
-        color: var(--color-text-secondary);
-        margin-left: auto;
       }
     }
   }

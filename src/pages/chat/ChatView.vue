@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { ref, onMounted, onUnmounted } from "vue";
+  import { onMounted, onUnmounted,ref } from "vue";
+
   import { UiChat } from "@/lib";
   import type { UiChatMessage, UiChatTicket } from "@/lib/components/UiChat/types";
 

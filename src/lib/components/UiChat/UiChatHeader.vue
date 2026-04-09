@@ -1,11 +1,14 @@
 <script setup lang="ts">
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
+
   import { computed, ref } from "vue";
-  import { config } from "@/lib/config";
-  import type { UiChatTicket, ChatAction, ChatActionOption } from "./types";
+
+  import type { ChatAction, ChatActionOption,UiChatTicket } from "./types";
+
   import { UiSkeleton } from "@/lib";
   import { useBreakpoints } from "@/lib/composables/useBreakpoints";
+  import { config } from "@/lib/config";
 
   const {
     ticket,
@@ -150,118 +153,137 @@
   .ui-chat {
     &__header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
       padding: 24px;
       background: var(--color-background-secondary);
+      gap: 16px;
+
       &.mobile-layout {
         padding: 16px;
       }
+
       &-content {
         display: flex;
+        overflow: hidden;
+        min-width: 0;
+        flex-grow: 1;
         align-items: center;
         gap: 16px;
-        min-width: 0;
-        overflow: hidden;
-        flex-grow: 1;
       }
+
       &-icon {
         display: flex;
-        justify-content: center;
-        align-items: center;
         width: 40px;
         height: 40px;
         flex-shrink: 0;
-        background: var(--color-background-info);
+        align-items: center;
+        justify-content: center;
         border-radius: 50%;
+        background: var(--color-background-info);
         color: var(--color-separator-border-accent);
       }
+
       &-info {
         display: flex;
-        flex-direction: column;
-        min-width: 0;
         overflow: hidden;
+        min-width: 0;
+        flex-direction: column;
         flex-grow: 1;
       }
+
       &-info-skeleton {
         min-width: 300px;
       }
+
       &-ticket {
         display: flex;
         align-items: center;
         gap: 0.45em;
       }
+
       &-title {
-        max-width: 50%;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        max-width: 50%;
+        color: var(--color-text-primary);
         font-size: 16px;
         font-weight: 500;
         line-height: 125%;
-        color: var(--color-text-primary);
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
+
       &-id {
         color: var(--color-separator-border-contrast-secondary);
         font-size: 14px;
         font-weight: 400;
         line-height: 142%;
       }
+
       &-support {
         display: flex;
         align-items: center;
         gap: 0.45em;
         line-height: 125%;
+
         &.mobile-layout {
           flex-direction: column;
           align-items: flex-start;
           gap: 0;
+
           .ui-chat__header-name {
             color: var(--color-text-primary);
             font-size: 14px;
             font-weight: 400;
           }
+
           .ui-chat__header-status {
             font-size: 10px;
           }
         }
       }
+
       &-name {
         color: var(--color-text-secondary);
         font-size: 11px;
         font-weight: 400;
         letter-spacing: -0.11px;
       }
+
       &-status {
-        font-size: 12px;
         color: var(--color-text-accent);
+        font-size: 12px;
       }
     }
+
     &__actions {
-      flex-shrink: 0;
       width: fit-content;
-      max-width: 100%;
       min-width: 120px;
+      max-width: 100%;
+      flex-shrink: 0;
+
       .ui-dropdown__content {
         min-width: 230px;
       }
+
       .ui-select {
         height: 32px;
       }
+
       &-selected {
-        white-space: nowrap;
         min-width: 80px;
         font-size: 14px;
         font-weight: 500;
+        white-space: nowrap;
       }
+
       &-item {
         display: flex;
+        min-width: 200px;
         align-items: center;
         font-size: 14px;
         font-weight: 400;
         gap: 8px;
-        min-width: 200px;
 
         .no-fill {
           path {

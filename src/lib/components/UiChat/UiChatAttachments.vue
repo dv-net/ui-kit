@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiGallery from "@/lib/components/UiGallery/UiGallery.vue";
-  import { ref, computed } from "vue";
-  import { ATTACH_MAX_FILES, ATTACH_ACCEPT } from "@/utils/constants/chat";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
+  import { computed,ref } from "vue";
+
+  import { ATTACH_ACCEPT,ATTACH_MAX_FILES } from "@/utils/constants/chat";
 
   const {
     maxFiles = ATTACH_MAX_FILES,
@@ -114,26 +116,29 @@
 <style lang="scss">
   .ui-chat-attachments {
     display: flex;
+    width: 100%;
     flex-wrap: wrap;
     align-items: stretch;
-    width: 100%;
     gap: 16px;
+
     &__item {
-      width: 125px;
       display: block;
-      background: var(--color-background-secondary);
+      width: 125px;
       padding: 8px;
       border-radius: 12px;
+      background: var(--color-background-secondary);
     }
+
     &__file {
+      position: relative;
       display: flex;
+      overflow: hidden;
+      width: 100%;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      position: relative;
       border-radius: inherit;
-      overflow: hidden;
+      aspect-ratio: 1 / 1;
+
       img {
         width: 100%;
         height: 100%;
@@ -141,70 +146,81 @@
         object-fit: cover;
       }
     }
+
     &__overlay {
-      display: flex;
-      width: 100%;
       position: absolute;
+      z-index: 2;
       bottom: 0;
       left: 0;
-      border-radius: inherit;
+      display: flex;
       overflow: hidden;
-      z-index: 2;
+      width: 100%;
+      border-radius: inherit;
       opacity: 1;
+
       @media (hover: hover) {
         opacity: 0;
       }
     }
+
     &__item:hover &__overlay {
       opacity: 1;
     }
+
     &__btn {
       display: flex;
+      height: 26px;
       flex-direction: column;
+      flex-grow: 1;
       align-items: center;
       justify-content: center;
-      flex-grow: 1;
-      border-radius: 0;
-      border: none;
       padding: 0;
-      height: 26px;
-      cursor: pointer;
+      border: none;
+      border-radius: 0;
       color: #fff;
+      cursor: pointer;
       text-decoration: none;
       transition: filter 0.15s;
+
       &:hover {
         filter: brightness(0.88);
       }
+
       &:active {
         filter: brightness(0.8);
       }
+
       &:disabled {
         cursor: not-allowed;
-        opacity: 0.5;
         filter: none;
+        opacity: 0.5;
       }
+
       &--show {
         background: var(--color-text-positive, #22c55e);
       }
+
       &--remove {
         background: var(--color-text-negative, #ef4444);
       }
+
       .ui-icon {
         width: 16px;
         height: 16px;
       }
     }
+
     &__description {
       display: -webkit-box;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
       overflow: hidden;
       margin-top: 6px;
+      -webkit-box-orient: vertical;
       font-size: 12px;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
       line-height: 1;
-      white-space: normal;
       text-align: center;
+      white-space: normal;
     }
   }
 </style>

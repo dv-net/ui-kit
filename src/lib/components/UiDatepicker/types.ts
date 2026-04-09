@@ -4,6 +4,7 @@ export type DatepickerSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface UiDatepickerRangeProps {
   disabled?: boolean;
+  locale?: string;
   beginDate?: string | null;
   size?: DatepickerSize;
   clearable?: boolean;

@@ -1,22 +1,25 @@
 <script setup lang="ts">
-  import UiChatHeader from "./UiChatHeader.vue";
   import UiChatFooter from "./UiChatFooter.vue";
-  import UiChatMessage from "./UiChatMessage.vue";
+  import UiChatHeader from "./UiChatHeader.vue";
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
-  import { computed, nextTick, onUnmounted, ref, watch } from "vue";
+  import UiChatMessage from "./UiChatMessage.vue";
+
   import dayjs from "dayjs";
   import timezonePlugin from "dayjs/plugin/timezone";
   import utc from "dayjs/plugin/utc";
-  import { config } from "@/lib/config";
+  import { computed, nextTick, onUnmounted, ref, watch } from "vue";
+
   import {
+    ChatAction,
     UiChatMessage as UiChatMessageType,
     UiChatProps,
-    ChatAction,
     UiChatSubmitPayload,
     UiChatTicketStatusValue
   } from "./types";
-  import { defaultChatMessage } from "@/utils/constants/chat";
+
   import { useBreakpoints } from "@/lib/composables/useBreakpoints.ts";
+  import { config } from "@/lib/config";
+  import { defaultChatMessage } from "@/utils/constants/chat";
 
   dayjs.extend(utc);
   dayjs.extend(timezonePlugin);
@@ -116,7 +119,7 @@
     return map;
   });
 
-  const onIntersectionObserverRead: IntersectionObserverCallback = (entries) => {
+  const onIntersectionObserverRead = (entries: IntersectionObserverEntry[]) => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
       const message = observerMessageMap.get(entry.target);
@@ -248,93 +251,107 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
+
     &__top {
       display: flex;
       flex-direction: column;
       gap: 6px;
+
       &-title {
         display: block;
-        max-width: 100%;
         overflow: hidden;
+        max-width: 100%;
+        color: var(--color-text-primary);
         font-size: 20px;
         font-weight: 700;
-        white-space: nowrap;
         text-overflow: ellipsis;
-        color: var(--color-text-primary);
+        white-space: nowrap;
       }
+
       &-id {
+        color: #686c77;
         font-size: 14px;
         font-weight: 400;
-        color: #686c77;
       }
     }
+
     &__wrapper {
       display: flex;
+      overflow: hidden;
       flex-direction: column;
       border: 1px solid var(--color-separator-border-primary);
       border-radius: 16px;
       background: var(--color-background-primary);
-      overflow: hidden;
     }
+
     &__body {
       display: flex;
+      overflow: clip auto;
+      height: 415px;
       flex-direction: column-reverse;
-      overflow-x: clip;
-      overflow-y: auto;
-      overscroll-behavior: contain;
       padding: 24px;
       gap: 0;
-      height: 415px;
+      overscroll-behavior: contain;
+
       &.mobile-layout {
         padding: 16px;
       }
+
       &::-webkit-scrollbar {
         width: 6px;
         height: 6px;
       }
+
       &::-webkit-scrollbar-track {
         border-radius: 0 16px 0 0;
-        background: transparent;
         margin: 15px 0;
+        background: transparent;
       }
+
       &::-webkit-scrollbar-thumb {
-        background: #cbd1db;
         border-radius: 16px;
+        background: #cbd1db;
+
         &:hover {
           background: #aaadb3;
           background-clip: padding-box;
         }
       }
     }
+
     &__group {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
       justify-content: flex-end;
+
       &-date {
         display: flex;
         justify-content: center;
         margin-bottom: 16px;
+
         span {
           padding: 4px 12px;
           border-radius: 4px;
           background: var(--color-background-secondary);
           color: var(--color-text-secondary);
           font-size: 10px;
-          line-height: 125%;
           font-weight: 500;
+          line-height: 125%;
         }
       }
     }
+
     &__message-observer {
       &:not(:last-child) {
         margin-bottom: 20px;
       }
     }
+
     &__alert-slot {
       display: flex;
-      justify-content: center;
       min-height: 0;
+      justify-content: center;
     }
   }
 </style>

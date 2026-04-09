@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-  import { UiGalleryProps } from "./types";
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
+  import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+
+  import { UiGalleryProps } from "./types";
 
   const { initialIndex = 0, images } = defineProps<UiGalleryProps>();
 
@@ -93,13 +95,14 @@
 
 <style lang="scss">
   .ui-gallery {
+    position: fixed;
+    z-index: 10000;
     display: flex;
     align-items: stretch;
-    position: fixed;
+    background: rgb(0 0 0 / 70%);
     inset: 0;
-    z-index: 10000;
-    background: rgba(0, 0, 0, 0.7);
     overscroll-behavior: contain;
+
     --gallery-padding: 22px;
     --gallery-inset: 80px;
 
@@ -115,18 +118,22 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
+
       &--active {
         opacity: 1;
         pointer-events: auto;
       }
+
       @media (hover: hover) {
         &:hover {
-          background: rgba(255, 255, 255, 0.025);
+          background: rgb(255 255 255 / 2.5%);
         }
       }
+
       &:active {
-        background: rgba(255, 255, 255, 0.035);
+        background: rgb(255 255 255 / 3.5%);
       }
+
       .ui-icon {
         width: 20px;
         height: 20px;
@@ -134,62 +141,66 @@
     }
 
     &__slider {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      padding: var(--gallery-inset) 0;
       position: relative;
+      display: flex;
+      width: 100%;
+      align-items: center;
+      padding: var(--gallery-inset) 0;
       pointer-events: none;
     }
 
     &__close {
       position: absolute;
-      right: 50%;
-      top: calc(var(--gallery-inset) / 2);
-      translate: 50% -50%;
       z-index: 5;
-      pointer-events: auto;
+      top: calc(var(--gallery-inset) / 2);
+      right: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 8px;
       border: none;
+      border-radius: 50%;
       background: none;
       color: #fff;
       cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
+      pointer-events: auto;
       transition: opacity 0.15s;
+      translate: 50% -50%;
+
       .ui-icon {
         width: 32px;
         height: 32px;
       }
+
       &:hover {
         opacity: 0.75;
       }
+
       &:active {
         opacity: 0.65;
       }
     }
 
     &__slide {
+      position: relative;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
       width: 100%;
       height: 100%;
-      position: relative;
-      overflow: hidden;
+      align-items: center;
+      justify-content: center;
     }
 
     &__image {
       max-width: 100%;
       max-height: 100%;
-      pointer-events: auto;
       object-fit: contain;
+      pointer-events: auto;
+
       &--initial {
+        animation: ui-gallery-show 0.5s ease forwards;
         opacity: 0;
         transform: perspective(1200px) rotate3d(10, 40, 0, 40deg);
-        animation: ui-gallery-show 0.5s ease forwards;
       }
     }
   }
@@ -205,6 +216,7 @@
   .ui-gallery-fade-leave-active {
     transition: opacity 0.3s ease;
   }
+
   .ui-gallery-fade-enter-from,
   .ui-gallery-fade-leave-to {
     opacity: 0;
@@ -214,6 +226,7 @@
   .ui-gallery-crossfade-leave-active {
     transition: opacity 0.3s ease;
   }
+
   .ui-gallery-crossfade-enter-from,
   .ui-gallery-crossfade-leave-to {
     opacity: 0;

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import UiProfileMenuItem from "@/lib/components/UiProfileMenu/components/UiProfileMenuItem.vue";
+
   import { computed } from "vue";
+
   import { UiAvatar, UiDropdown } from "@/lib";
   import { UiProfileMenuProps } from "@/lib/components/UiProfileMenu/types.ts";
 

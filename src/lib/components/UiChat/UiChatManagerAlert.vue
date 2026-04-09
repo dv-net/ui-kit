@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { computed } from "vue";
+
   import { config } from "@/lib/config";
 
   const { seconds } = defineProps<{
@@ -43,21 +44,21 @@
 
 <style lang="scss">
   .ui-chat-alert {
+    position: sticky;
+    z-index: 5;
     display: grid;
-    grid-template-rows: 1fr;
     width: max-content;
     max-width: 100%;
-    position: sticky;
+    grid-template-rows: 1fr;
     inset-block-end: 0;
-    z-index: 5;
     margin-block-start: auto;
     margin-inline: auto;
 
     @media (hover: hover) {
       &:hover {
         .ui-chat-alert__animation {
-          background: var(--color-state-accent, #3b82f6);
           border-color: var(--color-state-accent, #3b82f6);
+          background: var(--color-state-accent, #3b82f6);
           color: var(--color-white, #fff);
         }
       }
@@ -82,10 +83,10 @@
 
     &.alert-enter-from,
     &.alert-leave-to {
-      translate: 0% 100%;
+      grid-template-rows: 0fr;
       opacity: 0;
       scale: 0 0;
-      grid-template-rows: 0fr;
+      translate: 0% 100%;
 
       .ui-chat-alert__inner {
         padding-block-start: 0;
@@ -94,70 +95,72 @@
 
     &__inner {
       display: flex;
+      overflow: hidden;
+      width: 100%;
       flex-direction: column;
       align-items: center;
-      width: 100%;
-      overflow: hidden;
       padding-block-start: 52px;
     }
 
     &__animation {
+      position: relative;
       display: flex;
-      align-items: center;
       width: 54px;
-      aspect-ratio: 1/1;
-      background: var(--color-background-primary, #fff);
+      align-items: center;
       border: 2px solid var(--color-background-primary, #fff);
       border-radius: 50%;
-      position: relative;
+      aspect-ratio: 1/1;
+      background: var(--color-background-primary, #fff);
       color: var(--color-state-accent, #3b82f6);
       margin-block-end: 24px;
-      transition-property: color, border-color, background;
       transition-duration: 1.2s;
+      transition-property: color, border-color, background;
       transition-timing-function: ease;
 
       &::before,
       &::after {
-        content: '';
         position: absolute;
-        border-radius: inherit;
-        translate: -50% -50%;
-        inset-inline-start: 50%;
-        inset-block-start: 50%;
-        aspect-ratio: 1/1;
         max-width: none;
-        background: var(--bg);
+        border-radius: inherit;
         animation: ui-chat-alert-scale 2.5s ease infinite;
+        aspect-ratio: 1/1;
+        background: var(--bg);
         color: var(--color-state-accent, #3b82f6);
+        content: '';
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
+        translate: -50% -50%;
       }
 
       &::before {
-        width: 145%;
         z-index: -1;
-        --bg: hsl(from currentColor h s l / 8%);
+        width: 145%;
+
+        --bg: hsl(from currentcolor h s l / 8%);
       }
 
       &::after {
-        width: 175%;
         z-index: -2;
-        --bg: hsl(from currentColor h s l / 6%);
+        width: 175%;
+
+        --bg: hsl(from currentcolor h s l / 6%);
       }
     }
 
     &__icons {
-      flex-grow: 1;
       display: flex;
+      overflow: hidden;
+      flex-grow: 1;
       align-items: center;
       align-self: stretch;
-      overflow: hidden;
     }
 
     &__icon-wrap {
+      display: flex;
       width: 100%;
       flex-shrink: 0;
-      align-self: stretch;
-      display: flex;
       align-items: center;
+      align-self: stretch;
       justify-content: center;
 
       &:first-child {
@@ -165,8 +168,8 @@
       }
 
       &:last-child {
-        scale: 0.1 0.1;
         animation: ui-chat-alert-slide2 1.5s ease-in-out infinite;
+        scale: 0.1 0.1;
       }
     }
 
@@ -176,25 +179,25 @@
     }
 
     &__text {
+      width: max-content;
       min-width: 257px;
       max-width: 100%;
-      width: max-content;
-      padding-inline: 24px;
-      padding-block: 8px;
       min-height: 32px;
+      border: 1px solid var(--color-separator-border-primary, #e5e7eb);
+      border-radius: 12px;
       background: linear-gradient(
         180deg,
         var(--color-background-primary, #fff) 0%,
         var(--color-background-secondary, #f8f8f8) 100%
       );
-      border: 1px solid var(--color-separator-border-primary, #e5e7eb);
-      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.16);
-      border-radius: 12px;
+      box-shadow: 0 1px 1px rgb(0 0 0 / 16%);
+      color: var(--color-text-primary);
       font-size: 14px;
       line-height: 125%;
-      text-align: center;
-      color: var(--color-text-primary);
       margin-inline: auto;
+      padding-block: 8px;
+      padding-inline: 24px;
+      text-align: center;
     }
   }
 
@@ -206,17 +209,17 @@
 
   @keyframes ui-chat-alert-slide {
     85%,
-    to {
-      translate: -100% 0%;
+    100% {
       scale: 0.1 0.1;
+      translate: -100% 0%;
     }
   }
 
   @keyframes ui-chat-alert-slide2 {
     85%,
-    to {
-      translate: -100% 0%;
+    100% {
       scale: 1 1;
+      translate: -100% 0%;
     }
   }
 </style>

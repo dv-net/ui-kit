@@ -1,13 +1,12 @@
 <script lang="ts" setup>
-  import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
   import { Dayjs } from "dayjs";
-
   import { computed } from "vue";
 
   import { useDatePicker } from "../composables/useDatePicker";
-import { config } from "@/lib/config";
 
   import { UiIcon } from "@/lib";
+  import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
+import { config } from "@/lib/config";
   interface DatePickerSliderProps {
     isShow?: boolean;
     disabled?: boolean;
@@ -59,10 +58,9 @@ import { config } from "@/lib/config";
   });
 
   function change(isPrev: boolean) {
-    let diff = rangeDates.value.end.diff(rangeDates.value.start, "day") || 1;
-
-    let dateFrom: Dayjs | undefined = undefined;
-    let dateTo: Dayjs | undefined = undefined;
+    const diff = rangeDates.value.end.diff(rangeDates.value.start, "day") || 1;
+    let dateFrom: Dayjs;
+    let dateTo: Dayjs;
 
     if (selectedRange) {
       dateFrom = rangeDates.value.start.add(isPrev ? -1 : 1, selectedRange);

@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-## [7.5.11] - 2026-04-09
+## [7.6.0] - 2026-04-09
 
+- update: package.json
 - fix: lottie bundling warning fix
 
 ## [7.5.10] - 2026-03-16
@@ -18,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.5.9] - 2026-03-03
 
-- fix: uiChat
+- fix: uiChat_
 
 ## [7.5.8] - 2026-03-03
 

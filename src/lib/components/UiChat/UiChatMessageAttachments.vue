@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import UiGallery from "@/lib/components/UiGallery/UiGallery.vue";
+
   import { computed, ref } from "vue";
+
   import type { UiChatMessageAttachment } from "./types";
 
   const props = defineProps<{
@@ -48,97 +50,102 @@
 <style lang="scss">
   .ui-chat-msg-attachments {
     display: flex;
+    width: 100%;
+    max-width: 100%;
     flex-wrap: wrap;
     gap: 6px;
-    max-width: 100%;
-    width: 100%;
+
     &__group {
+      position: relative;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 1;
-      flex-grow: 1;
-      height: 64px;
+      overflow: hidden;
       min-width: 64px;
       max-width: 100%;
+      height: 64px;
+      flex-grow: 1;
+      flex-shrink: 1;
+      align-items: center;
+      justify-content: center;
       padding: 0;
       border: none;
       border-radius: 6px;
       background: #000;
       color: #fff;
+      cursor: pointer;
       font-size: 20px;
       font-weight: 400;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
       isolation: isolate;
     }
+
     &__bg {
-      flex-shrink: 1;
-      width: 100%;
       position: absolute;
-      inset: 0;
       z-index: -2;
+      width: 100%;
       height: 100%;
+      flex-shrink: 1;
+      filter: blur(1px);
+      inset: 0;
       object-fit: cover;
       opacity: 0.75;
-      filter: blur(1px);
     }
+
     &__wrap {
-      display: grid;
-      align-items: center;
-      grid-template-rows: minmax(0, 1fr);
-      grid-template-columns: minmax(0, 1fr);
       position: relative;
-      height: 100%;
-      white-space: nowrap;
       z-index: -1;
+      display: grid;
+      height: 100%;
+      align-items: center;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+      white-space: nowrap;
+
       &[data-count]::before {
-        content: "+" attr(data-count);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        grid-area: 1 / 1;
-        background: rgba(0, 0, 0, 0.7);
         z-index: 3;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        background: rgb(0 0 0 / 70%);
+        content: "+" attr(data-count);
+        grid-area: 1 / 1;
       }
     }
+
     &__img {
-      flex-shrink: 1;
-      grid-area: 1 / 1;
-      aspect-ratio: 1 / 1;
-      margin-left: auto;
-      margin-right: auto;
       position: relative;
       z-index: 2;
       height: 100%;
+      flex-shrink: 1;
+      margin-right: auto;
+      margin-left: auto;
+      aspect-ratio: 1 / 1;
+      grid-area: 1 / 1;
       object-fit: cover;
     }
 
     &__hover-effect {
       position: absolute;
       z-index: 3;
-      border-radius: inherit;
-      pointer-events: none;
       overflow: hidden;
+      border-radius: inherit;
       inset: 0;
       isolation: isolate;
+      pointer-events: none;
 
       &::after,
       &::before {
-        content: '';
         position: absolute;
-        width: 100%;
-        aspect-ratio: 1/1;
-        inset-inline-start: 50%;
-        inset-block-start: 50%;
-        translate: -50% -50%;
         z-index: -1;
-        background: var(--color-white, #fff);
+        width: 100%;
         border-radius: 50%;
-        scale: 0 0;
+        aspect-ratio: 1/1;
+        background: var(--color-white, #fff);
+        content: '';
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
         opacity: 0.15;
+        scale: 0 0;
+        translate: -50% -50%;
       }
 
       &::before {
@@ -150,11 +157,11 @@
       &__group:hover {
         .ui-chat-msg-attachments__hover-effect {
           &::after {
+            opacity: 0;
+            scale: 1 1;
             transition:
               scale 0.5s ease,
               opacity 0.5s ease 0.25s;
-            scale: 1 1;
-            opacity: 0;
           }
         }
       }
@@ -164,11 +171,11 @@
     &__group:focus-visible {
       .ui-chat-msg-attachments__hover-effect {
         &::before {
+          opacity: 0;
+          scale: 1 1;
           transition:
             scale 0.5s ease,
             opacity 0.5s ease 0.25s;
-          scale: 1 1;
-          opacity: 0;
         }
 
         &::after {

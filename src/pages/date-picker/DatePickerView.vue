@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import dayjs from "dayjs";
-
   import UiDatepickerRange from "@/lib/components/UiDatepicker/UiDatepickerRange.vue";
-  import { UiButton } from "@/lib";
 
+  import dayjs from "dayjs";
   import { ref } from "vue";
+
+  import { UiButton } from "@/lib";
 
   const dateTime = ref([]);
   const date = ref([]);

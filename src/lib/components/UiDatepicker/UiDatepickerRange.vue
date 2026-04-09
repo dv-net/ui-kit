@@ -4,8 +4,43 @@
   import DatePickerSlider from "@/lib/components/UiDatepicker/components/DatePickerSlider.vue";
   import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
 
-  import VueDatePicker from "@vuepic/vue-datepicker";
+  import { VueDatePicker } from "@vuepic/vue-datepicker";
   import { useWindowSize } from "@vueuse/core";
+  import {
+    ar,
+    bg,
+    bn,
+    cs,
+    da,
+    de,
+    el,
+    enUS,
+    es,
+    et,
+    fi,
+    fr,
+    hi,
+    hu,
+    id,
+    it,
+    ja,
+    ko,
+    lt,
+    lv,
+    nb,
+    nl,
+    pl,
+    pt,
+    ro,
+    ru,
+    sk,
+    sl,
+    sv,
+    tr,
+    uk,
+    vi,
+    zhCN
+  } from "date-fns/locale";
   import { computed, onMounted, ref } from "vue";
 
   import "@vuepic/vue-datepicker/dist/main.css";
@@ -28,6 +63,47 @@
   const effectiveFormat = computed(() =>
     props.enableTimePicker ? config.uiDatePicker.modelValueFormatTime : modelValueFormat.value
   );
+  const resolvedLocale = computed(() => props.locale || config.locale);
+  const pickerLocale = computed(() => {
+    const localeMap = {
+      en: enUS,
+      ar,
+      bn,
+      bg,
+      zh: zhCN,
+      cs,
+      da,
+      nl,
+      et,
+      fi,
+      el,
+      hi,
+      hu,
+      id,
+      ko,
+      lv,
+      lt,
+      nb,
+      pl,
+      pt,
+      ro,
+      sk,
+      sl,
+      sw: enUS,
+      sv,
+      tr,
+      vi,
+      de,
+      es,
+      fr,
+      it,
+      ja,
+      ru,
+      uk
+    };
+
+    return localeMap[resolvedLocale.value as keyof typeof localeMap] || enUS;
+  });
 
   const pickerRef = ref();
   const processingData = ref<string[]>(["", ""]);
@@ -46,6 +122,7 @@
     endDate,
     minDate: currentMinDate,
     maxDate: currentMaxDate,
+    locale: resolvedLocale,
     enableTimePicker: computed(() => props.enableTimePicker)
   });
 
@@ -54,12 +131,17 @@
     pickerRef.value.closeMenu();
   }
 
-  function updateIternalValue(date: string | string[]) {
+  function updateIternalValue(date: unknown) {
     if (!date) return;
 
-    const currentDate = Array.isArray(date) ? date : [date, date];
+    const normalize = (value: unknown) => {
+      if (typeof value === "string") return value;
+      if (value instanceof Date) return dayjs(value).format(effectiveFormat.value);
+      return "";
+    };
+    const currentDate = Array.isArray(date) ? [normalize(date[0]), normalize(date[1])] : [normalize(date), normalize(date)];
 
-    isDisabledBtn.value = date.length < 2;
+    isDisabledBtn.value = currentDate.some((v) => !v);
     if (currentDate.length === 2) {
       processingData.value = currentDate;
     }
@@ -123,7 +205,7 @@
     >
       <VueDatePicker
         position="center"
-        :locale="config.locale"
+        :locale="pickerLocale"
         ref="pickerRef"
         :model-value="single ? modelValue[0] : modelValue"
         :enable-time-picker="enableTimePicker"
@@ -171,7 +253,7 @@
           </button>
         </template>
 
-        <template #month-year="{ month, months, handleMonthYearChange }">
+        <template #month-year="{ month, months, handleMonthYearChange }: any">
           <div class="ui-datepicker__navigate">
             <UiIconButton
               @click="handleMonthYearChange && handleMonthYearChange(false)"

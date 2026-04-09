@@ -4,12 +4,13 @@
   import UiTextarea from "@/lib/components/UiTextarea/UiTextarea.vue";
   import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
 
-  import { ref, computed } from "vue";
+  import { computed,ref } from "vue";
 
-  import { config } from "@/lib/config";
-  import { ATTACH_MAX_FILES, ATTACH_FORMATS } from "@/utils/constants/chat";
   import type { UiChatSubmitPayload } from "./types";
+
   import { useBreakpoints } from "@/lib/composables/useBreakpoints.ts";
+  import { config } from "@/lib/config";
+  import { ATTACH_FORMATS,ATTACH_MAX_FILES } from "@/utils/constants/chat";
 
   const { sendingLoading = false } = defineProps<{
     sendingLoading?: boolean;
@@ -131,14 +132,16 @@
 <style lang="scss">
   .ui-chat {
     &__footer {
-      background: var(--color-background-secondary);
       display: flex;
       align-items: center;
-      gap: 16px;
       padding: 12px 24px;
+      background: var(--color-background-secondary);
+      gap: 16px;
+
       &.mobile-layout {
         padding: 8px 16px;
       }
+
       &-input {
         flex-grow: 1;
 
@@ -148,6 +151,7 @@
           }
         }
       }
+
       &-control {
         display: flex;
         width: 36px;
@@ -156,25 +160,30 @@
         justify-content: center;
         margin: -4px -9px;
       }
+
       &-icon-button {
+        width: 36px;
         min-width: 36px;
         max-width: 36px;
-        width: 36px;
+        height: 36px;
         min-height: 36px;
         max-height: 36px;
-        height: 36px;
       }
+
       &-tooltip {
-        font-size: 12px;
         display: flex;
         flex-direction: column;
+        font-size: 12px;
         gap: 4px;
       }
+
       .ui-textarea {
         padding: 6px 12px;
       }
+
       &-attachments {
         padding: 24px;
+
         &--empty {
           padding: 0;
         }

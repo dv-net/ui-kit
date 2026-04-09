@@ -67,6 +67,7 @@
   width: 100%;
   max-width: unset;
   margin-top: 12px;
+
   .dp__flex {
     gap: 32px;
   }
@@ -290,11 +291,12 @@
   }
 
   &__actions {
-    width: 100%;
-    padding-top: 12px;
     display: flex;
+    width: 100%;
     flex-direction: column;
+    padding-top: 12px;
     gap: 12px;
+
     &-btns {
       display: flex;
       align-items: center;

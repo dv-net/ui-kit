@@ -1,6 +1,11 @@
 @mixin font-sizes($suffix: "") {
   $font-weights: 400, 500, 600, 700;
-  $suffix: if($suffix == "", "", "-" + $suffix);
+
+  @if $suffix == "" {
+    $suffix: "";
+  } @else {
+    $suffix: "-" + $suffix;
+  }
 
   @for $i from 5 through 40 {
     .fs-#{$i * 2}#{$suffix} {

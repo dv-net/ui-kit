@@ -1,30 +1,30 @@
 .ui-button {
   --ui-button-effect-opacity: 0.06;
-  --ui-button-effect-color: currentColor;
+  --ui-button-effect-color: currentcolor;
 
   &__hover-effect {
     position: absolute;
     z-index: 2;
-    border-radius: inherit;
-    pointer-events: none;
     overflow: hidden;
+    border-radius: inherit;
     inset: 0;
     isolation: isolate;
+    pointer-events: none;
 
     &::after,
     &::before {
-      content: '';
       position: absolute;
-      width: 100%;
-      aspect-ratio: 1/1;
-      inset-inline-start: 50%;
-      inset-block-start: 50%;
-      translate: -50% -50%;
       z-index: -1;
-      background: var(--ui-button-effect-color);
+      width: 100%;
       border-radius: 50%;
-      scale: 0 0;
+      aspect-ratio: 1/1;
+      background: var(--ui-button-effect-color);
+      content: "";
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
       opacity: var(--ui-button-effect-opacity);
+      scale: 0 0;
+      translate: -50% -50%;
     }
 
     &::before {
@@ -33,28 +33,28 @@
   }
 
   @media (hover: hover) and (pointer: fine) {
-    &:hover:not(:disabled):not(.is-loading) {
+    &:hover:not(:disabled, .is-loading) {
       .ui-button__hover-effect {
         &::after {
+          opacity: 0;
+          scale: 1 1;
           transition:
             scale 0.5s ease,
             opacity 0.5s ease 0.25s;
-          scale: 1 1;
-          opacity: 0;
         }
       }
     }
   }
 
-  &:active:not(:disabled):not(.is-loading),
-  &:focus-visible:not(:disabled):not(.is-loading) {
+  &:active:not(:disabled, .is-loading),
+  &:focus-visible:not(:disabled, .is-loading) {
     .ui-button__hover-effect {
       &::before {
+        opacity: 0;
+        scale: 1 1;
         transition:
           scale 0.5s ease,
           opacity 0.5s ease 0.25s;
-        scale: 1 1;
-        opacity: 0;
       }
 
       &::after {

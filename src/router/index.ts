@@ -3,6 +3,7 @@ import Test1 from "@/pages/block-title/pages/Test1View.vue";
 import Test2 from "@/pages/block-title/pages/Test2View.vue";
 import Test3 from "@/pages/block-title/pages/Test3View.vue";
 import Buttons from "@/pages/buttons/ButtonsView.vue";
+import Chat from "@/pages/chat/ChatView.vue";
 import Checkbox from "@/pages/checkbox/CheckboxView.vue";
 import Collapse from "@/pages/collapse/CollapseView.vue";
 import Confirm from "@/pages/confirm/ConfirmView.vue";
@@ -11,6 +12,7 @@ import DragAndDrop from "@/pages/dragAndDrop/DragAndDropView.vue";
 import Drawer from "@/pages/drawer/DrawerView.vue";
 import Dropdown from "@/pages/dropdown/DropdownView.vue";
 import Form from "@/pages/form/FormView.vue";
+import Gallery from "@/pages/gallery/GalleryView.vue";
 import Home from "@/pages/HomeView.vue";
 import IconButtons from "@/pages/icon-buttons/IconButtonsView.vue";
 import Icons from "@/pages/icons/IconsView.vue";
@@ -30,8 +32,6 @@ import Tooltip from "@/pages/tooltip/TooltipView.vue";
 import UiAvatar from "@/pages/ui-avatar/UiAvatarView.vue";
 import UiLink from "@/pages/ui-link/UiLinkView.vue";
 import UiModal from "@/pages/ui-modal/UiModalView.vue";
-import Chat from "@/pages/chat/ChatView.vue";
-import Gallery from "@/pages/gallery/GalleryView.vue";
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: RouteRecordRaw[] = [

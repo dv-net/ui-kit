@@ -49,8 +49,8 @@
   .ui-switch {
     display: flex;
     align-items: center;
-    cursor: pointer;
     justify-content: flex-start;
+    cursor: pointer;
     gap: 8px;
 
     &__inner {
@@ -59,8 +59,9 @@
     }
 
     &__label {
-      user-select: none;
       order: 3;
+      user-select: none;
+
       &.text-position-left {
         order: 1;
       }

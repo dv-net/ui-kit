@@ -455,7 +455,7 @@
       align-items: center;
       color: var(--color-text-primary);
       font-weight: 400;
-      word-break: break-word;
+      overflow-wrap: anywhere;
 
       &.center {
         justify-content: center;

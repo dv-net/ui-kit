@@ -18,7 +18,6 @@ import "dayjs/locale/fr";
 import "dayjs/locale/es";
 import "dayjs/locale/de";
 import "dayjs/locale/ar";
-
 import { config } from "@/lib/config";
 
 dayjs.extend(utc);
