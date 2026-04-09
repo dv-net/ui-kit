@@ -1,7 +1,7 @@
 {
   "name": "@dv.net/ui-kit",
   "private": false,
-  "version": "7.6.1",
+  "version": "7.6.2",
   "type": "module",
   "sideEffects": false,
   "main": "dist/index.js",
@@ -12,7 +12,14 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./dist/*": "./dist/*"
+    "./dist": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./dist/*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    }
   },
   "style": "dist/style.css",
   "files": [
