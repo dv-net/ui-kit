@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, onUnmounted,ref } from "vue";
+  import { onMounted, onUnmounted, ref } from "vue";
 
   import { UiChat } from "@/lib";
   import type { UiChatMessage, UiChatTicket } from "@/lib/components/UiChat/types";
@@ -92,7 +92,15 @@
     {
       id: 9,
       ticket_id: 1,
-      message: "Hello! Your order has been handed to the courier, expect delivery today by 6:00 PM.",
+      // message: "Hello! Your order has been handed to the courier, expect delivery today by 6:00 PM.",
+      message:
+        "<p>\n" +
+        "  Это текст абзаца,\n" +
+        '  <span class="highlight">внутри span</span> и\n' +
+        '  <img src="x" onerror="alert(\'XSS via onerror\')" alt="xss-test" />\n' +
+        '  <a href="https://example.com" class="link">это ссылка</a>.\n' +
+        "</p>\n" +
+        '<script>console.log("Страница загружена")<\\/script>',
       created_at: "2026-02-16 14:35:00",
       updated_at: "2026-02-16 14:35:00",
       files: [],

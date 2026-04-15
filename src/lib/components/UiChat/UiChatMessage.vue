@@ -14,10 +14,20 @@
 
   const getTime = (datetime: string) => datetime.split(" ")[1]?.slice(0, 5);
 
+  const escapeHtml = (value: string): string => {
+    return value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  };
+
   const formattedMessage = computed(() => {
     const text = message.message?.trim();
     if (!text) return "";
-    return text.replace(HTTP_URL_REGEX, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    const safeText = escapeHtml(text);
+    return safeText.replace(HTTP_URL_REGEX, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
   });
 </script>
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.6.4] - 2026-04-15
+
+- fix: uiChat message safety and read behavior
+
 ## [7.6.3] - 2026-04-09
 
 - update: update dependencies package.json
