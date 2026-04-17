@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.0] - 2026-04-17
+
+- feat: uiTabs added animated active indicator and equal-width mode with locale-aware recalculation
+
 ## [7.6.4] - 2026-04-15
 
 - fix: uiChat message safety and read behavior

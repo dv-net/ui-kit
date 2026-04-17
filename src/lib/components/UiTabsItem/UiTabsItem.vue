@@ -67,6 +67,10 @@
       transition: var(--transition);
       white-space: nowrap;
 
+      .ui-tabs.width-equal & {
+        width: var(--ui-tabs-max-tab-width);
+      }
+
       &.mode-outline {
         border: 1px solid var(--color-separator-border-primary);
 
@@ -81,6 +85,9 @@
       }
 
       &.mode-light {
+        position: relative;
+        z-index: 1;
+
         &:not(.is-active) {
           color: var(--color-text-secondary);
         }
@@ -91,12 +98,14 @@
         }
 
         &.is-active {
-          background: var(--color-background-primary);
-          box-shadow: 0 0 6.4px 0 rgb(0 0 0 / 9%);
+          background: transparent;
+          box-shadow: none;
         }
       }
 
       &.mode-dark {
+        position: relative;
+        z-index: 1;
         color: var(--color-text-contrast);
 
         &:not(.is-active) {
@@ -109,8 +118,8 @@
         }
 
         &.is-active {
-          background: var(--color-background-contrast);
-          box-shadow: 0 0 6.4px 0 rgb(0 0 0 / 9%);
+          background: transparent;
+          box-shadow: none;
         }
       }
 

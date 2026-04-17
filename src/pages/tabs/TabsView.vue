@@ -13,14 +13,14 @@
     <div class="grid">
       <div class="grid__header">Size md</div>
       <div class="page-tabs__item">
-        <UiTabs @change="(tab) => console.log(tab)" v-model="tab">
+        <UiTabs @change="(tab) => console.log(tab)" v-model="tab" width-mode="content">
           <UiTabsItem value="1"> Button 1</UiTabsItem>
           <UiTabsItem value="2"> Button 2</UiTabsItem>
           <UiTabsItem value="3"> Button 3</UiTabsItem>
         </UiTabs>
-        <UiTabs mode="light" v-model="tab">
+        <UiTabs mode="light" v-model="tab" width-mode="equal">
           <UiTabsItem value="1"> Button 1</UiTabsItem>
-          <UiTabsItem value="2"> Button 2</UiTabsItem>
+          <UiTabsItem value="2"> A much longer tab label </UiTabsItem>
           <UiTabsItem value="3"> Button 3</UiTabsItem>
         </UiTabs>
         <UiTabs mode="dark" v-model="tab">
