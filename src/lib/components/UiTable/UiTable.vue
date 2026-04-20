@@ -106,7 +106,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="ui-table-root">
     <div class="ui-table__wrapper">
       <table :cellpadding="0" :cellspacing="0" :style="{ tableLayout: tableLayout }" class="ui-table">
         <thead>
@@ -329,6 +329,12 @@
 </template>
 
 <style lang="scss">
+  .ui-table-root {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
   .ui-table {
     position: relative;
     width: 100%;
@@ -347,6 +353,8 @@
       position: relative;
       overflow: auto;
       width: 100%;
+      min-width: 0;
+      max-width: 100%;
       border: 1px solid var(--color-separator-border-primary);
       border-radius: 8px;
     }

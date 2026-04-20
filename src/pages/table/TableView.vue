@@ -150,6 +150,17 @@
       name: "request"
     }
   ]);
+  const columns3 = ref<UiTableHeader[]>([
+    { label: "ID", name: "id", width: "180" },
+    { label: "Store ID", name: "store_id", width: "180" },
+    { label: "Transaction ID", name: "transaction_id", width: "180" },
+    { label: "Created", name: "created_at", width: "180" },
+    { label: "Success", name: "is_success", width: "120" },
+    { label: "Status", name: "status_code", width: "120" },
+    { label: "Request", name: "request", width: "320" },
+    { label: "Response", name: "response", width: "180" },
+    { label: "URL", name: "url", width: "320" }
+  ]);
 
   const isLoading = ref(false);
   const ttt = ref<string[]>([]);
@@ -244,6 +255,11 @@
         :headers="columns2"
         :meta="meta2"
       />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">Example 3 (fixed + many columns)</div>
+      <UiTable :loading="isLoading" :data="data3" :headers="columns3" table-layout="fixed" />
     </div>
   </div>
 </template>
