@@ -97,18 +97,28 @@
   });
 
   const groupedMessages = computed(() => {
-    const groups: Record<string, UiChatMessageType[]> = {};
+    const getTs = (datetime: string) => parseByTimezone(datetime)?.valueOf() ?? 0;
+    const groupsByDay = new Map<number, { date: string; messages: UiChatMessageType[] }>();
     for (const msg of actualMessages.value) {
-      const date = getDate(msg.created_at);
-      if (!groups[date]) groups[date] = [];
-      groups[date].push(msg);
-    }
-    for (const date in groups) {
-      groups[date].sort((a, b) => {
-        return (parseByTimezone(a.created_at)?.valueOf() ?? 0) - (parseByTimezone(b.created_at)?.valueOf() ?? 0);
+      const parsed = parseByTimezone(msg.created_at);
+      const dayTs = parsed?.startOf("day").valueOf() ?? 0;
+      const existing = groupsByDay.get(dayTs);
+      if (existing) {
+        existing.messages.push(msg);
+        continue;
+      }
+      groupsByDay.set(dayTs, {
+        date: getDate(msg.created_at),
+        messages: [msg]
       });
     }
-    return groups;
+    return Array.from(groupsByDay.entries())
+      .sort((a, b) => b[0] - a[0])
+      .map(([dayTs, group]) => ({
+        dayKey: dayTs,
+        date: group.date,
+        messages: group.messages.sort((a, b) => getTs(a.created_at) - getTs(b.created_at))
+      }));
   });
 
   const messageById = computed(() => {
@@ -126,7 +136,7 @@
       if (!message) continue;
       const isSupportMessage = !!currentUserUuid && !isOwnMessage(message);
       if (!message.ticket_id || message.id <= 0 || !isSupportMessage || message.updated_at !== message.created_at) {
-        continue
+        continue;
       }
       if (readDelay) {
         clearTimeout(readDelay);
@@ -181,7 +191,9 @@
     { immediate: true }
   );
 
-  watch(groupedMessages, () => {
+  watch(
+    groupedMessages,
+    () => {
       void reconnectReadObserver();
     },
     { immediate: true }
@@ -225,11 +237,16 @@
           <UiChatManagerAlert v-if="showManagerAlert" :seconds="managerAlertSeconds" />
         </Transition>
         <template v-if="!ticketLoading">
-          <div v-for="(groupMessages, date) in groupedMessages" :key="date" class="ui-chat__group">
+          <div v-for="group in groupedMessages" :key="group.dayKey" class="ui-chat__group">
             <div class="ui-chat__group-date">
-              <span>{{ date }}</span>
+              <span>{{ group.date }}</span>
             </div>
-            <div v-for="msg in groupMessages" :key="msg.id" class="ui-chat__message-observer" :data-chat-message-id="msg.id">
+            <div
+              v-for="msg in group.messages"
+              :key="msg.id"
+              class="ui-chat__message-observer"
+              :data-chat-message-id="msg.id"
+            >
               <UiChatMessage :message="msg" :is-own="isOwnMessage(msg)" />
             </div>
           </div>
@@ -290,7 +307,7 @@
       height: 415px;
       flex-direction: column-reverse;
       padding: 24px;
-      gap: 0;
+      gap: 24px;
       overscroll-behavior: contain;
 
       &.mobile-layout {
