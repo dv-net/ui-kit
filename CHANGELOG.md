@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.3] - 2026-04-23
+
+- fix: datepicker
+
 ## [7.7.2] - 2026-04-22
 
 - fix: uiChat

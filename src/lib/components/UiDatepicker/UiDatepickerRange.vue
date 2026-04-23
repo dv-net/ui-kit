@@ -59,9 +59,10 @@
   const modelValue = defineModel<string[]>({ default: [] });
   const { width } = useWindowSize();
   const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } = useDatePicker(modelValue);
+  const isTimePickerEnabled = computed(() => props.enableTimePicker === true);
 
   const effectiveFormat = computed(() =>
-    props.enableTimePicker ? config.uiDatePicker.modelValueFormatTime : modelValueFormat.value
+    isTimePickerEnabled.value ? config.uiDatePicker.modelValueFormatTime : modelValueFormat.value
   );
   const resolvedLocale = computed(() => props.locale || config.locale);
   const pickerLocale = computed(() => {
@@ -108,6 +109,7 @@
   const pickerRef = ref();
   const processingData = ref<string[]>(["", ""]);
   const isDisabledBtn = ref(false);
+  const timeConfig = computed(() => ({ enableTimePicker: isTimePickerEnabled.value }));
   const formatingBeginDate = computed(() =>
     props.beginDate ? dayjs(props.beginDate).format(modelValueFormat.value) : null
   );
@@ -123,7 +125,7 @@
     minDate: currentMinDate,
     maxDate: currentMaxDate,
     locale: resolvedLocale,
-    enableTimePicker: computed(() => props.enableTimePicker)
+    enableTimePicker: isTimePickerEnabled
   });
 
   function updatePresetHandler(preset: PresetModel) {
@@ -155,7 +157,7 @@
     const currentDate = Array.isArray(date) ? date : [date, date];
 
     if (startDate.value && endDate.value) {
-      const unit = props.enableTimePicker ? "minute" : "day";
+      const unit = isTimePickerEnabled.value ? "minute" : "day";
       const isSame = startDate.value.isSame(currentDate[0], unit) && endDate.value.isSame(currentDate[1], unit);
       if (!isSame) {
         setModelValue(currentDate);
@@ -199,7 +201,7 @@
       v-model="modelValue"
       :selected-range="selectedRange"
       :is-show="!hideSliderArrows"
-      :enable-time-picker="enableTimePicker"
+      :enable-time-picker="isTimePickerEnabled"
       :min-date="currentMinDate"
       :max-date="currentMaxDate"
     >
@@ -208,8 +210,9 @@
         :locale="pickerLocale"
         ref="pickerRef"
         :model-value="single ? modelValue[0] : modelValue"
-        :enable-time-picker="enableTimePicker"
-        :time-picker-inline="enableTimePicker"
+        :enable-time-picker="isTimePickerEnabled"
+        :time-config="timeConfig"
+        :time-picker-inline="isTimePickerEnabled"
         :range="!single"
         :multi-calendars="!single && width > 1000"
         month-name-format="long"
@@ -218,7 +221,7 @@
         :start-date="currentMaxDate"
         :auto-apply="autoApply"
         :offset="0"
-        :timezone="timezone"
+        :timezone="isTimePickerEnabled ? timezone : undefined"
         @update:model-value="updateModelValue"
         @internal-model-change="updateIternalValue"
       >
