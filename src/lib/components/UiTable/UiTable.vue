@@ -192,7 +192,7 @@
           </tr>
           <tr v-else-if="!sortedData.length">
             <td :colspan="headers.length">
-              <TableEmptyState v-if="emptyState" />
+              <TableEmptyState v-if="!showSimpleEmptyState" />
               <div v-else class="ui-table__empty">{{ config.uiTable.translations.noData }}</div>
             </td>
           </tr>
@@ -344,6 +344,7 @@
     font-size: 14px;
 
     &__skeleton-container {
+      background-color: var(--color-white);
       padding: 8px;
     }
 
@@ -373,6 +374,7 @@
     }
 
     &__expande-row {
+      background: var(--color-white);
       & > td {
         padding: 0;
       }

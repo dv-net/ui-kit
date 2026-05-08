@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.5] - 2026-05-08
+
+- fix: UiTable background
+
 ## [7.7.4] - 2026-05-08
 
-- feat: `UiTable` added right-aligned expand control, optional per-row expand button hiding via `rowClass`, and customizable empty-state view via `empty-state`
+- feat: `UiTable` added right-aligned expand control, optional per-row expand button hiding via `rowClass`, and customizable empty-state view via `show-simple-empty-state`
 
 ## [7.7.3] - 2026-04-23
 

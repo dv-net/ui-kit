@@ -29,6 +29,7 @@
     gap: 16px;
     padding: 24px;
     color: var(--color-text-secondary);
+    background-color: var(--color-white);
 
     &__icon {
       width: 48px;

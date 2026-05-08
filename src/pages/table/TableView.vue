@@ -248,7 +248,11 @@
         :data="data"
         :headers="columns"
         :meta="meta"
-      />
+      >
+        <template #expande>
+          <div class="expande">Example of a nested block</div>
+        </template>
+      </UiTable>
     </div>
 
     <div class="grid">
@@ -266,11 +270,6 @@
       <div class="grid__header">Example 3 (fixed + many columns)</div>
       <UiTable :loading="isLoading" :data="data3" :headers="columns3" table-layout="fixed" />
     </div>
-
-    <div class="grid">
-      <div class="grid__header">Example 4 (empty state)</div>
-      <UiTable :loading="isLoading" :data="emptyData" :headers="columns" empty-state />
-    </div>
   </div>
 </template>
 
@@ -279,21 +278,26 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-
     .grid {
       display: grid;
       align-items: center;
       gap: 12px;
       grid-template-columns: 1fr;
-
       &__header {
         font-size: 18px;
         font-weight: bold;
       }
+      .expande {
+        margin: 24px;
+        background-color: #f7f9fb;
+        border-radius: 12px;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: black;
+        font-size: 16px;
+      }
     }
-  }
-
-  .row-red {
-    background: #fcd5ce;
   }
 </style>

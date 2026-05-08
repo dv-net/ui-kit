@@ -54,7 +54,7 @@ export interface UiTableProps<T> {
   showSummary?: boolean;
   meta?: UItableMeta | null;
   emptyValue?: boolean | string;
-  emptyState?: boolean;
+  showSimpleEmptyState?: boolean;
   highlightRow?: "odd" | "even";
   isShowPerPageSelect?: boolean;
   summaryPosition?: SummaryPosition;
