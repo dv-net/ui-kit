@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="Selected, Expanded, Data">
   import UiIconButton from "../UiIconButton/UiIconButton.vue";
   import Sort from "./components/TableSort.vue";
+  import TableEmptyState from "./components/TableEmptyState.vue";
   import TableSummary from "./components/TableSummary.vue";
 
   import { uuidv4 } from "uuidv7";
@@ -191,7 +192,8 @@
           </tr>
           <tr v-else-if="!sortedData.length">
             <td :colspan="headers.length">
-              <div class="ui-table__empty">{{ config.uiTable.translations.noData }}</div>
+              <TableEmptyState v-if="emptyState" />
+              <div v-else class="ui-table__empty">{{ config.uiTable.translations.noData }}</div>
             </td>
           </tr>
           <template v-else>
@@ -494,6 +496,18 @@
 
       .ui-checkbox {
         margin: 0 auto;
+      }
+    }
+
+    .is-expande-col {
+      .ui-table__body-cell-inner {
+        justify-content: flex-end;
+      }
+    }
+
+    &__body-row.hide-expande-button {
+      .ui-table__expande {
+        display: none;
       }
     }
   }

@@ -107,6 +107,7 @@
       url: "https://ce921fb6-a71e-4f46-92e7-200e4731ea7f.requestcatcher.com/"
     }
   ]);
+  const emptyData = ref<test[]>([]);
 
   const columns = ref<UiTableHeader<test>[]>([
     {
@@ -209,6 +210,10 @@
     };
   }
 
+  function getRowClass(row: test) {
+    return row.firstName === "Paul" ? "hide-expande-button" : "";
+  }
+
   onMounted(() => {
     sortObj.value = { order: "asc", name: "lastName" };
   });
@@ -230,7 +235,7 @@
       <UiTable
         @changePagination="changePagination"
         @sort-change="sortChange"
-        :row-class="() => '123'"
+        :row-class="getRowClass"
         highlight-row="even"
         selectedKey="age"
         disabledKey="firstName"
@@ -260,6 +265,11 @@
     <div class="grid">
       <div class="grid__header">Example 3 (fixed + many columns)</div>
       <UiTable :loading="isLoading" :data="data3" :headers="columns3" table-layout="fixed" />
+    </div>
+
+    <div class="grid">
+      <div class="grid__header">Example 4 (empty state)</div>
+      <UiTable :loading="isLoading" :data="emptyData" :headers="columns" empty-state />
     </div>
   </div>
 </template>

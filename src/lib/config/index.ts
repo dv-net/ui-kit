@@ -42,6 +42,8 @@ export interface UiKitConfig {
   uiTable: {
     translations: {
       noData: string;
+      noDataTitle: string;
+      noDataDescription: string;
     };
   };
   uiPagination: {
@@ -133,7 +135,9 @@ export const config = reactive<UiKitConfig>({
   },
   uiTable: {
     translations: {
-      noData: "No data"
+      noData: "No data",
+      noDataTitle: "No data",
+      noDataDescription: "Data is unavailable or has not been loaded yet"
     }
   },
   uiPagination: {
