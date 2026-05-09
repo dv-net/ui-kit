@@ -26,10 +26,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
     padding: 24px;
-    color: var(--color-text-secondary);
     background-color: var(--color-white);
+    color: var(--color-text-secondary);
+    gap: 16px;
 
     &__icon {
       width: 48px;
@@ -38,16 +38,16 @@
     }
 
     &__title {
+      color: var(--color-text-primary);
       font-size: 16px;
       font-weight: 600;
-      color: var(--color-text-primary);
     }
 
     &__description {
       margin: 0;
+      color: var(--color-text-secondary);
       font-size: 14px;
       font-weight: 400;
-      color: var(--color-text-secondary);
     }
   }
 </style>

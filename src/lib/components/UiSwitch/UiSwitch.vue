@@ -55,6 +55,8 @@
 
     &__inner {
       position: relative;
+      display: inline-flex;
+      align-items: center;
       order: 2;
     }
 

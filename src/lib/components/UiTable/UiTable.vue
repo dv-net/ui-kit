@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="Selected, Expanded, Data">
   import UiIconButton from "../UiIconButton/UiIconButton.vue";
-  import Sort from "./components/TableSort.vue";
   import TableEmptyState from "./components/TableEmptyState.vue";
+  import Sort from "./components/TableSort.vue";
   import TableSummary from "./components/TableSummary.vue";
 
   import { uuidv4 } from "uuidv7";
@@ -326,6 +326,7 @@
       :isShowPerPageSelect="isShowPerPageSelect"
       :isShowAlwaysPagination="isShowAlwaysPagination"
       :keyPerPagPagination="keyPerPagPagination"
+      :per-page-presets="perPagePresets"
     />
   </div>
 </template>
@@ -344,8 +345,8 @@
     font-size: 14px;
 
     &__skeleton-container {
-      background-color: var(--color-white);
       padding: 8px;
+      background-color: var(--color-white);
     }
 
     &__pagination {
@@ -375,6 +376,7 @@
 
     &__expande-row {
       background: var(--color-white);
+
       & > td {
         padding: 0;
       }
@@ -498,12 +500,6 @@
 
       .ui-checkbox {
         margin: 0 auto;
-      }
-    }
-
-    .is-expande-col {
-      .ui-table__body-cell-inner {
-        justify-content: flex-end;
       }
     }
 

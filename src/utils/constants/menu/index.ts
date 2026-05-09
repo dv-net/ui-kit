@@ -133,6 +133,13 @@ export const menu = ref<RouteItem[]>([
     }
   },
   {
+    path: "/switch",
+    meta: {
+      title: "Switch",
+      animationIcon: securityAnimation
+    }
+  },
+  {
     path: "/radio",
     meta: {
       title: "Radio",

@@ -24,6 +24,7 @@ import Radio from "@/pages/radio/RadioView.vue";
 import Selects from "@/pages/selects/SelectsView.vue";
 import Skeleton from "@/pages/skeleton/SkeletonView.vue";
 import Summary from "@/pages/summary/SummaryView.vue";
+import Switch from "@/pages/switch/SwitchView.vue";
 import Table from "@/pages/table/TableView.vue";
 import Tabs from "@/pages/tabs/TabsView.vue";
 import Tags from "@/pages/tags/TagsView.vue";
@@ -54,6 +55,7 @@ const routes: RouteRecordRaw[] = [
   { path: "/textarea", component: Textarea },
   { path: "/links", component: UiLink },
   { path: "/checkbox", component: Checkbox },
+  { path: "/switch", component: Switch },
   { path: "/radio", component: Radio },
   { path: "/icon-buttons", component: IconButtons },
   { path: "/tags", component: Tags },

@@ -57,6 +57,7 @@ export interface UiTableProps<T> {
   showSimpleEmptyState?: boolean;
   highlightRow?: "odd" | "even";
   isShowPerPageSelect?: boolean;
+  perPagePresets?: number[];
   summaryPosition?: SummaryPosition;
   isShowAlwaysPagination?: boolean;
 }
