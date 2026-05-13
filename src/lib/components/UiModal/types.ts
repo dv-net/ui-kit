@@ -1,6 +1,6 @@
 export interface UiModalProps {
+  teleport?: boolean | string;
   isShowBtnClose?: boolean;
-  disabled?: boolean;
   padding?: string;
   borderRadius?: string;
   width?: string;

@@ -4,7 +4,7 @@
 
   import { capitalize, computed, nextTick, onMounted, ref } from "vue";
 
-  import { config, UiDrawer, UiIcon, UiInput, UiModal } from "@/lib";
+  import { config, UiDrawer, UiIcon, UiInput, UiLoading, UiModal } from "@/lib";
   import SearchIcon from "@/lib/assets/others/icons/search.svg";
   import { Locale, UiLanguagesProps } from "@/lib/components/UiLanguages/types";
   import { useBreakpoints } from "@/lib/composables/useBreakpoints";
@@ -12,7 +12,8 @@
   const emits = defineEmits(["change"]);
   const props = withDefaults(defineProps<UiLanguagesProps>(), {
     forHeader: false,
-    minNumbersLocalesDisplayFavorites: 10
+    minNumbersLocalesDisplayFavorites: 10,
+    localesLoading: false
   });
 
   const modelValue = defineModel<Locale>({ default: null });
@@ -70,8 +71,10 @@
   <div class="ui-languages">
     <button
       v-if="!isHidden"
-      :disabled="disabled"
-      :class="{ 'for-header': forHeader }"
+      type="button"
+      :disabled="disabled || localesLoading"
+      :class="{ 'for-header': forHeader, 'is-loading': localesLoading }"
+      :aria-busy="localesLoading || undefined"
       @click="openModal"
       class="ui-languages--trigger"
     >
@@ -86,6 +89,9 @@
           <template v-if="modelValue?.nativeName">({{ modelValue?.nativeName }})</template>
         </template>
       </slot>
+      <span v-if="localesLoading" class="ui-languages--trigger__loading">
+        <UiLoading :is-show="true" icon-size="sm" filled />
+      </span>
     </button>
 
     <UiModal
@@ -195,6 +201,7 @@
 
   .ui-languages {
     &--trigger {
+      position: relative;
       display: flex;
       width: 100%;
       height: 44px;
@@ -210,12 +217,27 @@
       gap: 12px;
       transition: var(--transition);
 
-      &:hover {
+      &:hover:not(:disabled) {
         box-shadow: 0 0 0 1px var(--color-state-secondary-hover) inset;
       }
 
       &:disabled {
         cursor: not-allowed;
+      }
+
+      &.is-loading:disabled {
+        cursor: wait;
+      }
+
+      &__loading {
+        position: absolute;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: inherit;
+        inset: 0;
+        pointer-events: none;
       }
     }
 

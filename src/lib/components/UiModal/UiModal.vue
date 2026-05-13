@@ -1,18 +1,39 @@
 <script setup lang="ts">
   import { onClickOutside } from "@vueuse/core";
-  import { onMounted, onUnmounted, ref, watch } from "vue";
+  import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
   import { UiModalProps } from "./types";
 
   import { UiIconButton } from "@/lib";
   import { toogleHiddenClass } from "@/lib/helpers/toogleHiddenClass";
 
-  withDefaults(defineProps<UiModalProps>(), {
+  const props = withDefaults(defineProps<UiModalProps>(), {
     padding: "30",
     borderRadius: "12",
     background: "#fff",
     popperClass: "",
-    isShowBtnClose: true
+    isShowBtnClose: true,
+    teleport: true
+  });
+
+  const modalCssVars = computed(() => {
+    const v: Record<string, string> = {
+      "--ui-modal-content-bg": props.background,
+      "--ui-modal-content-padding": `${props.padding}px`,
+      "--ui-modal-content-radius": `${props.borderRadius}px`
+    };
+    if (props.width) {
+      v["--ui-modal-content-width"] = `${props.width}px`;
+    }
+    if (props.positionTop) {
+      v["--ui-modal-content-top"] = `${props.positionTop}px`;
+      v["--ui-modal-content-translate-y"] = "0";
+    }
+    if (props.positionLeft) {
+      v["--ui-modal-content-left"] = `${props.positionLeft}px`;
+      v["--ui-modal-content-translate-x"] = "0";
+    }
+    return v;
   });
   const emits = defineEmits(["close"]);
   const modelValue = defineModel<boolean>({ default: true });
@@ -25,37 +46,25 @@
     document.removeEventListener("keydown", pressEscCallback);
   }
 
-  watch(modelValue, (value) => toogleHiddenClass(value));
-
   const pressEscCallback = (e: KeyboardEvent) => {
     if (e.key === "Escape") close();
   };
+
+  watch(modelValue, (value) => toogleHiddenClass(value));
 
   onMounted(() => {
     document.addEventListener("keydown", pressEscCallback);
   });
   onUnmounted(() => {
-    toogleHiddenClass(false)
-  })
+    toogleHiddenClass(false);
+  });
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport :disabled="!teleport" :to="typeof teleport === 'string' ? teleport : 'body'">
     <Transition name="fade">
-      <div v-if="modelValue" class="ui-modal" :class="[popperClass]">
-        <div
-          ref="contentRef"
-          class="ui-modal__content"
-          :style="{
-            background,
-            padding: `${padding}px`,
-            borderRadius: `${borderRadius}px`,
-            width: `${width}px`,
-            top: `${positionTop}px`,
-            left: `${positionLeft}px`,
-            transform: `translate(${positionLeft !== undefined ? '0' : '-50%'}, ${positionTop !== undefined ? '0' : '-50%'})`
-          }"
-        >
+      <div v-if="modelValue" class="ui-modal" :class="[popperClass]" :style="modalCssVars">
+        <div ref="contentRef" class="ui-modal__content">
           <slot />
           <UiIconButton
             v-if="isShowBtnClose"
@@ -80,17 +89,23 @@
     z-index: 9999;
     width: 100vw;
     height: 100dvh;
-    background: rgb(0 0 0 / 10%);
+    padding: 16px;
+    background: rgb(0 0 0 / 80%);
     inset: 0;
 
     &__content {
       position: relative;
-      top: 50%;
-      left: 50%;
-      width: max-content;
+      top: var(--ui-modal-content-top, 50%);
+      left: var(--ui-modal-content-left, 50%);
+      width: var(--ui-modal-content-width, max-content);
       max-width: 100%;
-      background: var(--color-background-primary);
-      transform: translate(-50%, -50%);
+      padding: var(--ui-modal-content-padding, 30px);
+      border-radius: var(--ui-modal-content-radius, 12px);
+      background: var(--ui-modal-content-bg, var(--color-background-primary));
+      transform: translate(
+        var(--ui-modal-content-translate-x, -50%),
+        var(--ui-modal-content-translate-y, -50%)
+      );
     }
 
     &__close-icon {

@@ -6,6 +6,7 @@
   import { locales } from "@/utils/constants/locale";
 
   const isShow = ref(false);
+  const isLoading = ref(false);
   const lang = ref(locales[0]);
 </script>
 <template>
@@ -14,7 +15,7 @@
 
     <div class="grid">
       <div class="grid__header">Basic</div>
-      <ui-languages class="grid__languages" v-model="lang" :locales="locales" />
+      <ui-languages class="grid__languages" v-model="lang" :locales="locales" :locales-loading="isLoading" />
     </div>
 
     <div class="grid">

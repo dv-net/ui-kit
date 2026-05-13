@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.7] - 2026-05-13
+
+- fix: UiModal
+
 ## [7.7.6] - 2026-05-12
 
 - fix: UiTable

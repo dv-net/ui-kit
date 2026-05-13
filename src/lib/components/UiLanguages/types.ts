@@ -7,6 +7,7 @@ export interface Locale {
 
 export interface UiLanguagesProps {
   locales: Locale[];
+  localesLoading?: boolean;
   disabled?: boolean;
   minNumbersLocalesDisplayFavorites?: number;
   forHeader?: boolean;
