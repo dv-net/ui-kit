@@ -47,7 +47,7 @@
     &__input {
       flex-grow: 1;
       flex-shrink: 1;
-      background: transparent;
+      background: transparent !important;
       box-shadow: none !important;
       font-family: inherit;
       font-size: 14px;

@@ -7,6 +7,7 @@
 
   import { UiRadioGroup } from "@/lib";
   import { SelectType } from "@/lib/components/UiSelect/types";
+import UiButton from "@/lib/components/UiButton/UiButton.vue";
   const data = ref([]);
   async function onLoadMore() {
     console.log(333);
@@ -221,7 +222,7 @@
           :options="data"
         >
           <template #header>
-            <button @click="data = [1, 3, 4, 5, 6, 7, 8, 9, 10, 11]">132</button>
+            <UiButton type="secondary" size="sm" @click="data = [1, 3, 4, 5, 6, 7, 8, 9, 10, 11]">132</UiButton>
           </template>
         </UiSelect>
       </div>
