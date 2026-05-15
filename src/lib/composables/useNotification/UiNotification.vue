@@ -111,7 +111,7 @@
 <style scoped lang="scss">
   .ui-notification {
     position: fixed;
-    z-index: 1000;
+    z-index: 10000;
     right: 16px;
     display: flex;
     max-width: 330px;

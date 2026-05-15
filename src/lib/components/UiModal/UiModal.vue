@@ -25,13 +25,8 @@
     if (props.width) {
       v["--ui-modal-content-width"] = `${props.width}px`;
     }
-    if (props.positionTop) {
-      v["--ui-modal-content-top"] = `${props.positionTop}px`;
-      v["--ui-modal-content-translate-y"] = "0";
-    }
-    if (props.positionLeft) {
-      v["--ui-modal-content-left"] = `${props.positionLeft}px`;
-      v["--ui-modal-content-translate-x"] = "0";
+    if (props.height) {
+      v["--ui-modal-content-height"] = `${props.height}px`;
     }
     return v;
   });
@@ -63,7 +58,7 @@
 <template>
   <Teleport :disabled="!teleport" :to="typeof teleport === 'string' ? teleport : 'body'">
     <Transition name="fade">
-      <div v-if="modelValue" class="ui-modal" :class="[popperClass]" :style="modalCssVars">
+      <div v-if="modelValue" class="ui-modal" :class="popperClass" :style="modalCssVars">
         <div ref="contentRef" class="ui-modal__content">
           <slot />
           <UiIconButton
@@ -87,25 +82,26 @@
   .ui-modal {
     position: fixed;
     z-index: 9999;
-    width: 100vw;
-    height: 100dvh;
+    box-sizing: border-box;
     padding: 16px;
     background: rgb(0 0 0 / 80%);
     inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
     &__content {
       position: relative;
-      top: var(--ui-modal-content-top, 50%);
-      left: var(--ui-modal-content-left, 50%);
       width: var(--ui-modal-content-width, max-content);
       max-width: 100%;
+      height: var(--ui-modal-content-height, auto);
+      margin-block: auto;
+      flex-shrink: 0;
       padding: var(--ui-modal-content-padding, 30px);
       border-radius: var(--ui-modal-content-radius, 12px);
       background: var(--ui-modal-content-bg, var(--color-background-primary));
-      transform: translate(
-        var(--ui-modal-content-translate-x, -50%),
-        var(--ui-modal-content-translate-y, -50%)
-      );
     }
 
     &__close-icon {

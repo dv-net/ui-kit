@@ -4,8 +4,7 @@ export interface UiModalProps {
   padding?: string;
   borderRadius?: string;
   width?: string;
+  height?: string;
   background?: string;
   popperClass?: string;
-  positionTop?: string;
-  positionLeft?: string;
 }
