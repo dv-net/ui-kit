@@ -4,6 +4,7 @@
   import { computed } from "vue";
 
   import type { UiChatMessage } from "./types";
+  import { formatUiChatTime } from "./uiChatDate";
 
   import { HTTP_URL_REGEX } from "@/utils/constants/general";
 
@@ -11,8 +12,6 @@
     message: UiChatMessage;
     isOwn?: boolean;
   }>();
-
-  const getTime = (datetime: string) => datetime.split(" ")[1]?.slice(0, 5);
 
   const escapeHtml = (value: string): string => {
     return value
@@ -37,7 +36,7 @@
       <UiChatMessageAttachments v-if="message.attachments?.length" :attachments="message.attachments" />
       <div class="ui-chat__message-info">
         <p v-if="formattedMessage" class="ui-chat__message-text" v-html="formattedMessage"></p>
-        <span class="ui-chat__message-time">{{ getTime(message.created_at) }}</span>
+        <span class="ui-chat__message-time">{{ formatUiChatTime(message.created_at) }}</span>
       </div>
     </div>
     <svg

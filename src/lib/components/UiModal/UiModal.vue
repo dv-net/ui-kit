@@ -82,26 +82,26 @@
   .ui-modal {
     position: fixed;
     z-index: 9999;
+    display: flex;
     box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
     padding: 16px;
     background: rgb(0 0 0 / 80%);
     inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
 
     &__content {
       position: relative;
       width: var(--ui-modal-content-width, max-content);
       max-width: 100%;
       height: var(--ui-modal-content-height, auto);
-      margin-block: auto;
       flex-shrink: 0;
       padding: var(--ui-modal-content-padding, 30px);
       border-radius: var(--ui-modal-content-radius, 12px);
       background: var(--ui-modal-content-bg, var(--color-background-primary));
+      margin-block: auto;
     }
 
     &__close-icon {

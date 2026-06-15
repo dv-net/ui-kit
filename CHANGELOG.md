@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.10] - 2026-06-15
+
+- change: UiChat
+
 ## [7.7.9] - 2026-05-15
 
 - fix: UiModal

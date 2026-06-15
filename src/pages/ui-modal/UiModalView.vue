@@ -79,9 +79,9 @@
         padding: 32px;
 
         .ui-modal__content {
+          height: 1000px;
           padding: 40px;
           border-radius: 24px;
-          height: 1000px;
 
           .block {
             display: flex;

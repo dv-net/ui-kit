@@ -1,0 +1,9 @@
+[build]
+  command = "yarn build-demo"
+  publish = "dist"
+
+# SPA fallback for vue-router history mode
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

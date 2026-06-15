@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import UiButton from "@/lib/components/UiButton/UiButton.vue";
   import UiRadio from "@/lib/components/UiRadio/UiRadio.vue";
   import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
   import UiSwitch from "@/lib/components/UiSwitch/UiSwitch.vue";
@@ -7,7 +8,6 @@
 
   import { UiRadioGroup } from "@/lib";
   import { SelectType } from "@/lib/components/UiSelect/types";
-import UiButton from "@/lib/components/UiButton/UiButton.vue";
   const data = ref([]);
   async function onLoadMore() {
     console.log(333);

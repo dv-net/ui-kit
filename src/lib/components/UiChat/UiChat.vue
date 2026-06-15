@@ -4,9 +4,6 @@
   import UiChatManagerAlert from "./UiChatManagerAlert.vue";
   import UiChatMessage from "./UiChatMessage.vue";
 
-  import dayjs from "dayjs";
-  import timezonePlugin from "dayjs/plugin/timezone";
-  import utc from "dayjs/plugin/utc";
   import { computed, nextTick, onUnmounted, ref, watch } from "vue";
 
   import {
@@ -16,13 +13,16 @@
     UiChatSubmitPayload,
     UiChatTicketStatusValue
   } from "./types";
+  import {
+    formatUiChatDate,
+    getUiChatDatetimeTimestamp,
+    getUiChatNowIso,
+    parseUiChatDatetime
+  } from "./uiChatDate";
 
   import { useBreakpoints } from "@/lib/composables/useBreakpoints.ts";
   import { config } from "@/lib/config";
   import { defaultChatMessage } from "@/utils/constants/chat";
-
-  dayjs.extend(utc);
-  dayjs.extend(timezonePlugin);
 
   const {
     ticket,
@@ -53,19 +53,6 @@
   let observerMessageMap = new WeakMap<Element, UiChatMessageType>();
   let readObserver: IntersectionObserver | null = null;
 
-  const resolvedTimezone = computed<string>(() => {
-    return config.uiChat.timezone || dayjs.tz.guess();
-  });
-
-  const parseByTimezone = (datetime: string) => {
-    const parsed = dayjs(datetime);
-    return parsed.isValid() ? parsed.tz(resolvedTimezone.value) : null;
-  };
-
-  const getDate = (datetime: string): string => {
-    const parsed = parseByTimezone(datetime);
-    return parsed?.isValid() ? parsed.format(config.uiChat.dateFormat) : datetime.split(/[T\s]/)[0] || datetime;
-  };
   const isOwnMessage = (msg: UiChatMessageType): boolean => msg.user.uuid === currentUserUuid;
 
   const isEmpty = computed<boolean>(() => !messages.length || !ticket || !currentUserUuid);
@@ -92,15 +79,13 @@
   const actualMessages = computed<UiChatMessageType[]>(() => {
     if (!isEmpty.value) return messages;
     if (!canShowDefaultMessage.value) return [];
-    const now = dayjs().tz(resolvedTimezone.value).format(config.uiChat.dateTimeFormat);
-    return [defaultChatMessage(config.uiChat.translations.defaultMessage, now)];
+    return [defaultChatMessage(config.uiChat.translations.defaultMessage, getUiChatNowIso())];
   });
 
   const groupedMessages = computed(() => {
-    const getTs = (datetime: string) => parseByTimezone(datetime)?.valueOf() ?? 0;
     const groupsByDay = new Map<number, { date: string; messages: UiChatMessageType[] }>();
     for (const msg of actualMessages.value) {
-      const parsed = parseByTimezone(msg.created_at);
+      const parsed = parseUiChatDatetime(msg.created_at);
       const dayTs = parsed?.startOf("day").valueOf() ?? 0;
       const existing = groupsByDay.get(dayTs);
       if (existing) {
@@ -108,7 +93,7 @@
         continue;
       }
       groupsByDay.set(dayTs, {
-        date: getDate(msg.created_at),
+        date: formatUiChatDate(msg.created_at),
         messages: [msg]
       });
     }
@@ -117,7 +102,9 @@
       .map(([dayTs, group]) => ({
         dayKey: dayTs,
         date: group.date,
-        messages: group.messages.sort((a, b) => getTs(a.created_at) - getTs(b.created_at))
+        messages: group.messages.sort(
+          (a, b) => getUiChatDatetimeTimestamp(a.created_at) - getUiChatDatetimeTimestamp(b.created_at)
+        )
       }));
   });
 
