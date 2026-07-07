@@ -39,7 +39,20 @@ export default defineConfig(({ mode }) => {
       : {
           copyPublicDir: false,
           rollupOptions: {
-            external: ["vue", "vue-router", "vue3-lottie", "lottie-web"],
+            external: (id) =>
+              [
+                "vue",
+                "vue-router",
+                "vue3-lottie",
+                "lottie-web",
+                "@vuepic/vue-datepicker",
+                "date-fns",
+                "@vueuse/core",
+                "@floating-ui/vue",
+                "dayjs",
+                "maska",
+                "vue-virtual-scroller"
+              ].some((pkg) => id === pkg || id.startsWith(`${pkg}/`)),
             input: Object.fromEntries([
               ...glob
                 .sync("./src/lib/**/*.{ts,vue}", { ignore: ["./src/lib/**/*.d.ts"] })

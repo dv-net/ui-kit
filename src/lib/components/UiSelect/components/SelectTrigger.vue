@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { UiIconSize } from "../../UiIcon/types";
   import { SelectType } from "../types";
-
-  import { UiIcon } from "@/lib";
   interface UiSelectTriggerProps {
     isActive: boolean;
     type: SelectType;

@@ -1,8 +1,10 @@
 <script setup lang="ts">
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { computed, onMounted, onUnmounted, ref } from "vue";
 
-  import { config, UiIcon } from "@/lib";
   import { UiNotificationType } from "@/lib/composables/useNotification/types.ts";
+  import { config } from "@/lib/config";
   import { isMobileDevice } from "@/lib/helpers/is-mobile-device";
 
   const props = withDefaults(

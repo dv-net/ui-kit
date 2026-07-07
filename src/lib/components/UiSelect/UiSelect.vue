@@ -1,18 +1,20 @@
 <script setup lang="ts" generic="ModelValue, Options">
-  import UiLoading from "../UiLoading/UiLoading.vue";
   import SelectList from "./components/SelectList.vue";
   import SelectListItem from "./components/SelectListItem.vue";
   import SelectSearch from "./components/SelectSearch.vue";
   import SelectTrigger from "./components/SelectTrigger.vue";
   import SelectVirtualList from "./components/SelectVirtualList.vue";
+  import UiDropdown from "@/lib/components/UiDropdown/UiDropdown.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+  import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
 
   import { computed, Ref, ref } from "vue";
 
   import { useKeyboard } from "./composables/useKeyboard";
   import { useMultiple } from "./composables/useMultiple";
 
-  import { config, UiDropdown, UiIcon } from "@/lib";
   import { UiSelectProps } from "@/lib/components/UiSelect/types.ts";
+  import { config } from "@/lib/config";
   const emits = defineEmits(["change", "clear", "changeInfinityScroll", "search", "onClose"]);
   const props = withDefaults(defineProps<UiSelectProps<Options>>(), {
     valueKey: "value",

@@ -1,50 +1,17 @@
 <script lang="ts" setup>
+  import UiButton from "@/lib/components/UiButton/UiButton.vue";
   import DatePickerInputs from "@/lib/components/UiDatepicker/components/DatePickerInputs.vue";
   import DatePickerPresets from "@/lib/components/UiDatepicker/components/DatePickerPresets.vue";
   import DatePickerSlider from "@/lib/components/UiDatepicker/components/DatePickerSlider.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
 
   import { VueDatePicker } from "@vuepic/vue-datepicker";
   import { useWindowSize } from "@vueuse/core";
-  import {
-    ar,
-    bg,
-    bn,
-    cs,
-    da,
-    de,
-    el,
-    enUS,
-    es,
-    et,
-    fi,
-    fr,
-    hi,
-    hu,
-    id,
-    it,
-    ja,
-    ko,
-    lt,
-    lv,
-    nb,
-    nl,
-    pl,
-    pt,
-    ro,
-    ru,
-    sk,
-    sl,
-    sv,
-    tr,
-    uk,
-    vi,
-    zhCN
-  } from "date-fns/locale";
   import { computed, onMounted, ref } from "vue";
 
   import "@vuepic/vue-datepicker/dist/main.css";
-  import { UiButton, UiIcon } from "@/lib";
+  import { useDatePickerLocale } from "@/lib/components/UiDatepicker/composables/datePickerLocale";
   import { useDatePicker } from "@/lib/components/UiDatepicker/composables/useDatePicker";
   import { useDatePickerPresets } from "@/lib/components/UiDatepicker/composables/useDatePickerPresets";
   import { useDatePickerSelected } from "@/lib/components/UiDatepicker/composables/useDatePickerSelected";
@@ -65,46 +32,7 @@
     isTimePickerEnabled.value ? config.uiDatePicker.modelValueFormatTime : modelValueFormat.value
   );
   const resolvedLocale = computed(() => props.locale || config.locale);
-  const pickerLocale = computed(() => {
-    const localeMap = {
-      en: enUS,
-      ar,
-      bn,
-      bg,
-      zh: zhCN,
-      cs,
-      da,
-      nl,
-      et,
-      fi,
-      el,
-      hi,
-      hu,
-      id,
-      ko,
-      lv,
-      lt,
-      nb,
-      pl,
-      pt,
-      ro,
-      sk,
-      sl,
-      sw: enUS,
-      sv,
-      tr,
-      vi,
-      de,
-      es,
-      fr,
-      it,
-      ja,
-      ru,
-      uk
-    };
-
-    return localeMap[resolvedLocale.value as keyof typeof localeMap] || enUS;
-  });
+  const { pickerLocale, localeReady } = useDatePickerLocale(resolvedLocale);
 
   const pickerRef = ref();
   const processingData = ref<string[]>(["", ""]);
@@ -125,6 +53,7 @@
     minDate: currentMinDate,
     maxDate: currentMaxDate,
     locale: resolvedLocale,
+    localeReady,
     enableTimePicker: isTimePickerEnabled
   });
 
@@ -206,6 +135,7 @@
       :max-date="currentMaxDate"
     >
       <VueDatePicker
+        v-if="localeReady && pickerLocale"
         position="center"
         :locale="pickerLocale"
         ref="pickerRef"

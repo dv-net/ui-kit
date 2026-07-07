@@ -1,9 +1,10 @@
 <script lang="ts" setup>
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { computed, inject } from "vue";
 
   import { UiCollapseItemProps } from "./types";
 
-  import { UiIcon } from "@/lib";
   import { COLLAPSE_PROVIDE_VALUE } from "@/lib/components/UiCollapse/constants";
   import { UiCollapseProvideData } from "@/lib/components/UiCollapse/types";
   const props = defineProps<UiCollapseItemProps>();

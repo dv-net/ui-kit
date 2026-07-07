@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { UiIcon } from "@/lib";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { UiTableSortOrder } from "@/lib/components/UiTable/types.ts";
 
   const modelValue = defineModel<UiTableSortOrder>({ default: null });

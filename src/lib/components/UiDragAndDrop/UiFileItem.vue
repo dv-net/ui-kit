@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import FileIcon from "@/lib/components/UiDragAndDrop/icons/FileIcon.vue";
+  import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
 
-  import { UiIconButton } from "@/lib";
   import type { FileToUpload } from "@/lib/components/UiDragAndDrop/types.ts";
 
   defineProps<{

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { UiSwitchProps } from "./types";
+  import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
 
-  import { UiLoading } from "@/lib";
+  import { UiSwitchProps } from "./types";
 
   const modelValue = defineModel<boolean>({
     default: false

@@ -1,9 +1,10 @@
 <script setup lang="ts">
+  import UiAvatar from "@/lib/components/UiAvatar/UiAvatar.vue";
+  import UiDropdown from "@/lib/components/UiDropdown/UiDropdown.vue";
   import UiProfileMenuItem from "@/lib/components/UiProfileMenu/components/UiProfileMenuItem.vue";
 
   import { computed } from "vue";
 
-  import { UiAvatar, UiDropdown } from "@/lib";
   import { UiProfileMenuProps } from "@/lib/components/UiProfileMenu/types.ts";
 
   const { userEmail, status, menuItems, avatar } = defineProps<UiProfileMenuProps>();

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import UiFileItem from "@/lib/components/UiDragAndDrop/UiFileItem.vue";
   import UiFileItemLoading from "@/lib/components/UiDragAndDrop/UiFileItemLoading.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+  import UiLink from "@/lib/components/UiLink/UiLink.vue";
 
   import { useDropZone, useFileDialog } from "@vueuse/core";
   import { uuidv4 } from "uuidv7";
@@ -8,7 +10,7 @@
 
   import type { FileToUpload, UiDragAndDropProps } from "./types";
 
-  import { config, UiIcon, UiLink } from "@/lib";
+  import { config } from "@/lib/config";
 
   const modelValue = defineModel<FileToUpload[]>({ default: [] });
 

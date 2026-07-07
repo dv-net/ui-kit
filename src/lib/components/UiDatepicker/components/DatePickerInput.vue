@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+  import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
+
   import { vMaska } from "maska/vue";
   import { nextTick,onMounted, ref } from "vue";
-
-  import { UiIconButton } from "@/lib";
 
   interface DatePickerInputProps {
     placeholder: string;

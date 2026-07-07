@@ -1,10 +1,11 @@
 <script setup lang="ts">
+  import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
+
   import { onClickOutside } from "@vueuse/core";
   import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
   import { UiModalProps } from "./types";
 
-  import { UiIconButton } from "@/lib";
   import { toogleHiddenClass } from "@/lib/helpers/toogleHiddenClass";
 
   const props = withDefaults(defineProps<UiModalProps>(), {

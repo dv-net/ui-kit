@@ -1,11 +1,12 @@
 <script lang="ts" setup>
+  import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
+
   import { arrow, autoUpdate, flip, offset, shift, size, useFloating } from "@floating-ui/vue";
   import { onClickOutside } from "@vueuse/core";
   import { computed, onUnmounted, ref } from "vue";
 
   import { UiTooltipProps } from "./types";
 
-  import { UiIconButton } from "@/lib";
   import { isMobileDevice } from "@/lib/helpers/is-mobile-device";
 
   const emits = defineEmits<{ close: [void]; click: [void] }>();

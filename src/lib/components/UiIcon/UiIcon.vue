@@ -1,7 +1,12 @@
 <script setup lang="ts">
-  import { defineAsyncComponent, markRaw,ref, watch } from "vue";
+  import { type Component, defineAsyncComponent, markRaw, ref, watch } from "vue";
 
   import { UiIconProps } from "./types";
+
+  const iconModules = import.meta.glob<Component>("../../assets/icons/{100,400,filled,social}/*.svg", {
+    query: "?component",
+    import: "default"
+  });
 
   const props = withDefaults(defineProps<UiIconProps>(), {
     size: "md",
@@ -12,9 +17,15 @@
   watch(
     [() => props.type, () => props.name],
     () => {
-      currentIcon.value = markRaw(
-        defineAsyncComponent(() => import(`../../assets/icons/${props.type}/${props.name}.svg?component`))
-      );
+      const iconPath = `../../assets/icons/${props.type}/${props.name}.svg`;
+      const loadIcon = iconModules[iconPath];
+
+      if (!loadIcon) {
+        currentIcon.value = undefined;
+        return;
+      }
+
+      currentIcon.value = markRaw(defineAsyncComponent(loadIcon));
     },
     {
       immediate: true
@@ -23,7 +34,7 @@
 </script>
 
 <template>
-  <component :is="currentIcon" class="ui-icon" :class="[`size-${size}`, {'not-social': type != 'social'}]" :style="{ color: color }" />
+  <component :is="currentIcon" class="ui-icon" :class="[`size-${size}`, { 'not-social': type != 'social' }]" :style="{ color: color }" />
 </template>
 
 <style lang="scss">

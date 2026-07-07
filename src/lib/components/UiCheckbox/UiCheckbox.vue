@@ -1,11 +1,11 @@
 <script setup lang="ts">
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { computed, inject, watch } from "vue";
 
   import { CHECKBOX_GROUP_PROVIDE_VALUE } from "../UiCheckboxGroup/constants";
   import { UiCheckboxGroupProvideData } from "../UiCheckboxGroup/types";
   import { UiCheckboxProps } from "./types";
-
-  import { UiIcon } from "@/lib";
   const props = withDefaults(defineProps<UiCheckboxProps>(), {
     size: "md",
     indeterminate: false,

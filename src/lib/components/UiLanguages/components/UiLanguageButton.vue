@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import UiFlagIcon from "@/lib/components/UiFlagIcon/UiFlagIcon.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
 
-  import { UiIcon } from "@/lib";
   import { UiLanguagesButtonProps } from "@/lib/components/UiLanguages/types";
 
   const emits = defineEmits(["change"]);

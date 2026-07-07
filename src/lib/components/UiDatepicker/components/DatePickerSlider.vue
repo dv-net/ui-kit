@@ -1,10 +1,11 @@
 <script lang="ts" setup>
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { Dayjs } from "dayjs";
   import { computed } from "vue";
 
   import { useDatePicker } from "../composables/useDatePicker";
 
-  import { UiIcon } from "@/lib";
   import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
 import { config } from "@/lib/config";
   interface DatePickerSliderProps {

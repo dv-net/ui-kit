@@ -1,9 +1,10 @@
 <script lang="ts" setup>
+  import UiAnimation from "@/lib/components/UiAnimation/UiAnimation.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { ref } from "vue";
 
   import { ProfileMenuItem } from "../types";
-
-  import { UiAnimation, UiIcon } from "@/lib";
 
   defineProps<{ item: ProfileMenuItem }>();
   const emits = defineEmits(["closeMenu"]);

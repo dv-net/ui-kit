@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-  import { UiBlockTitleProps } from "./types";
+  import UiTabs from "@/lib/components/UiTabs/UiTabs.vue";
+  import UiTabsItem from "@/lib/components/UiTabsItem/UiTabsItem.vue";
 
-  import { UiTabs, UiTabsItem } from "@/lib";
+  import { UiBlockTitleProps } from "./types";
   defineProps<UiBlockTitleProps>();
 </script>
 

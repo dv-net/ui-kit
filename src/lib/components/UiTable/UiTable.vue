@@ -1,8 +1,11 @@
 <script setup lang="ts" generic="Selected, Expanded, Data">
-  import UiIconButton from "../UiIconButton/UiIconButton.vue";
   import TableEmptyState from "./components/TableEmptyState.vue";
   import Sort from "./components/TableSort.vue";
   import TableSummary from "./components/TableSummary.vue";
+  import UiCheckbox from "@/lib/components/UiCheckbox/UiCheckbox.vue";
+  import UiIconButton from "@/lib/components/UiIconButton/UiIconButton.vue";
+  import UiPagination from "@/lib/components/UiPagination/UiPagination.vue";
+  import UiSkeleton from "@/lib/components/UiSkeleton/UiSkeleton.vue";
 
   import { uuidv4 } from "uuidv7";
   import { computed, nextTick, watch } from "vue";
@@ -13,13 +16,13 @@
   import { useSort } from "./composables/useSort.ts";
   import { getValueByHeaderName } from "./helpers/getValueByHeaderName.ts";
 
-  import { config, UiCheckbox, UiPagination, UiSkeleton } from "@/lib";
   import {
     SummarySlotData,
     type UiTableProps,
     UiTableSortObject,
     UiTableSortOrder
   } from "@/lib/components/UiTable/types.ts";
+  import { config } from "@/lib/config";
 
   const props = withDefaults(defineProps<UiTableProps<Data>>(), {
     data: () => [],

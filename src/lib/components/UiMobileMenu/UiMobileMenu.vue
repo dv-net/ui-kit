@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { UiDrawer, UiIcon } from "@/lib";
+  import UiDrawer from "@/lib/components/UiDrawer/UiDrawer.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   const modelValue = defineModel<boolean>();
 
   withDefaults(

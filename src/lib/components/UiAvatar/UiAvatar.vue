@@ -1,11 +1,10 @@
 <script lang="ts" setup>
   import AvatarMask from "./components/AvatarMask.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
 
   import { computed, useId } from "vue";
 
   import { AvatarStatusType, UiAvatarProps } from "./types";
-
-  import { UiIcon } from "@/lib";
 
   const { email = null, size = "sm", status = "reject", avatar, clickable } = defineProps<UiAvatarProps>();
   const avatarFromEmail = computed(() => (email ? (email[0] ?? "") + (email[1] ?? "") : null));

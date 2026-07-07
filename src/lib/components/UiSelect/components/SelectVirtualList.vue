@@ -1,9 +1,10 @@
 <script lang="ts" setup generic="Options">
+  import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
+
   import { computed } from "vue";
   import { RecycleScroller } from "vue-virtual-scroller";
 
   import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
-  import { UiLoading } from "@/lib";
   import { SelectListItemSize, SelectListItemSizeKeys } from "@/lib/components/UiSelect/types";
 
   const props = defineProps<{

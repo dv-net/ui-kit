@@ -1,11 +1,10 @@
 <script setup lang="ts">
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+  import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
 
   import { computed, useAttrs } from "vue";
 
   import { UiButtonProps } from "./types";
-
-  import { UiLoading } from "@/lib";
 
   const attrs = useAttrs();
 

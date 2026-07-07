@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
+  import UiSkeleton from "@/lib/components/UiSkeleton/UiSkeleton.vue";
 
   import { computed, ref } from "vue";
 
   import type { ChatAction, ChatActionOption,UiChatTicket } from "./types";
 
-  import { UiSkeleton } from "@/lib";
   import { useBreakpoints } from "@/lib/composables/useBreakpoints";
   import { config } from "@/lib/config";
 

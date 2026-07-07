@@ -1,9 +1,10 @@
 <script setup lang="ts">
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+  import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
+
   import { computed } from "vue";
 
   import { UiIconButtonProps } from "./types";
-
-  import { UiIcon, UiLoading } from "@/lib";
 
   const props = withDefaults(defineProps<UiIconButtonProps>(), {
     size: "md",

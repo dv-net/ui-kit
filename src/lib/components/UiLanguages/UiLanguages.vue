@@ -1,13 +1,18 @@
 <script setup lang="ts">
+  import UiDrawer from "@/lib/components/UiDrawer/UiDrawer.vue";
   import UiFlagIcon from "@/lib/components/UiFlagIcon/UiFlagIcon.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+  import UiInput from "@/lib/components/UiInput/UiInput.vue";
   import UiLanguageButton from "@/lib/components/UiLanguages/components/UiLanguageButton.vue";
+  import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
+  import UiModal from "@/lib/components/UiModal/UiModal.vue";
 
   import { capitalize, computed, nextTick, onMounted, ref } from "vue";
 
-  import { config, UiDrawer, UiIcon, UiInput, UiLoading, UiModal } from "@/lib";
   import SearchIcon from "@/lib/assets/others/icons/search.svg";
   import { Locale, UiLanguagesProps } from "@/lib/components/UiLanguages/types";
   import { useBreakpoints } from "@/lib/composables/useBreakpoints";
+  import { config } from "@/lib/config";
 
   const emits = defineEmits(["change"]);
   const props = withDefaults(defineProps<UiLanguagesProps>(), {

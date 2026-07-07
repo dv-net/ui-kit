@@ -9,15 +9,6 @@ import utc from "dayjs/plugin/utc";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import { computed, type Ref } from "vue";
 
-import "dayjs/locale/zh";
-import "dayjs/locale/uk";
-import "dayjs/locale/ru";
-import "dayjs/locale/ja";
-import "dayjs/locale/it";
-import "dayjs/locale/fr";
-import "dayjs/locale/es";
-import "dayjs/locale/de";
-import "dayjs/locale/ar";
 import { config } from "@/lib/config";
 
 dayjs.extend(utc);
@@ -28,7 +19,6 @@ dayjs.extend(customParseFormat);
 dayjs.extend(weekOfYear);
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
-dayjs.locale(config.locale);
 
 export function useDatePicker(modelValue?: Ref<string[]>) {
   const today = dayjs().format();

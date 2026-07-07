@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { UiIcon } from "@/lib";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+
   import { UiLoadingProps } from "@/lib/components/UiLoading/types.ts";
 
   withDefaults(defineProps<UiLoadingProps>(), {

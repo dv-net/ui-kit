@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+  import UiInput from "@/lib/components/UiInput/UiInput.vue";
 
-  import { config, UiInput } from "@/lib";
+  import { config } from "@/lib/config";
 
   defineProps<{
     placeholder?: string;

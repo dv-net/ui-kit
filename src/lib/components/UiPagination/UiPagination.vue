@@ -1,11 +1,13 @@
 <script lang="ts" setup>
   import IconArrow from "./components/IconArrow.vue";
+  import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
+  import UiSelect from "@/lib/components/UiSelect/UiSelect.vue";
 
   import { computed } from "vue";
 
   import { UiPaginationMeta, UiPaginationProps } from "./types";
 
-  import { config, UiIcon, UiSelect } from "@/lib";
+  import { config } from "@/lib/config";
 
   const props = withDefaults(defineProps<UiPaginationProps>(), {
     perPagePresets: () => [10, 20, 50, 100, 200],

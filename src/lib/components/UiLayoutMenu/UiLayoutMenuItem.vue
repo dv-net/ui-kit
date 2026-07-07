@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import UiAnimation from "@/lib/components/UiAnimation/UiAnimation.vue";
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
 
   import { watchOnce } from "@vueuse/core";
@@ -6,7 +7,6 @@
 
   import type { UiLayoutMenuItemProps } from "./types";
 
-  import { UiAnimation } from "@/lib";
   import { menuProvide, menuProvideDefault } from "@/lib/components/UiLayout/types.ts";
 
   defineEmits(["selected"]);

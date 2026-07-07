@@ -1,9 +1,12 @@
 <script lang="ts" setup>
+  import UiButton from "@/lib/components/UiButton/UiButton.vue";
+  import UiTooltip from "@/lib/components/UiTooltip/UiTooltip.vue";
+
   import { ref } from "vue";
 
   import { UiConfirmProps } from "./types";
 
-  import { config, UiButton, UiTooltip } from "@/lib";
+  import { config } from "@/lib/config";
 
   const emits = defineEmits<{
     success: [void];

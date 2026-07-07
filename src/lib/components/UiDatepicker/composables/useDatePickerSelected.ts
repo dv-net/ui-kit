@@ -1,5 +1,5 @@
 import dayjs, { type Dayjs } from "dayjs";
-import { computed, type ComputedRef } from "vue";
+import { computed, type ComputedRef, type Ref } from "vue";
 
 import { useDatePicker } from "../composables/useDatePicker";
 import { PresetModel } from "../types";
@@ -14,6 +14,7 @@ export function useDatePickerSelected(params: {
   minDate: ComputedRef<string | undefined>;
   maxDate: ComputedRef<string | undefined>;
   locale?: ComputedRef<string>;
+  localeReady?: Ref<boolean>;
   enableTimePicker?: ComputedRef<boolean>;
 }) {
   const { checkIsValidDate } = useDatePicker();
@@ -94,6 +95,8 @@ export function useDatePickerSelected(params: {
   });
 
   const selectedDate = computed(() => {
+    void params.localeReady?.value;
+
     if (!checkIsValidDate()) {
       return config.uiDatePicker.translations.invalidDate;
     }
