@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.11] - 2026-07-07
+
+- fix: UiSelect default font size for selected value set to 14px
+
 ## [7.7.10] - 2026-06-15
 
 - change: UiChat

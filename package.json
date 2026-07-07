@@ -1,7 +1,7 @@
 {
   "name": "@dv.net/ui-kit",
   "private": false,
-  "version": "7.7.10",
+  "version": "7.7.11",
   "type": "module",
   "sideEffects": false,
   "main": "dist/index.js",
