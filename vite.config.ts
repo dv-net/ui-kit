@@ -40,14 +40,18 @@ export default defineConfig(({ mode }) => {
           copyPublicDir: false,
           rollupOptions: {
             external: ["vue", "vue-router", "vue3-lottie", "lottie-web"],
-            input: Object.fromEntries(
-              glob
+            input: Object.fromEntries([
+              ...glob
                 .sync("./src/lib/**/*.{ts,vue}", { ignore: ["./src/lib/**/*.d.ts"] })
                 .map((file) => [
                   relative("./src/lib", file.slice(0, file.length - extname(file).length)),
                   fileURLToPath(new URL(file, import.meta.url))
-                ])
-            ),
+                ]),
+              ...glob.sync("./src/lib/assets/others/animations/*.json").map((file) => [
+                relative("./src/lib", file.slice(0, file.length - extname(file).length)),
+                fileURLToPath(new URL(file, import.meta.url))
+              ])
+            ]),
             output: {
               assetFileNames: "[name][extname]",
               entryFileNames: "[name].js",
