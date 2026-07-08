@@ -2,6 +2,7 @@ import dayjs, { type Dayjs } from "dayjs";
 import { computed, type ComputedRef, type Ref } from "vue";
 
 import { useDatePicker } from "../composables/useDatePicker";
+import { resolveDatePickerLocale } from "../composables/datePickerLocale";
 import { PresetModel } from "../types";
 
 import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";
@@ -112,7 +113,7 @@ export function useDatePickerSelected(params: {
     const isSameMonth = params.startDate.value.isSame(params.endDate.value, "month");
     const isSameYear = params.startDate.value.isSame(params.endDate.value, "year");
 
-    const locale = params.locale?.value || config.locale;
+    const locale = resolveDatePickerLocale(params.locale?.value || config.locale);
     const dateFrom = params.startDate.value.locale(locale);
     const dateTo = params.endDate.value.locale(locale);
 
