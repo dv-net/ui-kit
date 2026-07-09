@@ -296,24 +296,26 @@
           </template>
         </tbody>
 
-        <tfoot>
-          <TableSummary
-            v-if="showSummary && sortedData.length && summaryPosition === 'bottom'"
-            :empty-value="emptyValue"
-            :loading="loading"
-            :prepared-data="preparedData"
-            :headers="headers"
-          >
-            <template v-for="(_, slotName) in $slots" #[slotName]="scope: SummarySlotData">
-              <slot :name="slotName" v-bind="scope" />
-            </template>
-          </TableSummary>
-          <tr v-if="$slots.footer" class="ui-table__footer-row">
-            <td :colspan="headers.length" class="ui-table__footer-cell">
-              <slot name="footer" />
-            </td>
-          </tr>
-        </tfoot>
+        <slot name="footer-outer">
+          <tfoot>
+            <TableSummary
+              v-if="showSummary && sortedData.length && summaryPosition === 'bottom'"
+              :empty-value="emptyValue"
+              :loading="loading"
+              :prepared-data="preparedData"
+              :headers="headers"
+            >
+              <template v-for="(_, slotName) in $slots" #[slotName]="scope: SummarySlotData">
+                <slot :name="slotName" v-bind="scope" />
+              </template>
+            </TableSummary>
+            <tr v-if="$slots.footer" class="ui-table__footer-row">
+              <td :colspan="headers.length" class="ui-table__footer-cell">
+                <slot name="footer" />
+              </td>
+            </tr>
+          </tfoot>
+        </slot>
       </table>
     </div>
     <UiPagination
