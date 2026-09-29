@@ -12,7 +12,7 @@
 
   import { config } from "@/lib/config";
 
-  const modelValue = defineModel<FileToUpload[]>({ default: [] });
+  const modelValue = defineModel<FileToUpload[]>({ default: () => [] });
 
   const props = withDefaults(defineProps<UiDragAndDropProps>(), {
     extensions: () => [],

@@ -7,7 +7,7 @@
   import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
   import UiModal from "@/lib/components/UiModal/UiModal.vue";
 
-  import { capitalize, computed, nextTick, onMounted, ref } from "vue";
+  import { capitalize, computed, nextTick, ref } from "vue";
 
   import SearchIcon from "@/lib/assets/others/icons/search.svg";
   import { Locale, UiLanguagesProps } from "@/lib/components/UiLanguages/types";
@@ -21,18 +21,24 @@
     localesLoading: false
   });
 
-  const modelValue = defineModel<Locale>({ default: null });
+  const modelValue = defineModel<Locale | null>({ default: null });
   const isShow = defineModel<boolean>("is-show", { default: false });
   const { isMobile } = useBreakpoints();
   const searchValue = ref("");
   const inputRef = ref();
-  const navigatorLanguages = ref<Locale[]>([]);
+  const navigatorLanguages = computed(() => {
+    if (typeof navigator === "undefined") return [];
+
+    const browserLocaleCodes = navigator.languages.slice(0, 2).map((lang) => lang.split("-")[0]);
+
+    return props.locales.filter(({ isoCode }) => browserLocaleCodes.includes(isoCode));
+  });
 
   const sortedFavouriteLocales = computed(() => {
     return [
       { id: 2, name: "English", isoCode: "en", nativeName: "English" },
       ...navigatorLanguages.value,
-      modelValue.value
+      ...(modelValue.value ? [modelValue.value] : [])
     ].filter((obj, index, self) => index === self.findIndex((o) => o.isoCode === obj.isoCode));
   });
 
@@ -66,10 +72,6 @@
     });
   }
 
-  onMounted(() => {
-    const arrayLocales: string[] = navigator.languages.slice(0, 2).map((lang) => lang.split("-")[0]);
-    navigatorLanguages.value = props.locales.filter(({ isoCode }) => arrayLocales.includes(isoCode));
-  });
 </script>
 
 <template>

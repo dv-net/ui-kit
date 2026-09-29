@@ -8,7 +8,7 @@
     placeholder?: string;
   }>();
 
-  const modelValue = defineModel<string>({ default: null });
+  const modelValue = defineModel<string | null>({ default: null });
 </script>
 
 <template>

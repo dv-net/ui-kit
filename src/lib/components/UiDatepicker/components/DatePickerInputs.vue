@@ -10,7 +10,7 @@
   import { config } from "@/lib/config";
   const emits = defineEmits(["submit", "change"]);
   const { single } = defineProps<Pick<UiDatepickerRangeProps, "single">>();
-  const processingData = defineModel<string[]>("model-value", { default: [] });
+  const processingData = defineModel<string[]>("model-value", { default: () => [] });
   const { dayjs, inputFormat, modelValueFormat } = useDatePicker();
   const errors = ref<boolean[]>([false, false]);
 

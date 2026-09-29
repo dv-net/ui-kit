@@ -23,7 +23,7 @@
     (e: "clear"): void;
   }>();
 
-  const modelValue = defineModel<string[]>({ default: [] });
+  const modelValue = defineModel<string[]>({ default: () => [] });
   const { width } = useWindowSize();
   const { dayjs, today, endDate, startDate, beginDate, modelValueFormat } = useDatePicker(modelValue);
   const isTimePickerEnabled = computed(() => props.enableTimePicker === true);

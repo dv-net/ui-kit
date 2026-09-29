@@ -9,7 +9,7 @@
   const emits = defineEmits<{
     change: [value: Array<string | number>];
   }>();
-  const modelValue = defineModel<Array<string | number>>({ default: [] });
+  const modelValue = defineModel<Array<string | number>>({ default: () => [] });
   provide<UiCheckboxGroupProvideData>(CHECKBOX_GROUP_PROVIDE_VALUE, {
     modelValue,
     disabled: computed(() => props.disabled),

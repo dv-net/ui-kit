@@ -42,14 +42,14 @@
     indeterminateChange: [value: boolean];
   }>();
 
-  const disabled = defineModel<Selected[]>("disabled", { default: [] });
-  const selected = defineModel<Selected[]>("selected", { default: [] });
-  const expanded = defineModel<Expanded[]>("expanded", { default: [] });
+  const disabled = defineModel<Selected[]>("disabled", { default: () => [] });
+  const selected = defineModel<Selected[]>("selected", { default: () => [] });
+  const expanded = defineModel<Expanded[]>("expanded", { default: () => [] });
   const sortObject = defineModel<UiTableSortObject>("sort", {
-    default: {
+    default: () => ({
       order: null,
       name: null
-    }
+    })
   });
 
   const preparedData = computed(() => {

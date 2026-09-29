@@ -16,5 +16,5 @@ export interface UiLanguagesProps {
 
 export interface UiLanguagesButtonProps {
   locale: Locale
-  selected: Locale
+  selected: Locale | null
 }

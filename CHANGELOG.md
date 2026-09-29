@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.18] - 2026-09-29
+
+- chore: update dependencies (Vue, Vue Router, `@floating-ui/vue` 2.x, VueUse, tooling)
+- chore: raise Node engines to `^22.22.2 || ^24.15.0 || >=26.0.0`
+- fix: `defineModel` defaults and typings for Vue 3.5 (CheckboxGroup, Datepicker, DragAndDrop, Languages, Select, Table)
+- chore: add missing stylelint peer dependencies
+
+## [7.7.17] - 2026-07-09
+
+- fix: UiTable extend
+
+## [7.7.16] - 2026-07-09
+
+- feat: UiTable `footer-outer` slot
+
 ## [7.7.15] - 2026-07-08
 
 - fix: reducing bundle size

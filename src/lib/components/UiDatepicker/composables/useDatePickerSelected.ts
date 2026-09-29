@@ -1,8 +1,8 @@
 import dayjs, { type Dayjs } from "dayjs";
 import { computed, type ComputedRef, type Ref } from "vue";
 
-import { useDatePicker } from "../composables/useDatePicker";
 import { resolveDatePickerLocale } from "../composables/datePickerLocale";
+import { useDatePicker } from "../composables/useDatePicker";
 import { PresetModel } from "../types";
 
 import { DatepickerSwapRange } from "@/lib/components/UiDatepicker/types";

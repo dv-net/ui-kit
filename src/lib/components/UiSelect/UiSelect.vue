@@ -256,7 +256,7 @@
           />
 
           <SelectSearch
-            @update:model-value="(e: string | undefined) => $emit('search', e)"
+            @update:model-value="(e: string | null) => $emit('search', e ?? '')"
             v-if="props.withSearch"
             v-model="search"
           />

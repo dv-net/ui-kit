@@ -19,7 +19,7 @@ import { config } from "@/lib/config";
 
   const { minDate, maxDate, isShow = true, selectedRange, enableTimePicker = false } = defineProps<DatePickerSliderProps>();
 
-  const modelValue = defineModel<string[]>({ default: [] });
+  const modelValue = defineModel<string[]>({ default: () => [] });
 
   const { dayjs, modelValueFormat } = useDatePicker(modelValue);
   const effectiveFormat = computed(() =>
