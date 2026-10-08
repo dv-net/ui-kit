@@ -3,7 +3,17 @@ import { RouteLocationAsPathGeneric,RouteLocationAsRelativeGeneric } from "vue-r
 import { UiIconType } from "../UiIcon/types";
 export type UiIconButtonMode = "square" | "circle";
 export type UiIconButtonNativeType = "button" | "submit" | "reset";
-export type UiIconButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
+export type UiIconButtonSize =
+  | "xs" // 20px
+  | "sm" // 24px
+  | "sm-md" // 28px
+  | "md" // 32px
+  | "md-lg" // 36px
+  | "lg" // 40px
+  | "lg-xl" // 44px
+  | "xl" // 48px
+  | "xxxl" // 52px
+  | "xxxxl"; // 56px
 export type UiIconButtonType =
   | "contrast"
   | "accent"

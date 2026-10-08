@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.19] - 2026-10-08
+
+- fix: `UiTooltip` keeps an 8px gap from the viewport edge
+- feat: `UiDrawer` `teleport` prop
+- feat: `UiButton` sizes `lg-xl` (40px), `xxxl` (52px), `xxxxl` (56px)
+- feat: `UiIconButton` sizes `sm-md` (28px), `md-lg` (36px), `lg-xl` (44px), `xxxl` (52px), `xxxxl` (56px)
+- feat: `UiIcon` sizes `sm-md` (18px), `md-lg` (22px), `lg-xl` (28px), `xxxl` (36px), `xxxxl` (44px)
+
 ## [7.7.18] - 2026-09-29
 
 - chore: update dependencies (Vue, Vue Router, `@floating-ui/vue` 2.x, VueUse, tooling)

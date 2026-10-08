@@ -91,5 +91,40 @@
       height: 40px;
       min-height: 40px;
     }
+
+    &.size-sm-md {
+      width: 18px;
+      min-width: 18px;
+      height: 18px;
+      min-height: 18px;
+    }
+
+    &.size-md-lg {
+      width: 22px;
+      min-width: 22px;
+      height: 22px;
+      min-height: 22px;
+    }
+
+    &.size-lg-xl {
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
+      min-height: 28px;
+    }
+
+    &.size-xxxl {
+      width: 36px;
+      min-width: 36px;
+      height: 36px;
+      min-height: 36px;
+    }
+
+    &.size-xxxxl {
+      width: 44px;
+      min-width: 44px;
+      height: 44px;
+      min-height: 44px;
+    }
   }
 </style>

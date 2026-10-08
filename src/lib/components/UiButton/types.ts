@@ -2,7 +2,16 @@ import { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from "vue-
 
 import { UiIconSize, UiIconType } from "../UiIcon/types";
 import { UiLinkTarget } from "../UiLink/types";
-export type UiButtonSize = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
+export type UiButtonSize =
+  | "xs" // 24px
+  | "sm" // 28px
+  | "md" // 32px
+  | "lg" // 36px
+  | "lg-xl" // 40px
+  | "xl" // 44px
+  | "xxl" // 48px
+  | "xxxl" // 52px
+  | "xxxxl"; // 56px
 export type UiButtonMode = "neutral" | "accent";
 export type UiButtonNativeType = "button" | "submit" | "reset";
 export type UiButtonStyleType =

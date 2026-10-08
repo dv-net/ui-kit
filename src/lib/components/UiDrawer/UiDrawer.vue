@@ -10,7 +10,8 @@
 
   const props = withDefaults(defineProps<UiDrawerProps>(), {
     direction: "rtl",
-    size: "50%"
+    size: "50%",
+    teleport: true
   });
 
   const orientation = computed<Orientation>(() => {
@@ -42,7 +43,7 @@
 
 <template>
   <div>
-    <Teleport to="body">
+    <Teleport :disabled="!teleport" :to="typeof teleport === 'string' ? teleport : 'body'">
       <UiOverlay v-bind="{ ...$attrs }" v-model="modelValue" @click="modelValue = false">
         <Transition appear>
           <div

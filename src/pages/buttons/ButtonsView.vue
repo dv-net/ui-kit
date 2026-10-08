@@ -4,10 +4,23 @@
   import { ref } from "vue";
 
   import { UiButton } from "@/lib";
+  import { UiButtonSize, UiButtonStyleType } from "@/lib/components/UiButton/types";
 
   const isLoading = ref<boolean>(false);
   const isDisabled = ref<boolean>(false);
   const neutral = ref<boolean>(false);
+  const sizes: { value: UiButtonSize; label: string }[] = [
+    { value: "xs", label: "24px(xs)" },
+    { value: "sm", label: "28px(sm)" },
+    { value: "md", label: "32px(md)" },
+    { value: "lg", label: "36px(lg)" },
+    { value: "lg-xl", label: "40px(lg-xl)" },
+    { value: "xl", label: "44px(xl)" },
+    { value: "xxl", label: "48px(xxl)" },
+    { value: "xxxl", label: "52px(xxxl)" },
+    { value: "xxxxl", label: "56px(xxxxl)" }
+  ];
+  const types: UiButtonStyleType[] = ["primary", "secondary", "tertiary", "outline", "negative", "outline-light"];
 </script>
 
 <template>
@@ -35,397 +48,25 @@
       <div class="grid__header">Outline</div>
       <div class="grid__header">Negative</div>
       <div class="grid__header">Outline-light</div>
-      <div class="grid__row">28px</div>
-      <UiButton
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-        size="sm"
-        type="primary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="sm"
-        type="secondary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="sm"
-        type="tertiary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="sm"
-        type="outline"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-        outline-type-color="#e4704b"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="sm"
-        type="negative"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="sm"
-        type="outline-light"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-        :mode="neutral ? 'neutral' : 'accent'"
-      >
-        Label
-      </UiButton>
-      <div class="grid__row">32px</div>
-      <UiButton
-        size="md"
-        type="primary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="md"
-        type="secondary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="md"
-        type="tertiary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="md"
-        type="outline"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="md"
-        type="negative"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        :mode="neutral ? 'neutral' : 'accent'"
-        size="md"
-        type="outline-light"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <div class="grid__row">36px</div>
-      <UiButton
-        size="lg"
-        type="primary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="lg"
-        type="secondary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="lg"
-        type="tertiary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="lg"
-        type="outline"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="lg"
-        type="negative"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        :mode="neutral ? 'neutral' : 'accent'"
-        size="lg"
-        type="outline-light"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <div class="grid__row">44px</div>
-      <UiButton
-        size="xl"
-        type="primary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xl"
-        type="secondary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xl"
-        type="tertiary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xl"
-        type="outline"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xl"
-        type="negative"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        :mode="neutral ? 'neutral' : 'accent'"
-        size="xl"
-        type="outline-light"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <div class="grid__row">48px</div>
-      <UiButton
-        size="xxl"
-        type="primary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xxl"
-        type="secondary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xxl"
-        type="tertiary"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xxl"
-        type="outline"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        :mode="neutral ? 'neutral' : 'accent'"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        size="xxl"
-        type="negative"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
-      <UiButton
-        :mode="neutral ? 'neutral' : 'accent'"
-        size="xxl"
-        type="outline-light"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        leftIconType="100"
-        leftIconName="add-circle  1"
-        rightIconType="100"
-        rightIconName="add-circle  1"
-      >
-        Label
-      </UiButton>
+      <template v-for="size in sizes" :key="size.value">
+        <div class="grid__row">{{ size.label }}</div>
+        <UiButton
+          v-for="type in types"
+          :key="type"
+          :size="size.value"
+          :type="type"
+          :disabled="isDisabled"
+          :loading="isLoading"
+          :mode="type === 'negative' ? undefined : neutral ? 'neutral' : 'accent'"
+          left-icon-type="100"
+          left-icon-name="add-circle  1"
+          right-icon-type="100"
+          right-icon-name="add-circle  1"
+          :outline-type-color="type === 'outline' && size.value === 'sm' ? '#e4704b' : undefined"
+        >
+          Label
+        </UiButton>
+      </template>
     </div>
     <div class="bottom">
       <UiButton

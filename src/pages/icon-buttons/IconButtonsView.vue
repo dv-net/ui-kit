@@ -4,11 +4,34 @@
   import { ref } from "vue";
 
   import { UiIconButton } from "@/lib";
+  import { UiIconButtonSize, UiIconButtonType } from "@/lib/components/UiIconButton/types";
 
   const isLoading = ref(false);
   const isDisabled = ref(false);
   const isCircleMode = ref(false);
   const noSize = ref(false);
+  const sizes: { value: UiIconButtonSize; label: string }[] = [
+    { value: "xs", label: "20px(xs)" },
+    { value: "sm", label: "24px(sm)" },
+    { value: "sm-md", label: "28px(sm-md)" },
+    { value: "md", label: "32px(md)" },
+    { value: "md-lg", label: "36px(md-lg)" },
+    { value: "lg", label: "40px(lg)" },
+    { value: "lg-xl", label: "44px(lg-xl)" },
+    { value: "xl", label: "48px(xl)" },
+    { value: "xxxl", label: "52px(xxxl)" },
+    { value: "xxxxl", label: "56px(xxxxl)" }
+  ];
+  const types: UiIconButtonType[] = [
+    "accent",
+    "contrast",
+    "tint",
+    "positive",
+    "positive-tint",
+    "negative",
+    "negative-tint",
+    "clear"
+  ];
 </script>
 
 <template>
@@ -49,55 +72,20 @@
         <div class="sizes-grid__header">negative-tint</div>
         <div class="sizes-grid__header">clear</div>
 
-        <div class="sizes-grid__row">20px(xs)</div>
-        <UiIconButton type="accent" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="contrast" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="tint" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive-tint" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative-tint" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="clear" size="xs" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-
-        <div class="sizes-grid__row">24px(sm)</div>
-        <UiIconButton type="accent" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="contrast" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="tint" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive-tint" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative-tint" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="clear" size="sm" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-
-        <div class="sizes-grid__row">32px(md)</div>
-        <UiIconButton type="accent" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="contrast" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="tint" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive-tint" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative-tint" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="clear" size="md" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-
-        <div class="sizes-grid__row">40px(lg)</div>
-        <UiIconButton type="accent" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="contrast" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="tint" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive-tint" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative-tint" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="clear" size="lg" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-
-        <div class="sizes-grid__row">48px(xl)</div>
-        <UiIconButton type="accent" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="contrast" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="tint" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="positive-tint" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="negative-tint" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
-        <UiIconButton type="clear" size="xl" :loading="isLoading" :disabled="isDisabled" :no-size="noSize" icon-name="home" :mode="isCircleMode ? 'circle' : 'square'" />
+        <template v-for="size in sizes" :key="size.value">
+          <div class="sizes-grid__row">{{ size.label }}</div>
+          <UiIconButton
+            v-for="type in types"
+            :key="type"
+            :type="type"
+            :size="size.value"
+            :loading="isLoading"
+            :disabled="isDisabled"
+            :no-size="noSize"
+            icon-name="home"
+            :mode="isCircleMode ? 'circle' : 'square'"
+          />
+        </template>
       </div>
     </div>
   </div>

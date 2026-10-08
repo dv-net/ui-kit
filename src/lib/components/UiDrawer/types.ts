@@ -5,5 +5,6 @@ export type Orientation = "horizontal" | "vertical";
 export interface UiDrawerProps {
   direction?: DrawerDirection,
   size?: string,
-  drawerClass?: string
+  drawerClass?: string,
+  teleport?: boolean | string
 }

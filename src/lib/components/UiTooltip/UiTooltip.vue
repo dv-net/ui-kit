@@ -47,16 +47,18 @@
     placement: props.position,
     middleware: [
       offset(10),
-      shift(),
+      flip({
+        crossAxis: false,
+        padding: 8,
+        fallbackStrategy: "initialPlacement"
+      }),
+      shift({ padding: 8, crossAxis: true }),
       size({
         apply({ availableHeight, elements }) {
           Object.assign(elements.floating.style, {
             maxHeight: `${Math.max(300, availableHeight)}px`
           });
         }
-      }),
-      flip({
-        fallbackStrategy: "initialPlacement"
       }),
       arrow({ element: arrowRefer, padding: 30 })
     ]
