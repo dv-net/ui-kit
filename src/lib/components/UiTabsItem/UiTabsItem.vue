@@ -74,7 +74,7 @@
       &.mode-outline {
         border: 1px solid var(--color-separator-border-primary);
 
-        &:hover,
+        &:not(.is-active):hover,
         &:focus-visible {
           border-color: var(--color-separator-border-secondary);
         }
@@ -92,7 +92,7 @@
           color: var(--color-text-secondary);
         }
 
-        &:hover,
+        &:not(.is-active):hover,
         &:focus-visible {
           color: var(--color-text-tertiary);
         }
@@ -112,7 +112,7 @@
           background-color: var(--color-background-contrast-secondary);
         }
 
-        &:hover,
+        &:not(.is-active):hover,
         &:focus-visible {
           color: var(--color-text-inactive);
         }
@@ -144,7 +144,7 @@
           transition: var(--transition);
         }
 
-        &:hover,
+        &:not(.is-active):hover,
         &:focus-visible {
           color: var(--color-text-secondary);
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.20] - 2026-10-27
+
+- feat: language support for `az`, `he`, `kk`, `th`, `uz` (catalog, flags, datepicker locales)
+- fix: `UiTabs` active tab no longer changes on hover
+
 ## [7.7.19] - 2026-10-08
 
 - fix: `UiTooltip` keeps an 8px gap from the viewport edge

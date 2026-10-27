@@ -8,6 +8,7 @@ const DATE_FNS_LOCALE_PATHS: Record<string, string> = {
   zh: "zh-CN",
   sw: "en-US",
   ar: "ar",
+  az: "az",
   bn: "bn",
   bg: "bg",
   cs: "cs",
@@ -16,9 +17,11 @@ const DATE_FNS_LOCALE_PATHS: Record<string, string> = {
   et: "et",
   fi: "fi",
   el: "el",
+  he: "he",
   hi: "hi",
   hu: "hu",
   id: "id",
+  kk: "kk",
   ko: "ko",
   lv: "lv",
   lt: "lt",
@@ -29,6 +32,7 @@ const DATE_FNS_LOCALE_PATHS: Record<string, string> = {
   sk: "sk",
   sl: "sl",
   sv: "sv",
+  th: "th",
   tr: "tr",
   vi: "vi",
   de: "de",
@@ -37,7 +41,8 @@ const DATE_FNS_LOCALE_PATHS: Record<string, string> = {
   it: "it",
   ja: "ja",
   ru: "ru",
-  uk: "uk"
+  uk: "uk",
+  uz: "uz"
 };
 
 // Static import paths so the bundler can emit proper locale chunks.
@@ -45,6 +50,7 @@ const DATE_FNS_LOADERS: Record<string, () => Promise<unknown>> = {
   "en-US": () => import("date-fns/locale/en-US"),
   "zh-CN": () => import("date-fns/locale/zh-CN"),
   ar: () => import("date-fns/locale/ar"),
+  az: () => import("date-fns/locale/az"),
   bn: () => import("date-fns/locale/bn"),
   bg: () => import("date-fns/locale/bg"),
   cs: () => import("date-fns/locale/cs"),
@@ -53,9 +59,11 @@ const DATE_FNS_LOADERS: Record<string, () => Promise<unknown>> = {
   et: () => import("date-fns/locale/et"),
   fi: () => import("date-fns/locale/fi"),
   el: () => import("date-fns/locale/el"),
+  he: () => import("date-fns/locale/he"),
   hi: () => import("date-fns/locale/hi"),
   hu: () => import("date-fns/locale/hu"),
   id: () => import("date-fns/locale/id"),
+  kk: () => import("date-fns/locale/kk"),
   ko: () => import("date-fns/locale/ko"),
   lv: () => import("date-fns/locale/lv"),
   lt: () => import("date-fns/locale/lt"),
@@ -66,6 +74,7 @@ const DATE_FNS_LOADERS: Record<string, () => Promise<unknown>> = {
   sk: () => import("date-fns/locale/sk"),
   sl: () => import("date-fns/locale/sl"),
   sv: () => import("date-fns/locale/sv"),
+  th: () => import("date-fns/locale/th"),
   tr: () => import("date-fns/locale/tr"),
   vi: () => import("date-fns/locale/vi"),
   de: () => import("date-fns/locale/de"),
@@ -74,12 +83,14 @@ const DATE_FNS_LOADERS: Record<string, () => Promise<unknown>> = {
   it: () => import("date-fns/locale/it"),
   ja: () => import("date-fns/locale/ja"),
   ru: () => import("date-fns/locale/ru"),
-  uk: () => import("date-fns/locale/uk")
+  uk: () => import("date-fns/locale/uk"),
+  uz: () => import("date-fns/locale/uz")
 };
 
 const DAYJS_LOADERS: Record<string, () => Promise<unknown>> = {
   zh: () => import("dayjs/locale/zh.js"),
   ar: () => import("dayjs/locale/ar.js"),
+  az: () => import("dayjs/locale/az.js"),
   bn: () => import("dayjs/locale/bn.js"),
   bg: () => import("dayjs/locale/bg.js"),
   cs: () => import("dayjs/locale/cs.js"),
@@ -88,9 +99,11 @@ const DAYJS_LOADERS: Record<string, () => Promise<unknown>> = {
   et: () => import("dayjs/locale/et.js"),
   fi: () => import("dayjs/locale/fi.js"),
   el: () => import("dayjs/locale/el.js"),
+  he: () => import("dayjs/locale/he.js"),
   hi: () => import("dayjs/locale/hi.js"),
   hu: () => import("dayjs/locale/hu.js"),
   id: () => import("dayjs/locale/id.js"),
+  kk: () => import("dayjs/locale/kk.js"),
   ko: () => import("dayjs/locale/ko.js"),
   lv: () => import("dayjs/locale/lv.js"),
   lt: () => import("dayjs/locale/lt.js"),
@@ -101,6 +114,7 @@ const DAYJS_LOADERS: Record<string, () => Promise<unknown>> = {
   sk: () => import("dayjs/locale/sk.js"),
   sl: () => import("dayjs/locale/sl.js"),
   sv: () => import("dayjs/locale/sv.js"),
+  th: () => import("dayjs/locale/th.js"),
   tr: () => import("dayjs/locale/tr.js"),
   vi: () => import("dayjs/locale/vi.js"),
   de: () => import("dayjs/locale/de.js"),
@@ -109,7 +123,8 @@ const DAYJS_LOADERS: Record<string, () => Promise<unknown>> = {
   it: () => import("dayjs/locale/it.js"),
   ja: () => import("dayjs/locale/ja.js"),
   ru: () => import("dayjs/locale/ru.js"),
-  uk: () => import("dayjs/locale/uk.js")
+  uk: () => import("dayjs/locale/uk.js"),
+  uz: () => import("dayjs/locale/uz.js")
 };
 
 const dateFnsLocaleCache = new Map<string, Locale>([

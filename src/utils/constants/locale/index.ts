@@ -7,6 +7,12 @@ export const locales: Locale[] = [
       nativeName: "العربية"
     },
     {
+      id: 38,
+      name: "Azerbaijani",
+      isoCode: "az",
+      nativeName: "Azərbaycan"
+    },
+    {
       id: 34,
       name: "Belarusian",
       isoCode: "be",
@@ -79,6 +85,12 @@ export const locales: Locale[] = [
       nativeName: "Français"
     },
     {
+      id: 39,
+      name: "Hebrew",
+      isoCode: "he",
+      nativeName: "עברית"
+    },
+    {
       id: 36,
       name: "Hindi",
       isoCode: "hi",
@@ -107,6 +119,12 @@ export const locales: Locale[] = [
       name: "Japanese",
       isoCode: "ja",
       nativeName: "日本語"
+    },
+    {
+      id: 40,
+      name: "Kazakh",
+      isoCode: "kk",
+      nativeName: "Қазақша"
     },
     {
       id: 24,
@@ -187,6 +205,12 @@ export const locales: Locale[] = [
       nativeName: "Kiswahili"
     },
     {
+      id: 41,
+      name: "Thai",
+      isoCode: "th",
+      nativeName: "ไทย"
+    },
+    {
       id: 33,
       name: "Turkish",
       isoCode: "tr",
@@ -197,6 +221,12 @@ export const locales: Locale[] = [
       name: "Ukrainian",
       isoCode: "uk",
       nativeName: "Українська"
+    },
+    {
+      id: 42,
+      name: "Uzbek",
+      isoCode: "uz",
+      nativeName: "Oʻzbekcha"
     },
     {
       id: 37,

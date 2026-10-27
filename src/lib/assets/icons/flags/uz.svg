@@ -1,0 +1,26 @@
+<svg width="20" height="14" viewBox="2 2 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_uz)">
+<rect x="1.5" y="1" width="21" height="15" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 1H22.5V5.7H1.5V1Z" fill="#0099B5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 5.7H22.5V6.2H1.5V5.7ZM1.5 10.8H22.5V11.3H1.5V10.8Z" fill="#CE1126"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 11.3H22.5V16H1.5V11.3Z" fill="#1EB53A"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4.15 3.35a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M5.15 3.2a1.05 1.05 0 1 0 2.1 0a1.05 1.05 0 1 0-2.1 0" fill="white"/>
+<circle cx="8.15" cy="2.35" r="0.38" fill="white"/>
+<circle cx="9.55" cy="2.35" r="0.38" fill="white"/>
+<circle cx="10.95" cy="2.35" r="0.38" fill="white"/>
+<circle cx="12.35" cy="2.35" r="0.38" fill="white"/>
+<circle cx="8.85" cy="3.45" r="0.38" fill="white"/>
+<circle cx="10.25" cy="3.45" r="0.38" fill="white"/>
+<circle cx="11.65" cy="3.45" r="0.38" fill="white"/>
+<circle cx="13.05" cy="3.45" r="0.38" fill="white"/>
+<circle cx="8.15" cy="4.55" r="0.38" fill="white"/>
+<circle cx="9.55" cy="4.55" r="0.38" fill="white"/>
+<circle cx="10.95" cy="4.55" r="0.38" fill="white"/>
+<circle cx="12.35" cy="4.55" r="0.38" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_uz">
+<rect x="1.5" y="1" width="21" height="15" fill="white"/>
+</clipPath>
+</defs>
+</svg>

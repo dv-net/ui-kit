@@ -151,6 +151,7 @@ export const svgList100 = [
 ] as const;
 export const svgListflags = [
   "ar",
+  "az",
   "be",
   "bg",
   "bn",
@@ -163,11 +164,13 @@ export const svgListflags = [
   "et",
   "fi",
   "fr",
+  "he",
   "hi",
   "hu",
   "id",
   "it",
   "ja",
+  "kk",
   "ko",
   "lt",
   "lv",
@@ -181,8 +184,10 @@ export const svgListflags = [
   "sl",
   "sv",
   "sw",
+  "th",
   "tr",
   "uk",
+  "uz",
   "vi",
   "zh"
 ] as const;
