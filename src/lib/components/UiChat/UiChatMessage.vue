@@ -8,25 +8,38 @@
 
   import { HTTP_URL_REGEX } from "@/utils/constants/general";
 
+  type UiChatMessagePart = {
+    type: "text" | "link";
+    value: string;
+  };
+
   const { message, isOwn = false } = defineProps<{
     message: UiChatMessage;
     isOwn?: boolean;
   }>();
 
-  const escapeHtml = (value: string): string => {
-    return value
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#39;");
-  };
-
-  const formattedMessage = computed(() => {
+  const messageParts = computed<UiChatMessagePart[]>(() => {
     const text = message.message?.trim();
-    if (!text) return "";
-    const safeText = escapeHtml(text);
-    return safeText.replace(HTTP_URL_REGEX, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    if (!text) return [];
+
+    const parts: UiChatMessagePart[] = [];
+    const matches = text.matchAll(new RegExp(HTTP_URL_REGEX.source, "g"));
+    let lastIndex = 0;
+
+    for (const match of matches) {
+      const index = match.index ?? 0;
+      if (index > lastIndex) {
+        parts.push({ type: "text", value: text.slice(lastIndex, index) });
+      }
+      parts.push({ type: "link", value: match[0] });
+      lastIndex = index + match[0].length;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push({ type: "text", value: text.slice(lastIndex) });
+    }
+
+    return parts;
   });
 </script>
 
@@ -35,7 +48,14 @@
     <div class="ui-chat__message-bubble">
       <UiChatMessageAttachments v-if="message.attachments?.length" :attachments="message.attachments" />
       <div class="ui-chat__message-info">
-        <p v-if="formattedMessage" class="ui-chat__message-text" v-html="formattedMessage"></p>
+        <p v-if="messageParts.length" class="ui-chat__message-text">
+          <template v-for="(part, index) in messageParts" :key="index">
+            <a v-if="part.type === 'link'" :href="part.value" target="_blank" rel="noopener noreferrer">{{
+              part.value
+            }}</a>
+            <template v-else>{{ part.value }}</template>
+          </template>
+        </p>
         <span class="ui-chat__message-time">{{ formatUiChatTime(message.created_at) }}</span>
       </div>
     </div>
