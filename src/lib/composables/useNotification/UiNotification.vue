@@ -14,13 +14,11 @@
       title?: string;
       message: string;
       type?: UiNotificationType;
-      isHTMLMessage?: boolean;
       pauseOnHover?: boolean;
       duration?: number;
     }>(),
     {
       type: "error",
-      isHTMLMessage: true,
       pauseOnHover: true,
       duration: 5000
     }
@@ -104,8 +102,7 @@
           </template>
         </span>
       </div>
-      <div v-if="isHTMLMessage" v-html="message" class="ui-notification__text" />
-      <div v-else class="ui-notification__text">{{ message }}</div>
+      <div class="ui-notification__text">{{ message }}</div>
     </div>
   </transition>
 </template>

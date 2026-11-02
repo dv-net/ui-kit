@@ -8,7 +8,13 @@ import { UiNotificationType } from "@/lib/composables/useNotification/types.ts";
 const margin = 16;
 let existedNotifications: VNode[] = [];
 
-export default function (message: string, type?: UiNotificationType, isHTMLMessage?: boolean, title?: string) {
+export default function (
+  message: string,
+  type?: UiNotificationType,
+  titleOrLegacyFlag?: string | boolean,
+  legacyTitle?: string
+) {
+  const title = typeof titleOrLegacyFlag === "string" ? titleOrLegacyFlag : legacyTitle;
   let topOffset = margin;
   for (const notificationComp of existedNotifications) {
     topOffset += notificationComp.el!.offsetHeight + margin;
@@ -26,7 +32,6 @@ export default function (message: string, type?: UiNotificationType, isHTMLMessa
     onRemove: removeComponent,
     message,
     type,
-    isHTMLMessage,
     title
   });
 

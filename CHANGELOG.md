@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [7.7.21] - 2026-10-31
 
 - fix: `UiChat` renders message links without `v-html`
+- fix: `UiNotification` renders the message as text, without `v-html`
 
 ## [7.7.20] - 2026-10-27
 

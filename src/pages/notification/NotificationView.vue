@@ -13,7 +13,7 @@
         type="negative"
         @click="
           UiNotification(
-            'Hello, I am notification <p style=color:red;>123</p> asdasd Eat more of these soft French rolls, and have some tea'
+            'Hello, I am notification. Eat more of these soft French rolls, and have some tea'
           )
         "
       >
@@ -24,7 +24,7 @@
         type="primary"
         @click="
           UiNotification(
-            'Hello, I am notification <p style=color:green;>123</p> asdasd Eat more of these soft French rolls, and have some tea',
+            'Hello, I am notification. Eat more of these soft French rolls, and have some tea',
             'success'
           )
         "
@@ -36,9 +36,8 @@
         type="secondary"
         @click="
           UiNotification(
-            'Hello, I am notification <p style=color:lightgreen;>123</p> asdasd Eat more of these soft French rolls, and have some tea',
+            'Hello, I am notification. Eat more of these soft French rolls, and have some tea',
             'info',
-            true,
             'Custom info title'
           )
         "
