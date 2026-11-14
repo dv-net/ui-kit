@@ -23,10 +23,17 @@ import {
   support2Animation,
   telegramAnimation,
   toolsAnimation,
-  twoArrowOutlineAnimation,
+  twoArrowOutlineAnimation
 } from "@/lib/helpers/animations-list.ts";
 
 export const menu = ref<RouteItem[]>([
+  {
+    path: "/demo",
+    meta: {
+      title: "Demo",
+      animationIcon: gridAnimation
+    }
+  },
   {
     path: "/buttons",
     meta: {
@@ -52,7 +59,7 @@ export const menu = ref<RouteItem[]>([
     path: "/tags",
     meta: {
       title: "Tags",
-      animationIcon: documentAnimation,
+      animationIcon: documentAnimation
     }
   },
   {
@@ -190,18 +197,18 @@ export const menu = ref<RouteItem[]>([
   },
   {
     path: "/summary",
-      meta: {
-        title: "Summary",
-          indicator: "2",
-          animationIcon: dashboardAnimation,
-          alwaysOpen: true
-        // click: () => console.log(123),
-        // class?: string;
-        // isChildren?: boolean;
-        // icon, iconActive - simple icon from uikit
-        // iconComponent, iconComponentActive - if u need put icon not from uikit
-        // isButton: true // Enable if you need the menu item to stop linking to a route
-      },
+    meta: {
+      title: "Summary",
+      indicator: "2",
+      animationIcon: dashboardAnimation,
+      alwaysOpen: true
+      // click: () => console.log(123),
+      // class?: string;
+      // isChildren?: boolean;
+      // icon, iconActive - simple icon from uikit
+      // iconComponent, iconComponentActive - if u need put icon not from uikit
+      // isButton: true // Enable if you need the menu item to stop linking to a route
+    },
     children: [
       {
         path: "/summary/notification",
@@ -265,9 +272,9 @@ export const menu = ref<RouteItem[]>([
           iconActive: "add",
           isChildren: true // required for every child
         }
-      },
+      }
     ]
-  },
+  }
 ]);
 
 export const menuItems = ref<ProfileMenuItem[][]>([

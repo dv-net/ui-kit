@@ -8,6 +8,7 @@ import Checkbox from "@/pages/checkbox/CheckboxView.vue";
 import Collapse from "@/pages/collapse/CollapseView.vue";
 import Confirm from "@/pages/confirm/ConfirmView.vue";
 import DatePicker from "@/pages/date-picker/DatePickerView.vue";
+import Demo from "@/pages/demo/DemoView.vue";
 import DragAndDrop from "@/pages/dragAndDrop/DragAndDropView.vue";
 import Drawer from "@/pages/drawer/DrawerView.vue";
 import Dropdown from "@/pages/dropdown/DropdownView.vue";
@@ -37,6 +38,7 @@ import UiModal from "@/pages/ui-modal/UiModalView.vue";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: RouteRecordRaw[] = [
   { path: "/", component: Home },
+  { path: "/demo", component: Demo },
   {
     path: "/block-title",
     component: BlockTitle,
@@ -77,7 +79,7 @@ const routes: RouteRecordRaw[] = [
   { path: "/summary/drawer", component: Drawer },
   { path: "/summary/avatar", component: UiAvatar },
   { path: "/chat", component: Chat },
-  { path: "/gallery", component: Gallery },
+  { path: "/gallery", component: Gallery }
 ];
 
 export const router = createRouter({
