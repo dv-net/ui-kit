@@ -25,6 +25,7 @@
       { 'is-disabled': isDisabled },
       `size-${size}`
     ]"
+    :data-highlighted="isNavigated ? 'true' : undefined"
   >
     <slot />
   </button>

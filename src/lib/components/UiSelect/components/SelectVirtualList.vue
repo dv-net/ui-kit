@@ -1,7 +1,7 @@
 <script lang="ts" setup generic="Options">
   import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
 
-  import { computed } from "vue";
+  import { computed, ref } from "vue";
   import { RecycleScroller } from "vue-virtual-scroller";
 
   import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
@@ -24,10 +24,18 @@
     })
   );
   const size = computed(() => SelectListItemSize[props.size]);
+  const scroller = ref<{ scrollToItem: (index: number) => void } | null>(null);
+
+  defineExpose({
+    scrollToItem(index: number) {
+      scroller.value?.scrollToItem(index);
+    }
+  });
 </script>
 
 <template>
   <RecycleScroller
+    ref="scroller"
     @scroll-end="() => $emit('changeInfinityScroll')"
     :items="conputedOptions"
     :item-size="size"
