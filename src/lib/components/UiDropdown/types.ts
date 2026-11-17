@@ -14,4 +14,5 @@ export interface UiDropdownProps {
   placement?: UiPlacementType;
   teleport?: string | boolean;
   mode?: UiDropdownMode;
+  tabindex?: number;
 }
