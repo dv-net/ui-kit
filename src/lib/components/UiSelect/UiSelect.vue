@@ -8,7 +8,7 @@
   import UiIcon from "@/lib/components/UiIcon/UiIcon.vue";
   import UiLoading from "@/lib/components/UiLoading/UiLoading.vue";
 
-  import { computed, Ref, ref } from "vue";
+  import { computed, nextTick, Ref, ref, watch } from "vue";
 
   import { useKeyboard } from "./composables/useKeyboard";
   import { useMultiple } from "./composables/useMultiple";
@@ -42,6 +42,8 @@
   const search = ref("");
   const dropdownRef = ref();
   const inputRef = ref();
+  const contentRef = ref<HTMLElement | null>(null);
+  const virtualListRef = ref<{ scrollToItem: (index: number) => void } | null>(null);
 
   const isDisabled = computed(() => props.disabled || props.readonly);
   const isOptionPrimitive = computed(() => {
@@ -85,10 +87,13 @@
     });
   });
 
-  const { onKeydownDown, onKeydownEnter, onKeydownUp, navigatedIndex } = useKeyboard<Options>({
-    isFocus: isFocus,
-    checkOption: checkOption,
-    filteredOptions: filteredOptions
+  const { onKeydown, navigatedIndex, firstSelectableIndex, lastSelectableIndex } = useKeyboard<Options>({
+    isOpen,
+    isDisabled,
+    checkOption,
+    filteredOptions,
+    isOptionDisabled,
+    open: openFromKeyboard
   });
 
   const { setModelValueItem } = useMultiple(modelValue as Ref<string[]>);
@@ -100,7 +105,8 @@
       setModelValueItem(optionToVal(option));
     } else {
       modelValue.value = optionToVal(option);
-      onBlur();
+      onClose();
+      dropdownRef.value.close();
     }
     emits("change");
   }
@@ -162,6 +168,15 @@
   function onBlur() {
     onClose();
     dropdownRef.value.close();
+    inputRef.value?.blur();
+  }
+
+  function openFromKeyboard(preferEnd = false) {
+    if (isDisabled.value) {
+      return;
+    }
+    onOpen(preferEnd);
+    dropdownRef.value.open();
   }
 
   function onClose() {
@@ -170,28 +185,62 @@
     emits("onClose");
     navigatedIndex.value = null;
     isFocus.value = false;
-    inputRef.value.blur();
   }
 
-  function onOpen() {
-    const selectedIndex = filteredOptions.value.findIndex((option) => {
-      return isOptionChecked(option);
-    });
-    if (selectedIndex !== -1) {
-      navigatedIndex.value = selectedIndex;
+  function onOpen(preferEnd = false) {
+    if (preferEnd) {
+      navigatedIndex.value = lastSelectableIndex();
+    } else {
+      const selectedIndex = filteredOptions.value.findIndex((option) => {
+        return isOptionChecked(option) && !isOptionDisabled(option);
+      });
+      navigatedIndex.value = selectedIndex !== -1 ? selectedIndex : firstSelectableIndex();
     }
-    inputRef.value.focus();
+    inputRef.value?.focus();
     isFocus.value = true;
+    void scrollHighlightedIntoView();
   }
+
+  async function scrollHighlightedIntoView() {
+    await nextTick();
+    if (props.isVirtualList && navigatedIndex.value !== null) {
+      virtualListRef.value?.scrollToItem(navigatedIndex.value);
+      await nextTick();
+    }
+    const item = contentRef.value?.querySelector<HTMLElement>("[data-highlighted='true']");
+    const container = item?.closest(".ui-select__options-list-wrapper");
+    if (!(container instanceof HTMLElement) || !item) {
+      return;
+    }
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    if (itemRect.top < containerRect.top) {
+      container.scrollTop -= containerRect.top - itemRect.top;
+    } else if (itemRect.bottom > containerRect.bottom) {
+      container.scrollTop += itemRect.bottom - containerRect.bottom;
+    }
+  }
+
+  watch(navigatedIndex, () => {
+    if (!isOpen.value || navigatedIndex.value === null) {
+      return;
+    }
+    void scrollHighlightedIntoView();
+  });
+
+  watch(search, () => {
+    if (!isOpen.value || !isFocus.value) {
+      return;
+    }
+    navigatedIndex.value = firstSelectableIndex();
+  });
 </script>
 
 <template>
   <div
     class="ui-select__wrapper"
     :class="[{ 'is-disabled': props.disabled }]"
-    @keydown.enter="onKeydownEnter"
-    @keydown.down="onKeydownDown"
-    @keydown.up="onKeydownUp"
+    @keydown="onKeydown"
     @keydown.tab="onBlur"
   >
     <input inputmode="none" ref="inputRef" :disabled="disabled" :id="id" class="ui-select__input" @focus="onFocus" />
@@ -201,7 +250,7 @@
       :offset="offset"
       ref="dropdownRef"
       @close="onClose"
-      @open="onOpen"
+      @open="() => onOpen()"
       :popper-class="[popperClass ?? '', 'ui-select__popper']"
       :fit-content-width="fitContentWidth"
       :disabled="isDisabled"
@@ -243,7 +292,7 @@
         </div>
       </template>
       <template #default>
-        <div class="ui-select__content">
+        <div ref="contentRef" class="ui-select__content" @keydown="onKeydown">
           <div v-if="$slots.header" class="ui-select__header">
             <slot name="header" />
           </div>
@@ -267,6 +316,7 @@
 
           <SelectVirtualList
             v-if="isVirtualList"
+            ref="virtualListRef"
             @changeInfinityScroll="$emit('changeInfinityScroll')"
             :size="itemSize"
             :options="filteredOptions"
