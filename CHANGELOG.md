@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.22] - 2026-11-17
+
+- feat: `UiSelect` native keyboard navigation with ArrowUp, ArrowDown and Enter
+
 ## [7.7.21] - 2026-10-31
 
 - fix: `UiChat` renders message links without `v-html`
