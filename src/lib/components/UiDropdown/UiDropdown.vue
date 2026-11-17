@@ -3,8 +3,9 @@
 
   import { autoUpdate, flip, offset, shift, size,useFloating } from "@floating-ui/vue";
   import { onClickOutside, useWindowSize } from "@vueuse/core";
-  import { computed, ref, watch } from "vue";
+  import { computed, nextTick, ref, watch } from "vue";
 
+  import { useKeyboard } from "./composables/useKeyboard";
   import { UiDropdownProps } from "./types";
 
   import { isMobileDevice } from "@/lib/helpers/is-mobile-device";
@@ -13,11 +14,14 @@
     trigger: "click",
     fitContentWidth: true,
     placement: "bottom-start",
-    teleport: "body"
+    teleport: "body",
+    tabindex: 0
   });
   const isShow = defineModel<boolean>("modelValue", { default: false });
   const dropdownRef = ref<HTMLDivElement | null>(null);
-  const contentRefer = ref(null);
+  const contentRefer = ref<HTMLElement | null>(null);
+  const preferEndOnOpen = ref(false);
+  const isDisabled = computed(() => !!props.disabled);
   const widthContent = ref("");
   const { width } = useWindowSize();
   const { x, y } = useFloating(dropdownRef, contentRefer, {
@@ -102,13 +106,39 @@
     emits("close");
   }
 
+  function openFromKeyboard(preferEnd = false) {
+    if (isDisabled.value) {
+      return;
+    }
+    preferEndOnOpen.value = preferEnd;
+    open();
+  }
+
+  const { onKeydown, clearHighlight, setInitialHighlight } = useKeyboard({
+    isOpen: isShow,
+    isDisabled,
+    open: openFromKeyboard,
+    getRoot: () => contentRefer.value
+  });
+
   watch([isShow, width], setContentWidth);
+
+  watch(isShow, (shown) => {
+    if (!shown) {
+      clearHighlight();
+      return;
+    }
+    const preferEnd = preferEndOnOpen.value;
+    preferEndOnOpen.value = false;
+    void nextTick(() => setInitialHighlight(preferEnd));
+  });
 </script>
 <template>
-  <div ref="dropdownRef" class="ui-dropdown">
+  <div ref="dropdownRef" class="ui-dropdown" @keydown="onKeydown">
     <div
       class="ui-dropdown__trigger"
       :class="[{ 'click-event': trigger === 'click', 'is-disabled': disabled }, `mode-${mode}`]"
+      :tabindex="disabled ? -1 : tabindex"
       @mouseenter="showEventHandler('mouseenter')"
       @mouseleave="showEventHandler('mouseleave')"
       @click="showEventHandler('click')"
@@ -131,7 +161,12 @@
         class="ui-dropdown__content-wrapper"
       >
         <Transition name="dropdown">
-          <div v-if="isShow" class="ui-dropdown__content" :class="{ 'is-fit': fitContentWidth }">
+          <div
+            v-if="isShow"
+            class="ui-dropdown__content"
+            :class="{ 'is-fit': fitContentWidth }"
+            @keydown="onKeydown"
+          >
             <slot />
           </div>
         </Transition>
@@ -232,6 +267,11 @@
 
       &.is-fit {
         max-width: v-bind(widthContent);
+      }
+
+      [data-highlighted="true"],
+      .is-navigated {
+        background: var(--color-background-secondary);
       }
 
       &.mode-light {

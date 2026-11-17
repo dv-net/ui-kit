@@ -256,6 +256,7 @@
       :disabled="isDisabled"
       :placement="placement"
       :teleport="teleport"
+      :tabindex="-1"
     >
       <template #reference>
         <div

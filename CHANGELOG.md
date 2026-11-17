@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.7.23] - 2026-11-17
+
+- feat: `UiDropdown` native keyboard navigation with ArrowUp, ArrowDown and Enter
+
 ## [7.7.22] - 2026-11-17
 
 - feat: `UiSelect` native keyboard navigation with ArrowUp, ArrowDown and Enter
