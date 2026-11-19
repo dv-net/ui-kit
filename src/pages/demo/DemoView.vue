@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import BinRates from "./components/bin-rates/BinRates.vue";
+  import IconSwap from "./components/icon-swap/IconSwap.vue";
   import SearchGroup from "./components/search-group/SearchGroup.vue";
   import TariffCards from "./components/tariff-card/TariffCards.vue";
   import WalletStack from "./components/wallet-stack/WalletStack.vue";
@@ -20,6 +21,17 @@
       <div class="demo__stage">
         <SearchGroup />
       </div>
+    </section>
+
+    <section class="demo">
+      <div class="demo__heading">
+        <h2>Icon swap</h2>
+        <p>
+          A stand-in holds the place until the icon loads. It turns out on its edge, then the real icon turns in.
+        </p>
+      </div>
+
+      <IconSwap />
     </section>
 
     <section class="demo">
